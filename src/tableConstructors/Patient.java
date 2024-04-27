@@ -1,8 +1,7 @@
 package tableConstructors;
 /**
-* User Patient class constructor 
-* as well as all the geters and setter
-*/
+ * @author Matt DeROsa
+ */
 import java.util.Date;
 
 public class Patient {

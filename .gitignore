@@ -52,7 +52,10 @@ out/
 .classpath
 .project
 .settings/
-bin/
+/bin/
+.classpath
+.project
+*.class
 tmp/
 build/
 *.tmp

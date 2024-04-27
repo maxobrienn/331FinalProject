@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 public class PharmacyEmployee {
     private String employeeId;
     private String lastName;

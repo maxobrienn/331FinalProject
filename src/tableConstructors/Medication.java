@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 public class Medication {
     private String name;
     private String quantity;

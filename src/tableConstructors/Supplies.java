@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 public class Supplies {
 	
     private String supplierId;

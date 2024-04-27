@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 import java.util.Date;
 
 public class Prescription {

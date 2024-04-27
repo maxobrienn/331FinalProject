@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 public class PaysFor {
     private String prescriptionId;
     private String insuranceId;

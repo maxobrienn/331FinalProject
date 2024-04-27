@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 public class Fills {
     private String pharmacyId;
     private String prescriptionId;

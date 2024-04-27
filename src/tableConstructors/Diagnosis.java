@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 public class Diagnosis {
     private String patientId;
     private String diagnoses;

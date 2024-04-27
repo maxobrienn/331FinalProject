@@ -1,5 +1,7 @@
 package tableConstructors;
-
+/**
+ * @author Matt DeROsa
+ */
 public class InsuranceCompany {
     private String insuranceId;
     private String insuranceName;
