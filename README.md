@@ -1,1 +1,1 @@
-This is a final project for CSCI 331 Databases. From the schema all the way up to a working front end was created by Matt DeRosa, Ellie Smith, Max Obrien, Mason Meyer, and Evan Quinn. 
+This is a final project for CSCI 331 Databases. A ground up project to show our skills in creating a database schema and integrating it with a front-end created by Matt DeRosa, Ellie Smith, Max Obrien, Mason Meyer, and Evan Quinn. 
