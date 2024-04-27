@@ -6,11 +6,7 @@ package functionalityControllers;
 import tableConstructors.Patient;
 
 public class PatientController {
-	
-	//TODO 
-	public static void login(String username, String password) {
-		
-	}
+
 	
 	//TODO
 	public static Patient newPatient() {

@@ -3,6 +3,7 @@ package tableConstructors;
  * @author Matt DeROsa
  */
 import java.util.Date;
+import java.sql.*;
 
 public class Patient {
     private String patientId;
@@ -18,29 +19,47 @@ public class Patient {
     private String sex;
     private String insuranceId;
     private String password;
+    private Boolean loggedIn = false;
 
     // Constructor without parameters
     public Patient() {
     }
+    
+	/**
+	 * @param patientId
+	 * @param dob
+	 * @param street
+	 * @param city
+	 * @param state
+	 * @param zipCode
+	 * @param email
+	 * @param phoneNumber
+	 * @param lastName
+	 * @param firstName
+	 * @param sex
+	 * @param insuranceId
+	 * @param password
+	 * @param loggedIn
+	 */
+	public Patient(String patientId, Date dob, String street, String city, String state, String zipCode, String email,
+			String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password) {
+		this.patientId = patientId;
+		this.dob = dob;
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.zipCode = zipCode;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.sex = sex;
+		this.insuranceId = insuranceId;
+		this.password = password;
+	}
 
-    // Constructor with all fields
-    public Patient(String patientId, Date dob, String street, String city, String state, String zipCode, String email, String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password) {
-        this.patientId = patientId;
-        this.dob = dob;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.sex = sex;
-        this.insuranceId = insuranceId;
-        this.password = password;
-    }
 
-    // Getters and Setters
+	// Getters and Setters
     public String getPatientId() {
         return patientId;
     }
@@ -144,6 +163,24 @@ public class Patient {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    /**
+	 * @return the loggedIn status
+	 */
+	public Boolean isLoggedIn() {
+		return this.loggedIn;
+	}
+	
+	/**
+	   * sets loggedIn instance field to false
+	   * @throws IllegalStateException if then method is called when loggedIn = false
+	   */
+	  public void logout(){
+	    if(! isLoggedIn())
+	      throw new IllegalStateException("MUST BE LOGGED IN FIRST!");
+	    
+	    this.loggedIn = false;
+	  }
 
     @Override
     public String toString() {
@@ -163,4 +200,134 @@ public class Patient {
                 ", password='" + password + '\'' +
                 '}';
     }
+    
+    public Connection openDBConnection() {
+        try {
+          // Load driver and link to driver manager
+          Class.forName("oracle.jdbc.OracleDriver");
+          // Create a connection to the specified database
+          Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
+                                                                "csci.cscioraclerh7srv.ad.csbsju.edu","TEAM05", "TEAM05");
+          return myConnection;
+        } catch (Exception E) {
+          E.printStackTrace();
+        }
+        return null;
+      }
+    
+    public boolean login() {
+        Connection con = openDBConnection();
+        try {
+          PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HEALTHCAREMANAGEMENT_PATIENT WHERE email = ? AND password = ?");
+          statement.setString(1, email);
+          statement.setString(2, password);
+          ResultSet rs = statement.executeQuery();
+          rs.next();
+          int count = rs.getInt(1);
+          if (count == 1) {
+            this.loggedIn = true;
+            return true;
+          }
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+        return false;
+      }
+    
+    public void editPatientInfo(String patientId, String phoneNumber, String email, String street, String city, String state, String zipCode, String insuranceId, String sex) {
+        Connection con = openDBConnection();
+    	String sql = "{CALL Edit_Patient_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setString(1, patientId);
+            statement.setString(2, phoneNumber);
+            statement.setString(3, email);
+            statement.setString(4, street);
+            statement.setString(5, city);
+            statement.setString(6, state);
+            statement.setString(7, zipCode);
+            statement.setString(8, insuranceId);
+            statement.setString(9, sex);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public String generateRandomPatientId() {
+    	Connection con = openDBConnection();
+        String patientId = null;
+        String sql = "{? = CALL Generate_Random_Patient_ID()}";
+        try (CallableStatement statement = con.prepareCall(sql)) {
+            statement.registerOutParameter(1, java.sql.Types.CHAR);
+            statement.execute();
+            patientId = statement.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return patientId;
+    }
+    
+    
+    public void addPatient(Patient patient) {
+    	Connection con = openDBConnection();
+        String sql = "INSERT INTO HealthCareManagement_Patient (PATIENT_ID, DOB, STREET, CITY, STATE, ZIP_CODE, EMAIL, PHONE_NUMBER, LAST, FIRST, SEX, INSURANCE_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            // Generate patient ID using the function
+            String patientId = generateRandomPatientId();
+
+            // Set values for other columns
+            statement.setString(1, patientId);
+            statement.setDate(2, new java.sql.Date(patient.getDob().getTime()));
+            statement.setString(3, patient.getStreet());
+            statement.setString(4, patient.getCity());
+            statement.setString(5, patient.getState());
+            statement.setString(6, patient.getZipCode());
+            statement.setString(7, patient.getEmail());
+            statement.setString(8, patient.getPhoneNumber());
+            statement.setString(9, patient.getLastName());
+            statement.setString(10, patient.getFirstName());
+            statement.setString(11, patient.getSex());
+            statement.setString(12, patient.getInsuranceId());
+            statement.setString(13, patient.getPassword());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Patient viewPatientProfile(String patientId) {
+    	Connection con = openDBConnection();
+        Patient patient = null;
+        String sql = "SELECT * FROM HealthCareManagement_Patient WHERE PATIENT_ID = ?";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setString(1, patientId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    patient = new Patient(
+                        resultSet.getString("PATIENT_ID"),
+                        resultSet.getDate("DOB"),
+                        resultSet.getString("STREET"),
+                        resultSet.getString("CITY"),
+                        resultSet.getString("STATE"),
+                        resultSet.getString("ZIP_CODE"),
+                        resultSet.getString("EMAIL"),
+                        resultSet.getString("PHONE_NUMBER"),
+                        resultSet.getString("LAST"),
+                        resultSet.getString("FIRST"),
+                        resultSet.getString("SEX"),
+                        resultSet.getString("INSURANCE_ID"),
+                        resultSet.getString("PASSWORD")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return patient;
+    }
+    
+    
+
 }
