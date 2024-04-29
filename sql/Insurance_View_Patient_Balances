@@ -1,0 +1,44 @@
+
+-- Create a view to retrieve information about patients covered by the insurance company and their outstanding payments
+CREATE OR REPLACE VIEW Insurance_Company_Covered_Patients AS
+SELECT      P.PATIENT_ID,
+            P.LAST || ', ' || P.FIRST AS PATIENT_NAME,
+            PC.INSURANCE_ID,
+            SUM(PRICE) AS AMOUNT_OWED
+FROM        HealthCareManagement_PATIENT P
+            JOIN    HealthCareManagement_PAYSFOR PC ON P.INSURANCE_ID = PC.INSURANCE_ID
+            JOIN    HealthCareManagement_PRESCRIPTION PR ON P.PATIENT_ID = PR.PATIENT_ID
+GROUP BY    P.PATIENT_ID, P.LAST, P.FIRST, PC.INSURANCE_ID;
+
+-- Create a procedure that allows the insurance company to view the information from the view
+CREATE OR REPLACE PROCEDURE View_Covered_Patients_Information (i_insurance_id IN CHAR)
+AS
+BEGIN
+    -- Retrieve information about patients covered by the insurance company and their outstanding payments
+    FOR patient_record IN (SELECT * FROM Insurance_Company_Covered_Patients WHERE INSURANCE_ID = i_insurance_id) LOOP
+        DBMS_OUTPUT.PUT_LINE('Patient ID: ' || patient_record.PATIENT_ID);
+        DBMS_OUTPUT.PUT_LINE('Patient Name: ' || patient_record.PATIENT_NAME);
+        DBMS_OUTPUT.PUT_LINE('Amount Owed: $' || patient_record.AMOUNT_OWED);
+        DBMS_OUTPUT.PUT_LINE('------------------------');
+    END LOOP;
+END;
+
+
+--TEST STATEMENTS:
+
+SET SERVEROUTPUT ON;
+EXEC View_Covered_Patients_Information('INS001');
+-- OUTPUT:
+--Patient ID: PAT001    
+--Patient Name: Doe, Jane
+--Amount Owed: $25
+--------------------------
+
+
+
+
+
+
+
+
+
