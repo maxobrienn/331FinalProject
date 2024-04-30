@@ -203,6 +203,66 @@ public class InsuranceCompany {
   }
   
   /**
+   * 
+   */
+  public boolean login(String email, String password) {
+        Connection con = openDBConnection();
+        try {
+            PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HEALTHCAREMANAGEMENT_INSURANCECOMPANY WHERE email = ? AND password = ?");
+            statement.setString(1, email);
+            statement.setString(2, password);
+
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next() && rs.getString(1) != null){
+                this.loggedIn = true;
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+  
+  /**
+   * TO DO!!!
+   * Method to update insurance company information
+   * 
+    public void updatePatientInfo(String phoneNumber, String email, String street, String city, String state, String zipCode, String insuranceId, String sex) {
+        try {
+            // Connect to Oracle database
+            Connection connection = openDBConnection();
+
+            // Prepare the stored procedure call
+            CallableStatement callableStatement = connection.prepareCall("{call Edit_Patient_Info(?,?,?,?,?,?,?,?,?)}");
+
+            // Set the input parameters
+            callableStatement.setString(1,getPatientId());
+            callableStatement.setString(2, phoneNumber);
+            callableStatement.setString(3, email);
+            callableStatement.setString(4, street);
+            callableStatement.setString(5, city);
+            callableStatement.setString(6, state);
+            callableStatement.setString(7, zipCode);
+            callableStatement.setString(8, insuranceId);
+            callableStatement.setString(9, sex);
+
+            // Execute the stored procedure
+            callableStatement.execute();
+
+            // Output success message
+            System.out.println("Patient information updated successfully.");
+
+            // Close JDBC objects
+            callableStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    */
+  
+  /**
    * This method allows InsuranceCompanies to make a payment by inserting a value into HealthCareManagement_INSURANCEPAYMENT
    * After inserting, trigger ChangePrescriptionBalanceAfterInsurancePayment alters InsuranceBalance in 
    * HealthCareManagement_PRESCRIPTIONBALANCE table

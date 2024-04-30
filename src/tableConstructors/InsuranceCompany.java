@@ -367,7 +367,7 @@ public class InsuranceCompany {
       //test.makePayment("PAY011", "2024-04-29", "2.5", "INS002", "PRSC001");
       
       // Call the instance method on the created instance to view covered patients information
-      test.viewCoveredPatientsInformation("INS003");
+      test.viewCoveredPatientsInformation("INS002"+"    ");
     } 
     
     catch (Exception e) {

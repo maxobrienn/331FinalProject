@@ -322,112 +322,19 @@ public class Patient {
                 System.out.println("Insurance ID: " + patient.getInsuranceId());
                 System.out.println("Sex: " + patient.getSex());
             }
-            
+
             // Close JDBC objects
             resultSet.close();
             preparedStatement.close();
             con.close();
         } catch (SQLException e) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
         return patient;
     }
-    
-    /**
-     * 
-     * 
-     */
-    public void viewPrescriptionBalances(String PATIENTID) {
-      
-      //Variable of type database connection
-      Connection myConnection;
-      //Variable of type prepared statement
-      PreparedStatement preparedStmt;
-      
-      try {
-        // Open a database connection.
-        myConnection = openDBConnection();
-        
-        // Prepare the SQL update statement.
-        String queryString = "SELECT * FROM Patient_Prescription_Balance WHERE PATIENT_ID = ?";
-        
-        // Create a PreparedStatement for executing the update.
-        preparedStmt = myConnection.prepareStatement(queryString);
-        
-        // Bind the instance field values to the PreparedStatement's parameters.
-        preparedStmt.setString(1, PATIENTID);
-        
-        // Execute the query
-        ResultSet rs = preparedStmt.executeQuery(); 
-        
-        // Print the column headers
-        System.out.println("PATIENT_ID\tPRESCRIPTION_ID\tDATE_ISSUED\tPRESCRIPTION_NAME\tAMOUNT_OWED");
-        
-        // Iterate through the result set and print each row
-        while (rs.next()) {
-          String patientId = rs.getString("PATIENT_ID");
-          String prescriptionId = rs.getString("PRESCRIPTION_ID");
-          Date dateIssued = rs.getDate("DATE_ISSUED");
-          String prescriptionName = rs.getString("PRESCRIPTION_NAME");
-          double amountOwed = rs.getDouble("AMOUNT_OWED");
-          System.out.println(patientId + "\t\t" + prescriptionId + "\t\t" + dateIssued + "\t" + prescriptionName + "\t" + amountOwed);
-        }
-      }
-      
-      catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    
-    /**
-   * This method allows InsuranceCompanies to make a payment by inserting a value into HealthCareManagement_INSURANCEPAYMENT
-   * After inserting, trigger ChangePrescriptionBalanceAfterInsurancePayment alters InsuranceBalance in 
-   * HealthCareManagement_PRESCRIPTIONBALANCE table
-   * @param PAYMENT_ID
-   * @param PAYMENT_DATE
-   * @param AMOUNT
-   * @param INSURANCE_ID
-   * @param PRESCRIPTION_ID
-   */
-  public void makePayment(String PAYMENT_ID, String PAYMENT_DATE, String AMOUNT, String PATIENT_ID, String PRESCRIPTION_ID) {
-    // Variable of type database connection
-    Connection myConnection;
-    // Variable of type prepared statement
-    PreparedStatement preparedStmt;
-    
-    try {
-      // Open a database connection.
-      myConnection = openDBConnection();
-      
-      // Prepare the SQL statement with placeholders
-      String sqlStatement = "INSERT INTO HealthCareManagement_PATIENTPAYMENT (PAYMENT_ID, PAYMENT_DATE, AMOUNT, PATIENT_ID, PRESCRIPTION_ID) " +
-        "VALUES (?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?)";
-      
-      // Create a PreparedStatement for executing the statement
-      preparedStmt = myConnection.prepareStatement(sqlStatement);
-      
-      // Set the values for the placeholders
-      preparedStmt.setString(1, PAYMENT_ID);
-      preparedStmt.setString(2, PAYMENT_DATE);
-      preparedStmt.setString(3, AMOUNT);
-      preparedStmt.setString(4, PATIENT_ID);
-      preparedStmt.setString(5, PRESCRIPTION_ID);
-      
-      // Execute the prepared statement
-      preparedStmt.executeUpdate();
-      
-      // Print success message
-      System.out.println("Payment successfully made.");
-    } 
-    
-    catch (SQLException e) {
-      // Handle any SQL exceptions that occur during the operation.
-      e.printStackTrace();
-    }
-  }
 
     @SuppressWarnings("deprecation")
- public static void main(String[] args) {
+	public static void main(String[] args) {
         // Creating a sample patient
         Patient patient = new Patient();
         patient.setPatientId("PAT001");
@@ -493,12 +400,5 @@ public class Patient {
         } else {
             System.out.println("Patient not found!");
         }
-        
-        // testing to see if patients can view prescriptions
-        newPatient.viewPrescriptionBalances("PAT001"+"    ");
-        
-        // testing makePayment method with the given parameters
-        newPatient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
-        
     }
 }
