@@ -327,7 +327,4 @@ public class Patient {
         }
         return patient;
     }
-    
-    
-
 }

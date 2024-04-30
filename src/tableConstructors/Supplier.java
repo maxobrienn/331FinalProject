@@ -1,4 +1,11 @@
 package tableConstructors;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @author Matt DeROsa
  */
@@ -155,5 +162,67 @@ public class Supplier {
 	}
 
     // Getters and setters
+	public Connection openDBConnection() {
+        try {
+          // Load driver and link to driver manager
+          Class.forName("oracle.jdbc.OracleDriver");
+          // Create a connection to the specified database
+          Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
+                                                                "csci.cscioraclerh7srv.ad.csbsju.edu","TEAM05", "TEAM05");
+          return myConnection;
+        } catch (Exception E) {
+          E.printStackTrace();
+        }
+        return null;
+      }
+	//Function to view Supplier Profile 
+	public Supplier viewSupplierProfile(String supplierId) {
+    	Connection con = openDBConnection();
+        Supplier supplier = null;
+        String sql = "SELECT * FROM HealthCareManagement_SUPPLIER WHERE PATIENT_ID = ?";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setString(1, supplierId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    supplier = new Supplier(
+                        resultSet.getString("SUPPLIER_ID"),
+                        resultSet.getString("SUPPLIER_NAME"),
+                        resultSet.getString("STREET"),
+                        resultSet.getString("CITY"),
+                        resultSet.getString("STATE"),
+                        resultSet.getString("ZIP_CODE"),
+                        resultSet.getString("PHONE_NUMBER"),
+                        resultSet.getString("PASSWORD"),
+                        resultSet.getString("EMAIL")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return supplier;
+    }
+	
+	//Function to edit supplier profile info
+	public void editSupplierInfo(String supplierId, String supplierName, String street, String city, String state, String zipCode, String phoneNumber, String password, String email) {
+        Connection con = openDBConnection();
+    	String sql = "{CALL Edit_Supplier_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setString(1, supplierId);
+            statement.setString(2, supplierName);
+            statement.setString(3, street);
+            statement.setString(4, city);
+            statement.setString(5, state);
+            statement.setString(6, zipCode);
+            statement.setString(7, phoneNumber);
+            statement.setString(8, password);
+            statement.setString(9, email);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
+	
 }
