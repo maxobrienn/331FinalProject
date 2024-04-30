@@ -235,25 +235,40 @@ public class Patient {
         return false;
       }
     
-    public void editPatientInfo(String patientId, String phoneNumber, String email, String street, String city, String state, String zipCode, String insuranceId, String sex) {
-        Connection con = openDBConnection();
-     String sql = "{CALL Edit_Patient_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setString(1, patientId);
-            statement.setString(2, phoneNumber);
-            statement.setString(3, email);
-            statement.setString(4, street);
-            statement.setString(5, city);
-            statement.setString(6, state);
-            statement.setString(7, zipCode);
-            statement.setString(8, insuranceId);
-            statement.setString(9, sex);
+ // Method to update patient information
+    public void updatePatientInfo(String phoneNumber, String email, String street, String city, String state, String zipCode, String insuranceId, String sex) {
+        try {
+            // Connect to Oracle database
+            Connection connection = openDBConnection();
 
-            statement.executeUpdate();
+            // Prepare the stored procedure call
+            CallableStatement callableStatement = connection.prepareCall("{call Edit_Patient_Info(?,?,?,?,?,?,?,?,?)}");
+
+            // Set the input parameters
+            callableStatement.setString(1,getPatientId());
+            callableStatement.setString(2, phoneNumber);
+            callableStatement.setString(3, email);
+            callableStatement.setString(4, street);
+            callableStatement.setString(5, city);
+            callableStatement.setString(6, state);
+            callableStatement.setString(7, zipCode);
+            callableStatement.setString(8, insuranceId);
+            callableStatement.setString(9, sex);
+
+            // Execute the stored procedure
+            callableStatement.execute();
+
+            // Output success message
+            System.out.println("Patient information updated successfully.");
+
+            // Close JDBC objects
+            callableStatement.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     
     public String generateRandomPatientId() {
      Connection con = openDBConnection();
@@ -333,6 +348,7 @@ public class Patient {
  public static void main(String[] args) {
         // Creating a sample patient
         Patient patient = new Patient();
+        patient.setPatientId("PAT001");
         patient.setFirstName("Jane");
         patient.setLastName("Doe");
         patient.setEmail("patient1@email.com");
@@ -351,8 +367,11 @@ public class Patient {
         System.out.println(patient.login("patient1@email.com", "thsbaibniincd58n"));
 
         // Testing editing patient info
-        System.out.println("\nEditing patient info...");
-        patient.editPatientInfo(patient.getPatientId(), "987-654-3210", "updatedemail1@example.com", "789 Health Ave",
+        System.out.println("\nEditing patient info before...");
+        System.out.println(patient.toString());
+        
+        System.out.println("\nEdit patient info after....");
+        patient.updatePatientInfo("987-654-3210", "updatedemail1@example.com", "789 Health Ave",
                 "Carecity", "CA", "34567", "INS003", "Male");
 
         // Testing viewing patient profile
