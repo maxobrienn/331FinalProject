@@ -89,7 +89,7 @@ CREATE OR REPLACE TRIGGER create_Account
 BEFORE INSERT ON HealthCareManagement_Patient
 FOR EACH ROW
 BEGIN
-    :NEW.PATIENT_ID := Generate_Random_Patient_ID();
+    :NEW.PATIENT_ID := NEW.PATIENT_ID;
     :NEW.DOB := :NEW.DOB; -- DOB
     :NEW.STREET := :NEW.STREET; -- STREET
     :NEW.CITY := :NEW.CITY; -- CITY
