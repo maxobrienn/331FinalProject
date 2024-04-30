@@ -156,4 +156,13 @@ public class Prescription {
 		this.patientId = patientId;
 	}
 
+	@Override
+	public String toString() {
+		return "Prescription [prescriptionId=" + prescriptionId + ", dateIssued=" + dateIssued + ", prescriptionName="
+				+ prescriptionName + ", dosage=" + dosage + ", refillsRemaining=" + refillsRemaining + ", price="
+				+ price + ", quantity=" + quantity + ", doctorId=" + doctorId + ", patientId=" + patientId + "]";
+	}
+	
+	
+
 }

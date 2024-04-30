@@ -160,8 +160,17 @@ public class Supplier {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	
 
-    // Getters and setters
+    @Override
+	public String toString() {
+		return "Supplier [supplierId=" + supplierId + ", supplierName=" + supplierName + ", street=" + street
+				+ ", city=" + city + ", state=" + state + ", zipCode=" + zipCode + ", phoneNumber=" + phoneNumber
+				+ ", password=" + password + ", email=" + email + "]";
+	}
+
+	// Getters and setters
 	public Connection openDBConnection() {
         try {
           // Load driver and link to driver manager

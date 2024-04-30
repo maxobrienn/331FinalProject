@@ -58,6 +58,11 @@ public class Medication {
 		this.supplierId = supplierId;
 	}
 
-    // Getters and setters
+	@Override
+	public String toString() {
+		return "Medication [name=" + name + ", quantity=" + quantity + ", supplierId=" + supplierId + "]";
+	}
+
+    
     
 }

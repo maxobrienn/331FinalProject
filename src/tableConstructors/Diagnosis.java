@@ -42,7 +42,12 @@ public class Diagnosis {
 		this.diagnoses = diagnoses;
 	}
 
-    // Getters and setters
+	@Override
+	public String toString() {
+		return "Diagnosis [patientId=" + patientId + ", diagnoses=" + diagnoses + "]";
+	}
+
+    
     
     
 }

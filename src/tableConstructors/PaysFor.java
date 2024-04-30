@@ -42,6 +42,11 @@ public class PaysFor {
 		this.insuranceId = insuranceId;
 	}
 
-    // Getters and setters
+	@Override
+	public String toString() {
+		return "PaysFor [prescriptionId=" + prescriptionId + ", insuranceId=" + insuranceId + "]";
+	}
+
+    
     
 }

@@ -101,8 +101,17 @@ public class Pharmacy {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    
 
-    public Connection openDBConnection() {
+    @Override
+	public String toString() {
+		return "Pharmacy [pharmacyId=" + pharmacyId + ", pharmacyName=" + pharmacyName + ", street=" + street
+				+ ", city=" + city + ", state=" + state + ", zipCode=" + zipCode + ", phoneNumber=" + phoneNumber
+				+ ", password=" + password + ", email=" + email + ", loggedIn=" + loggedIn + "]";
+	}
+
+	public Connection openDBConnection() {
         try {
             Class.forName("oracle.jdbc.OracleDriver");
             Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +

@@ -77,6 +77,12 @@ public class Appointment {
 		this.appointmentDate = appointmentDate;
 	}
 
-    // Getters and setters
+	@Override
+	public String toString() {
+		return "Appointment [patientId=" + patientId + ", doctorId=" + doctorId + ", note=" + note
+				+ ", appointmentDate=" + appointmentDate + "]";
+	}
+
+   
     
 }

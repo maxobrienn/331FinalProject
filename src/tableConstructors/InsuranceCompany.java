@@ -183,7 +183,16 @@ public class InsuranceCompany {
     this.password = password;
   }
   
-  /**
+  
+  
+  @Override
+public String toString() {
+	return "InsuranceCompany [insuranceId=" + insuranceId + ", insuranceName=" + insuranceName + ", street=" + street
+			+ ", city=" + city + ", state=" + state + ", zipCode=" + zipCode + ", phoneNumber=" + phoneNumber
+			+ ", email=" + email + ", password=" + password + ", loggedIn=" + loggedIn + "]";
+}
+
+/**
    * This method and creates and returns a Connection object to the database. 
    * All other methods that need database access will call this method.
    * @return a Connection object to Oracle

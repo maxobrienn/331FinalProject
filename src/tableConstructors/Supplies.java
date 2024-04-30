@@ -43,5 +43,10 @@ public class Supplies {
 		this.pharmacyId = pharmacyId;
 	}
 
-    // Getters and setters
+	@Override
+	public String toString() {
+		return "Supplies [supplierId=" + supplierId + ", pharmacyId=" + pharmacyId + "]";
+	}
+
+    
 }

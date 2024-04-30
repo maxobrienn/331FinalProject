@@ -140,6 +140,13 @@ public class Doctor {
 		this.loggedIn = loggedIn;
 	}
 	
+	@Override
+	public String toString() {
+		return "Doctor [doctorId=" + doctorId + ", lastName=" + lastName + ", firstName=" + firstName + ", email="
+				+ email + ", password=" + password + ", specialization=" + specialization + ", officeNumber="
+				+ officeNumber + ", loggedIn=" + loggedIn + "]";
+	}
+
 	public Connection openDBConnection() {
         try {
             Class.forName("oracle.jdbc.OracleDriver");

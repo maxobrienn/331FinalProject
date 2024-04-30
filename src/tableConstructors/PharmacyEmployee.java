@@ -157,6 +157,15 @@ public class PharmacyEmployee {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "PharmacyEmployee [employeeId=" + employeeId + ", lastName=" + lastName + ", firstName=" + firstName
+				+ ", ssn=" + ssn + ", phoneNumber=" + phoneNumber + ", email=" + email + ", position=" + position
+				+ ", pharmacyId=" + pharmacyId + ", password=" + password + ", loggedIn=" + loggedIn + "]";
+	}
 
 	public Connection openDBConnection() {
         try {
