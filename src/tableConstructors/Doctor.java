@@ -1,4 +1,6 @@
 package tableConstructors;
+
+import java.sql.*;
 /**
  * @author Matt DeROsa
  */
@@ -11,6 +13,8 @@ public class Doctor {
     private String specialization;
     private String officeNumber;
 
+    private Boolean loggedIn = false;
+    
     public Doctor() {
     }
 
@@ -122,5 +126,115 @@ public class Doctor {
 		this.officeNumber = officeNumber;
 	}
 
-    // Getters and setters
+	/**
+	 * @return the loggedIn
+	 */
+	public Boolean getLoggedIn() {
+		return loggedIn;
+	}
+
+	/**
+	 * @param loggedIn the loggedIn to set
+	 */
+	public void setLoggedIn(Boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
+	
+	public Connection openDBConnection() {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+            Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
+                    "csci.cscioraclerh7srv.ad.csbsju.edu", "TEAM05", "TEAM05");
+            return myConnection;
+        } catch (Exception E) {
+            E.printStackTrace();
+        }
+        return null;
+    }
+	
+	public boolean login(String email, String password) {
+	    Connection con = openDBConnection();
+	    try {
+	        PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_DOCTOR WHERE EMAIL = ? AND PASSWORD = ?");
+	        statement.setString(1, email);
+	        statement.setString(2, password);
+
+	        ResultSet rs = statement.executeQuery();
+
+	        if (rs.next() && rs.getString(1) != null) {
+	            this.setLoggedIn(true);
+	            return true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            con.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return false;
+	}
+
+    public void updateDoctorInfo(String doctorId, String lastName, String firstName, String email, String password, String specialization, String officeNumber) {
+        try {
+            Connection connection = openDBConnection();
+            CallableStatement callableStatement = connection.prepareCall("{call Edit_Doctor_Info(?,?,?,?,?,?,?)}");
+            callableStatement.setString(1, doctorId);
+            callableStatement.setString(2, lastName);
+            callableStatement.setString(3, firstName);
+            callableStatement.setString(4, email);
+            callableStatement.setString(5, specialization);
+            callableStatement.setString(6, officeNumber);
+            callableStatement.setString(7, password);
+
+            callableStatement.execute();
+
+            System.out.println("Doctor information updated successfully.");
+
+            callableStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Doctor displayDoctorInfo(String doctorId) {
+        Doctor doctor = new Doctor();
+        Connection con = openDBConnection();
+        try {
+            String sql = "SELECT * FROM HealthCareManagement_DOCTOR WHERE DOCTOR_ID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, doctorId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                doctor.setDoctorId(resultSet.getString("DOCTOR_ID"));
+                doctor.setLastName(resultSet.getString("LAST"));
+                doctor.setFirstName(resultSet.getString("FIRST"));
+                doctor.setEmail(resultSet.getString("EMAIL"));
+                doctor.setSpecialization(resultSet.getString("SPECIALIZATION"));
+                doctor.setOfficeNumber(resultSet.getString("OFFICE_NUMBER"));
+                doctor.setPassword(resultSet.getString("PASSWORD"));
+
+                System.out.println("Doctor ID: " + doctor.getDoctorId());
+                System.out.println("Last Name: " + doctor.getLastName());
+                System.out.println("First Name: " + doctor.getFirstName());
+                System.out.println("Email: " + doctor.getEmail());
+                System.out.println("Specialization: " + doctor.getSpecialization());
+                System.out.println("Office Number: " + doctor.getOfficeNumber());
+                System.out.println("Password: " + doctor.getPassword());
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return doctor;
+    }
+
+    
 }
