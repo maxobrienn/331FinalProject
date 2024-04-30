@@ -25,41 +25,41 @@ public class Patient {
     public Patient() {
     }
     
-	/**
-	 * @param patientId
-	 * @param dob
-	 * @param street
-	 * @param city
-	 * @param state
-	 * @param zipCode
-	 * @param email
-	 * @param phoneNumber
-	 * @param lastName
-	 * @param firstName
-	 * @param sex
-	 * @param insuranceId
-	 * @param password
-	 * @param loggedIn
-	 */
-	public Patient(String patientId, Date dob, String street, String city, String state, String zipCode, String email,
-			String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password) {
-		this.patientId = patientId;
-		this.dob = dob;
-		this.street = street;
-		this.city = city;
-		this.state = state;
-		this.zipCode = zipCode;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.lastName = lastName;
-		this.firstName = firstName;
-		this.sex = sex;
-		this.insuranceId = insuranceId;
-		this.password = password;
-	}
+ /**
+  * @param patientId
+  * @param dob
+  * @param street
+  * @param city
+  * @param state
+  * @param zipCode
+  * @param email
+  * @param phoneNumber
+  * @param lastName
+  * @param firstName
+  * @param sex
+  * @param insuranceId
+  * @param password
+  * @param loggedIn
+  */
+ public Patient(String patientId, Date dob, String street, String city, String state, String zipCode, String email,
+   String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password) {
+  this.patientId = patientId;
+  this.dob = dob;
+  this.street = street;
+  this.city = city;
+  this.state = state;
+  this.zipCode = zipCode;
+  this.email = email;
+  this.phoneNumber = phoneNumber;
+  this.lastName = lastName;
+  this.firstName = firstName;
+  this.sex = sex;
+  this.insuranceId = insuranceId;
+  this.password = password;
+ }
 
 
-	// Getters and Setters
+ // Getters and Setters
     public String getPatientId() {
         return patientId;
     }
@@ -165,22 +165,22 @@ public class Patient {
     }
     
     /**
-	 * @return the loggedIn status
-	 */
-	public Boolean isLoggedIn() {
-		return this.loggedIn;
-	}
-	
-	/**
-	   * sets loggedIn instance field to false
-	   * @throws IllegalStateException if then method is called when loggedIn = false
-	   */
-	  public void logout(){
-	    if(! isLoggedIn())
-	      throw new IllegalStateException("MUST BE LOGGED IN FIRST!");
-	    
-	    this.loggedIn = false;
-	  }
+  * @return the loggedIn status
+  */
+ public Boolean isLoggedIn() {
+  return this.loggedIn;
+ }
+ 
+ /**
+    * sets loggedIn instance field to false
+    * @throws IllegalStateException if then method is called when loggedIn = false
+    */
+   public void logout(){
+     if(! isLoggedIn())
+       throw new IllegalStateException("MUST BE LOGGED IN FIRST!");
+     
+     this.loggedIn = false;
+   }
 
     @Override
     public String toString() {
@@ -215,16 +215,17 @@ public class Patient {
         return null;
       }
     
-    public boolean login() {
+    public boolean login(String email, String password) {
         Connection con = openDBConnection();
         try {
           PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HEALTHCAREMANAGEMENT_PATIENT WHERE email = ? AND password = ?");
           statement.setString(1, email);
+          
           statement.setString(2, password);
+          
           ResultSet rs = statement.executeQuery();
-          rs.next();
-          int count = rs.getInt(1);
-          if (count == 1) {
+     
+          if(rs.next() && rs.getString(1) != null){
             this.loggedIn = true;
             return true;
           }
@@ -236,7 +237,7 @@ public class Patient {
     
     public void editPatientInfo(String patientId, String phoneNumber, String email, String street, String city, String state, String zipCode, String insuranceId, String sex) {
         Connection con = openDBConnection();
-    	String sql = "{CALL Edit_Patient_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+     String sql = "{CALL Edit_Patient_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
         try (PreparedStatement statement = con.prepareStatement(sql)) {
             statement.setString(1, patientId);
             statement.setString(2, phoneNumber);
@@ -255,7 +256,7 @@ public class Patient {
     }
     
     public String generateRandomPatientId() {
-    	Connection con = openDBConnection();
+     Connection con = openDBConnection();
         String patientId = null;
         String sql = "{? = CALL Generate_Random_Patient_ID()}";
         try (CallableStatement statement = con.prepareCall(sql)) {
@@ -270,7 +271,7 @@ public class Patient {
     
     
     public void addPatient(Patient patient) {
-    	Connection con = openDBConnection();
+     Connection con = openDBConnection();
         String sql = "INSERT INTO HealthCareManagement_Patient (PATIENT_ID, DOB, STREET, CITY, STATE, ZIP_CODE, EMAIL, PHONE_NUMBER, LAST, FIRST, SEX, INSURANCE_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = con.prepareStatement(sql)) {
             // Generate patient ID using the function
@@ -298,7 +299,7 @@ public class Patient {
     }
     
     public Patient viewPatientProfile(String patientId) {
-    	Connection con = openDBConnection();
+     Connection con = openDBConnection();
         Patient patient = null;
         String sql = "SELECT * FROM HealthCareManagement_Patient WHERE PATIENT_ID = ?";
         try (PreparedStatement statement = con.prepareStatement(sql)) {
@@ -327,4 +328,69 @@ public class Patient {
         }
         return patient;
     }
+    
+    @SuppressWarnings("deprecation")
+ public static void main(String[] args) {
+        // Creating a sample patient
+        Patient patient = new Patient();
+        patient.setFirstName("Jane");
+        patient.setLastName("Doe");
+        patient.setEmail("patient1@email.com");
+        patient.setPassword("thsbaibniincd58n");
+        patient.setDob(new Date(1990, 1, 1));
+        patient.setStreet("1234 Life St");
+        patient.setCity("Anytown");
+        patient.setState("NY");
+        patient.setZipCode("12345");
+        patient.setPhoneNumber("123-456-7890");
+        patient.setSex("Female");
+        patient.setInsuranceId("INS001");
+
+        // Testing login functionality
+        System.out.println("Logging in...");
+        System.out.println(patient.login("patient1@email.com", "thsbaibniincd58n"));
+
+        // Testing editing patient info
+        System.out.println("\nEditing patient info...");
+        patient.editPatientInfo(patient.getPatientId(), "987-654-3210", "updatedemail1@example.com", "789 Health Ave",
+                "Carecity", "CA", "34567", "INS003", "Male");
+
+        // Testing viewing patient profile
+        System.out.println("\nViewing patient profile...");
+        Patient retrievedPatient = patient.viewPatientProfile(patient.getPatientId());
+        if (retrievedPatient != null) {
+            System.out.println(retrievedPatient.toString());
+        } else {
+            System.out.println("Patient not found!");
+        }
+
+        // Testing adding a new patient
+        System.out.println("\nAdding new patient...");
+        Patient newPatient = new Patient();
+        newPatient.setFirstName("John");
+        newPatient.setLastName("Smith");
+        newPatient.setEmail("patient7@email.com");
+        newPatient.setPassword("password");
+        newPatient.setDob(new Date(1980, 5, 15));
+        newPatient.setStreet("456 New St");
+        newPatient.setCity("Newcity");
+        newPatient.setState("TX");
+        newPatient.setZipCode("23456");
+        newPatient.setPhoneNumber("234-567-8901");
+        newPatient.setSex("Male");
+        newPatient.setInsuranceId("INS002");
+
+        patient.addPatient(newPatient);
+        System.out.println("New patient added successfully!");
+
+        // Testing viewing added patient profile
+        System.out.println("\nViewing added patient profile...");
+        retrievedPatient = patient.viewPatientProfile("PAT001");
+        if (retrievedPatient != null) {
+            System.out.println(retrievedPatient.toString());
+        } else {
+            System.out.println("Patient not found!");
+        }
+    }
+   
 }
