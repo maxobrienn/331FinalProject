@@ -1,4 +1,6 @@
 package tableConstructors;
+
+import java.sql.*;
 /**
  * @author Matt DeROsa
  */
@@ -12,6 +14,8 @@ public class PharmacyEmployee {
     private String position;
     private String pharmacyId;
     private String password;
+    
+    private Boolean loggedIn = false;
 
     public PharmacyEmployee() {
     }
@@ -154,6 +158,114 @@ public class PharmacyEmployee {
 		this.password = password;
 	}
 
-    // Getters and setters
+	public Connection openDBConnection() {
+        try {
+            Class.forName("oracle.jdbc.OracleDriver");
+            Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
+                    "csci.cscioraclerh7srv.ad.csbsju.edu","TEAM05", "TEAM05");
+            return myConnection;
+        } catch (Exception E) {
+            E.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean login(String email, String password) {
+        Connection con = openDBConnection();
+        try {
+            PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM PHARMACY_EMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
+            statement.setString(1, email);
+            statement.setString(2, password);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next() && rs.getString(1) != null) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
+        try {
+            Connection connection = openDBConnection();
+            CallableStatement callableStatement = connection.prepareCall("{call Edit_Pharmacy_Employee_Info(?,?,?,?,?,?,?,?,?)}");
+            callableStatement.setString(1, employeeId);
+            callableStatement.setString(2, lastName);
+            callableStatement.setString(3, firstName);
+            callableStatement.setString(4, ssn);
+            callableStatement.setString(5, phoneNumber);
+            callableStatement.setString(6, email);
+            callableStatement.setString(7, position);
+            callableStatement.setString(8, pharmacyId);
+            callableStatement.setString(9, password);
+
+            callableStatement.execute();
+
+            System.out.println("Pharmacy employee information updated successfully.");
+
+            callableStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public PharmacyEmployee displayEmployeeInfo(String employeeId) {
+        PharmacyEmployee employee = new PharmacyEmployee();
+        Connection con = openDBConnection();
+        try {
+            String sql = "SELECT * FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMPLOYEE_ID = ?";
+           
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, employeeId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                employee.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
+                employee.setLastName(resultSet.getString("LAST_NAME"));
+                employee.setFirstName(resultSet.getString("FIRST_NAME"));
+                employee.setSsn(resultSet.getString("SSN"));
+                employee.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
+                employee.setEmail(resultSet.getString("EMAIL"));
+                employee.setPosition(resultSet.getString("POSITION"));
+                employee.setPharmacyId(resultSet.getString("PHARMACY_ID"));
+                employee.setPassword(resultSet.getString("PASSWORD"));
+
+                System.out.println("Employee ID: " + employee.getEmployeeId());
+                System.out.println("Last Name: " + employee.getLastName());
+                System.out.println("First Name: " + employee.getFirstName());
+                System.out.println("SSN: " + employee.getSsn());
+                System.out.println("Phone Number: " + employee.getPhoneNumber());
+                System.out.println("Email: " + employee.getEmail());
+                System.out.println("Position: " + employee.getPosition());
+                System.out.println("Pharmacy ID: " + employee.getPharmacyId());
+                System.out.println("Password: " + employee.getPassword());
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employee;
+    }
+
+	/**
+	 * @return the loggedIn
+	 */
+	public Boolean getLoggedIn() {
+		return loggedIn;
+	}
+
+	/**
+	 * @param loggedIn the loggedIn to set
+	 */
+	public void setLoggedIn(Boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
     
 }
