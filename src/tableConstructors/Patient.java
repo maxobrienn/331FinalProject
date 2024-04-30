@@ -1,9 +1,7 @@
 package tableConstructors;
-/**
- * @author Matt DeROsa
- */
-import java.util.Date;
+
 import java.sql.*;
+import java.util.Date;
 
 public class Patient {
     private String patientId;
@@ -25,41 +23,28 @@ public class Patient {
     public Patient() {
     }
     
- /**
-  * @param patientId
-  * @param dob
-  * @param street
-  * @param city
-  * @param state
-  * @param zipCode
-  * @param email
-  * @param phoneNumber
-  * @param lastName
-  * @param firstName
-  * @param sex
-  * @param insuranceId
-  * @param password
-  * @param loggedIn
-  */
- public Patient(String patientId, Date dob, String street, String city, String state, String zipCode, String email,
-   String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password) {
-  this.patientId = patientId;
-  this.dob = dob;
-  this.street = street;
-  this.city = city;
-  this.state = state;
-  this.zipCode = zipCode;
-  this.email = email;
-  this.phoneNumber = phoneNumber;
-  this.lastName = lastName;
-  this.firstName = firstName;
-  this.sex = sex;
-  this.insuranceId = insuranceId;
-  this.password = password;
- }
+    /**
+     * Constructor with parameters
+     */
+    public Patient(String patientId, Date dob, String street, String city, String state, String zipCode, String email,
+                   String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password) {
+        this.patientId = patientId;
+        this.dob = dob;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.sex = sex;
+        this.insuranceId = insuranceId;
+        this.password = password;
+    }
 
 
- // Getters and Setters
+    // Getters and Setters
     public String getPatientId() {
         return patientId;
     }
@@ -163,24 +148,24 @@ public class Patient {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     /**
-  * @return the loggedIn status
-  */
- public Boolean isLoggedIn() {
-  return this.loggedIn;
- }
- 
- /**
-    * sets loggedIn instance field to false
-    * @throws IllegalStateException if then method is called when loggedIn = false
-    */
-   public void logout(){
-     if(! isLoggedIn())
-       throw new IllegalStateException("MUST BE LOGGED IN FIRST!");
-     
-     this.loggedIn = false;
-   }
+     * @return the loggedIn status
+     */
+    public Boolean isLoggedIn() {
+        return this.loggedIn;
+    }
+
+    /**
+     * sets loggedIn instance field to false
+     * @throws IllegalStateException if then method is called when loggedIn = false
+     */
+    public void logout(){
+        if(!isLoggedIn())
+            throw new IllegalStateException("MUST BE LOGGED IN FIRST!");
+
+        this.loggedIn = false;
+    }
 
     @Override
     public String toString() {
@@ -200,42 +185,41 @@ public class Patient {
                 ", password='" + password + '\'' +
                 '}';
     }
-    
+
     public Connection openDBConnection() {
         try {
-          // Load driver and link to driver manager
-          Class.forName("oracle.jdbc.OracleDriver");
-          // Create a connection to the specified database
-          Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
-                                                                "csci.cscioraclerh7srv.ad.csbsju.edu","TEAM05", "TEAM05");
-          return myConnection;
+            // Load driver and link to driver manager
+            Class.forName("oracle.jdbc.OracleDriver");
+            // Create a connection to the specified database
+            Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
+                    "csci.cscioraclerh7srv.ad.csbsju.edu","TEAM05", "TEAM05");
+            return myConnection;
         } catch (Exception E) {
-          E.printStackTrace();
+            E.printStackTrace();
         }
         return null;
-      }
-    
+    }
+
     public boolean login(String email, String password) {
         Connection con = openDBConnection();
         try {
-          PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HEALTHCAREMANAGEMENT_PATIENT WHERE email = ? AND password = ?");
-          statement.setString(1, email);
-          
-          statement.setString(2, password);
-          
-          ResultSet rs = statement.executeQuery();
-     
-          if(rs.next() && rs.getString(1) != null){
-            this.loggedIn = true;
-            return true;
-          }
+            PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HEALTHCAREMANAGEMENT_PATIENT WHERE email = ? AND password = ?");
+            statement.setString(1, email);
+            statement.setString(2, password);
+
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next() && rs.getInt(1) > 0){
+                this.loggedIn = true;
+                return true;
+            }
         } catch (SQLException e) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
         return false;
-      }
-    
- // Method to update patient information
+    }
+
+    // Method to update patient information
     public void updatePatientInfo(String phoneNumber, String email, String street, String city, String state, String zipCode, String insuranceId, String sex) {
         try {
             // Connect to Oracle database
@@ -269,83 +253,88 @@ public class Patient {
         }
     }
 
-    
-    public String generateRandomPatientId() {
-     Connection con = openDBConnection();
-        String patientId = null;
-        String sql = "{? = CALL Generate_Random_Patient_ID()}";
-        try (CallableStatement statement = con.prepareCall(sql)) {
-            statement.registerOutParameter(1, java.sql.Types.CHAR);
-            statement.execute();
-            patientId = statement.getString(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return patientId;
-    }
-    
-    
-    public void addPatient(Patient patient) {
-     Connection con = openDBConnection();
-        String sql = "INSERT INTO HealthCareManagement_Patient (PATIENT_ID, DOB, STREET, CITY, STATE, ZIP_CODE, EMAIL, PHONE_NUMBER, LAST, FIRST, SEX, INSURANCE_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            // Generate patient ID using the function
-            String patientId = generateRandomPatientId();
+   public void addPatient(Patient patient) {
+    try (Connection connection = openDBConnection()) {
+        // Generate a new patient ID
+        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Patient_ID}");
+        callableStatement.registerOutParameter(1, Types.CHAR);
+        callableStatement.execute();
 
-            // Set values for other columns
-            statement.setString(1, patientId);
-            statement.setDate(2, new java.sql.Date(patient.getDob().getTime()));
-            statement.setString(3, patient.getStreet());
-            statement.setString(4, patient.getCity());
-            statement.setString(5, patient.getState());
-            statement.setString(6, patient.getZipCode());
-            statement.setString(7, patient.getEmail());
-            statement.setString(8, patient.getPhoneNumber());
-            statement.setString(9, patient.getLastName());
-            statement.setString(10, patient.getFirstName());
-            statement.setString(11, patient.getSex());
-            statement.setString(12, patient.getInsuranceId());
-            statement.setString(13, patient.getPassword());
+        String generatedId = callableStatement.getString(1);
+        callableStatement.close();
 
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String sql = "INSERT INTO HealthCareManagement_Patient (PATIENT_ID, FIRST, LAST, EMAIL, PASSWORD, DOB, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, SEX, INSURANCE_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, generatedId);
+        preparedStatement.setString(2, patient.getFirstName());
+        preparedStatement.setString(3, patient.getLastName());
+        preparedStatement.setString(4, patient.getEmail());
+        preparedStatement.setString(5, patient.getPassword());
+        preparedStatement.setDate(6, new java.sql.Date(patient.getDob().getTime()));
+        preparedStatement.setString(7, patient.getStreet());
+        preparedStatement.setString(8, patient.getCity());
+        preparedStatement.setString(9, patient.getState());
+        preparedStatement.setString(10, patient.getZipCode());
+        preparedStatement.setString(11, patient.getPhoneNumber());
+        preparedStatement.setString(12, patient.getSex());
+        preparedStatement.setString(13, patient.getInsuranceId());
+
+        preparedStatement.executeUpdate();
+        System.out.println("Patient added successfully with ID: " + generatedId);
+
+        preparedStatement.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
-    
-    public Patient viewPatientProfile(String patientId) {
-     Connection con = openDBConnection();
-        Patient patient = null;
-        String sql = "SELECT * FROM HealthCareManagement_Patient WHERE PATIENT_ID = ?";
-        try (PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setString(1, patientId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    patient = new Patient(
-                        resultSet.getString("PATIENT_ID"),
-                        resultSet.getDate("DOB"),
-                        resultSet.getString("STREET"),
-                        resultSet.getString("CITY"),
-                        resultSet.getString("STATE"),
-                        resultSet.getString("ZIP_CODE"),
-                        resultSet.getString("EMAIL"),
-                        resultSet.getString("PHONE_NUMBER"),
-                        resultSet.getString("LAST"),
-                        resultSet.getString("FIRST"),
-                        resultSet.getString("SEX"),
-                        resultSet.getString("INSURANCE_ID"),
-                        resultSet.getString("PASSWORD")
-                    );
-                }
+}
+
+
+
+    public Patient displayPatientInfo(String patientId) {
+        Patient patient = new Patient();
+        Connection con = openDBConnection();
+        try {
+            // Prepare and execute SQL query to retrieve patient information
+            String sql = "SELECT * FROM HealthCareManagement_PATIENT WHERE PATIENT_ID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(sql);
+            preparedStatement.setString(1, patientId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Print patient information
+            while (resultSet.next()) {
+                patient.setPatientId(resultSet.getString("PATIENT_ID"));
+                patient.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
+                patient.setEmail(resultSet.getString("EMAIL"));
+                patient.setStreet(resultSet.getString("STREET"));
+                patient.setCity(resultSet.getString("CITY"));
+                patient.setState(resultSet.getString("STATE"));
+                patient.setZipCode(resultSet.getString("ZIP_CODE"));
+                patient.setInsuranceId(resultSet.getString("INSURANCE_ID"));
+                patient.setSex(resultSet.getString("SEX"));
+
+                System.out.println("Patient ID: " + patient.getPatientId());
+                System.out.println("Phone Number: " + patient.getPhoneNumber());
+                System.out.println("Email: " + patient.getEmail());
+                System.out.println("Street: " + patient.getStreet());
+                System.out.println("City: " + patient.getCity());
+                System.out.println("State: " + patient.getState());
+                System.out.println("Zip Code: " + patient.getZipCode());
+                System.out.println("Insurance ID: " + patient.getInsuranceId());
+                System.out.println("Sex: " + patient.getSex());
             }
+
+            // Close JDBC objects
+            resultSet.close();
+            preparedStatement.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return patient;
     }
-    
+
     @SuppressWarnings("deprecation")
- public static void main(String[] args) {
+	public static void main(String[] args) {
         // Creating a sample patient
         Patient patient = new Patient();
         patient.setPatientId("PAT001");
@@ -369,14 +358,15 @@ public class Patient {
         // Testing editing patient info
         System.out.println("\nEditing patient info before...");
         System.out.println(patient.toString());
-        
+
         System.out.println("\nEdit patient info after....");
         patient.updatePatientInfo("987-654-3210", "updatedemail1@example.com", "789 Health Ave",
                 "Carecity", "CA", "34567", "INS003", "Male");
+        System.out.println(patient.toString());
 
         // Testing viewing patient profile
         System.out.println("\nViewing patient profile...");
-        Patient retrievedPatient = patient.viewPatientProfile(patient.getPatientId());
+        Patient retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
         if (retrievedPatient != null) {
             System.out.println(retrievedPatient.toString());
         } else {
@@ -404,12 +394,11 @@ public class Patient {
 
         // Testing viewing added patient profile
         System.out.println("\nViewing added patient profile...");
-        retrievedPatient = patient.viewPatientProfile("PAT001");
+        retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
         if (retrievedPatient != null) {
             System.out.println(retrievedPatient.toString());
         } else {
             System.out.println("Patient not found!");
         }
     }
-   
 }
