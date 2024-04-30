@@ -209,7 +209,7 @@ public class Patient {
 
             ResultSet rs = statement.executeQuery();
 
-            if(rs.next() && rs.getInt(1) > 0){
+            if(rs.next() && rs.getString(1) != null){
                 this.loggedIn = true;
                 return true;
             }
