@@ -187,9 +187,9 @@ public class InsuranceCompany {
   
   @Override
 public String toString() {
-	return "InsuranceCompany [insuranceId=" + insuranceId + ", insuranceName=" + insuranceName + ", street=" + street
-			+ ", city=" + city + ", state=" + state + ", zipCode=" + zipCode + ", phoneNumber=" + phoneNumber
-			+ ", email=" + email + ", password=" + password + ", loggedIn=" + loggedIn + "]";
+ return "InsuranceCompany [insuranceId=" + insuranceId + ", insuranceName=" + insuranceName + ", street=" + street
+   + ", city=" + city + ", state=" + state + ", zipCode=" + zipCode + ", phoneNumber=" + phoneNumber
+   + ", email=" + email + ", password=" + password + ", loggedIn=" + loggedIn + "]";
 }
 
 /**
@@ -319,30 +319,26 @@ public String toString() {
   }
   
   /**
+   * Method that allows insurance companies to view Covered Patients Information
    * 
+   * @param INSURANCEID -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
    * 
    */
   public void viewCoveredPatientsInformation(String INSURANCEID) {
     
-    //Variable of type database connection
     Connection myConnection;
-    //Variable of type prepared statement
     PreparedStatement preparedStmt;
     
     try {
-      // Open a database connection.
       myConnection = openDBConnection();
       
       // Prepare the SQL update statement.
       String queryString = "SELECT * FROM Insurance_Company_Covered_Patients WHERE INSURANCE_ID = ?";
       
-      // Create a PreparedStatement for executing the update.
       preparedStmt = myConnection.prepareStatement(queryString);
       
-      // Bind the instance field values to the PreparedStatement's parameters.
       preparedStmt.setString(1, INSURANCEID);
       
-      // Execute the query
       ResultSet rs = preparedStmt.executeQuery(); 
       
       // Print the column headers
@@ -373,10 +369,10 @@ public String toString() {
       InsuranceCompany test = new InsuranceCompany();
       
       // Call the makePayment method with the given parameters
-      //test.makePayment("PAY011", "2024-04-29", "2.5", "INS002", "PRSC001");
+      test.makePayment("PAY011", "2024-04-29", "2.5", "INS002", "PRSC001");
       
       // Call the instance method on the created instance to view covered patients information
-      test.viewCoveredPatientsInformation("INS002"+"    ");
+      test.viewCoveredPatientsInformation("INS002");
     } 
     
     catch (Exception e) {
