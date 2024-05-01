@@ -32,142 +32,142 @@ public class PharmacyEmployee {
         this.password = password;
     }
 
- /**
-  * @return the employeeId
-  */
- public String getEmployeeId() {
-  return employeeId;
- }
+	/**
+	 * @return the employeeId
+	 */
+	public String getEmployeeId() {
+		return employeeId;
+	}
 
- /**
-  * @param employeeId the employeeId to set
-  */
- public void setEmployeeId(String employeeId) {
-  this.employeeId = employeeId;
- }
+	/**
+	 * @param employeeId the employeeId to set
+	 */
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
+	}
 
- /**
-  * @return the lastName
-  */
- public String getLastName() {
-  return lastName;
- }
+	/**
+	 * @return the lastName
+	 */
+	public String getLastName() {
+		return lastName;
+	}
 
- /**
-  * @param lastName the lastName to set
-  */
- public void setLastName(String lastName) {
-  this.lastName = lastName;
- }
+	/**
+	 * @param lastName the lastName to set
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
- /**
-  * @return the firstName
-  */
- public String getFirstName() {
-  return firstName;
- }
+	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
 
- /**
-  * @param firstName the firstName to set
-  */
- public void setFirstName(String firstName) {
-  this.firstName = firstName;
- }
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
- /**
-  * @return the ssn
-  */
- public String getSsn() {
-  return ssn;
- }
+	/**
+	 * @return the ssn
+	 */
+	public String getSsn() {
+		return ssn;
+	}
 
- /**
-  * @param ssn the ssn to set
-  */
- public void setSsn(String ssn) {
-  this.ssn = ssn;
- }
+	/**
+	 * @param ssn the ssn to set
+	 */
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
 
- /**
-  * @return the phoneNumber
-  */
- public String getPhoneNumber() {
-  return phoneNumber;
- }
+	/**
+	 * @return the phoneNumber
+	 */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 
- /**
-  * @param phoneNumber the phoneNumber to set
-  */
- public void setPhoneNumber(String phoneNumber) {
-  this.phoneNumber = phoneNumber;
- }
+	/**
+	 * @param phoneNumber the phoneNumber to set
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
- /**
-  * @return the email
-  */
- public String getEmail() {
-  return email;
- }
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
 
- /**
-  * @param email the email to set
-  */
- public void setEmail(String email) {
-  this.email = email;
- }
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
- /**
-  * @return the position
-  */
- public String getPosition() {
-  return position;
- }
+	/**
+	 * @return the position
+	 */
+	public String getPosition() {
+		return position;
+	}
 
- /**
-  * @param position the position to set
-  */
- public void setPosition(String position) {
-  this.position = position;
- }
+	/**
+	 * @param position the position to set
+	 */
+	public void setPosition(String position) {
+		this.position = position;
+	}
 
- /**
-  * @return the pharmacyId
-  */
- public String getPharmacyId() {
-  return pharmacyId;
- }
+	/**
+	 * @return the pharmacyId
+	 */
+	public String getPharmacyId() {
+		return pharmacyId;
+	}
 
- /**
-  * @param pharmacyId the pharmacyId to set
-  */
- public void setPharmacyId(String pharmacyId) {
-  this.pharmacyId = pharmacyId;
- }
+	/**
+	 * @param pharmacyId the pharmacyId to set
+	 */
+	public void setPharmacyId(String pharmacyId) {
+		this.pharmacyId = pharmacyId;
+	}
 
- /**
-  * @return the password
-  */
- public String getPassword() {
-  return password;
- }
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
 
- /**
-  * @param password the password to set
-  */
- public void setPassword(String password) {
-  this.password = password;
- }
- 
- 
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
 
- @Override
- public String toString() {
-  return "PharmacyEmployee [employeeId=" + employeeId + ", lastName=" + lastName + ", firstName=" + firstName
-    + ", ssn=" + ssn + ", phoneNumber=" + phoneNumber + ", email=" + email + ", position=" + position
-    + ", pharmacyId=" + pharmacyId + ", password=" + password + ", loggedIn=" + loggedIn + "]";
- }
+	@Override
+	public String toString() {
+		return "PharmacyEmployee [employeeId=" + employeeId + ", lastName=" + lastName + ", firstName=" + firstName
+				+ ", ssn=" + ssn + ", phoneNumber=" + phoneNumber + ", email=" + email + ", position=" + position
+				+ ", pharmacyId=" + pharmacyId + ", password=" + password + ", loggedIn=" + loggedIn + "]";
+	}
 
- public Connection openDBConnection() {
+	public Connection openDBConnection() {
         try {
             Class.forName("oracle.jdbc.OracleDriver");
             Connection myConnection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
@@ -263,76 +263,18 @@ public class PharmacyEmployee {
         return employee;
     }
 
- /**
-  * @return the loggedIn
-  */
- public Boolean getLoggedIn() {
-  return loggedIn;
- }
+	/**
+	 * @return the loggedIn
+	 */
+	public Boolean getLoggedIn() {
+		return loggedIn;
+	}
 
- /**
-  * @param loggedIn the loggedIn to set
-  */
- public void setLoggedIn(Boolean loggedIn) {
-  this.loggedIn = loggedIn;
- }
- 
- /**
-   * Method that allows pharmacy employees to view all presscriptions including any unpaid balance for each
-   * 
-   * @param PHARMACY_ID -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
-   * 
-   */
-  public void viewPrescriptions(String PHARMACY_ID) {
-    
-    Connection myConnection;
-    PreparedStatement preparedStmt;
-    
-    try {
-      myConnection = openDBConnection();
-      
-      // Prepare the SQL update statement.
-      String queryString = "SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = ?";
-      
-      preparedStmt = myConnection.prepareStatement(queryString);
-      
-      preparedStmt.setString(1, PHARMACY_ID);
-      
-      ResultSet rs = preparedStmt.executeQuery(); 
-      
-      // Print the column headers
-      System.out.println("PRESCRIPTION_ID\tPATIENT_ID\tINSURANCE_ID\tAMOUNT_OWED");
-      
-      // Iterate through the result set and print each row
-      while (rs.next()) {
-        String prescriptionId = rs.getString("PRESCRIPTION_ID");
-        String patientId = rs.getString("PATIENT_ID");
-        String insuranceId = rs.getString("INSURANCE_ID");
-        double amountOwed = rs.getDouble("AMOUNT_OWED");
-        System.out.println(prescriptionId + "\t\t" + patientId + "\t\t" + insuranceId + "\t\t" + amountOwed);
-      }
-    }
-    
-    catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
-  
-    /**
-   * Main method to test JDBC methods
-   */
-  public static void main(String[] args) {
-    try {
-      // Create an instance of InsuranceCompanyController
-      PharmacyEmployee test = new PharmacyEmployee();
-
-      // Call the instance method on the created instance to view covered patients information
-      test.viewPrescriptions("PHRM001");
-    } 
-    
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+	/**
+	 * @param loggedIn the loggedIn to set
+	 */
+	public void setLoggedIn(Boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
     
 }
