@@ -292,14 +292,14 @@ public class Patient {
 
 
 
-    public Patient displayPatientInfo(String patientId) {
+    public Patient displayPatientInfo() {
         Patient patient = new Patient();
         Connection con = openDBConnection();
         try {
             // Prepare and execute SQL query to retrieve patient information
             String sql = "SELECT * FROM HealthCareManagement_PATIENT WHERE PATIENT_ID = ?";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setString(1, patientId);
+            preparedStatement.setString(1, getPatientId());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             // Print patient information
@@ -313,16 +313,6 @@ public class Patient {
                 patient.setZipCode(resultSet.getString("ZIP_CODE"));
                 patient.setInsuranceId(resultSet.getString("INSURANCE_ID"));
                 patient.setSex(resultSet.getString("SEX"));
-
-                System.out.println("Patient ID: " + patient.getPatientId());
-                System.out.println("Phone Number: " + patient.getPhoneNumber());
-                System.out.println("Email: " + patient.getEmail());
-                System.out.println("Street: " + patient.getStreet());
-                System.out.println("City: " + patient.getCity());
-                System.out.println("State: " + patient.getState());
-                System.out.println("Zip Code: " + patient.getZipCode());
-                System.out.println("Insurance ID: " + patient.getInsuranceId());
-                System.out.println("Sex: " + patient.getSex());
             }
             
             // Close JDBC objects
@@ -452,7 +442,7 @@ public class Patient {
   @SuppressWarnings("deprecation")
   public static void main(String[] args) {
       Patient patient = new Patient();
-      patient.setPatientId("PAT001    ");
+      patient.setPatientId("PAT001");
       patient.setFirstName("Jane");
       patient.setLastName("Doe");
       patient.setEmail("patient1@email.com");
@@ -484,31 +474,16 @@ public class Patient {
       // Test editing patient info
       System.out.println("\nTesting editing patient info...");
       System.out.println("Patient info before update:");
-      System.out.println(patient.toString());
-      patient.updatePatientInfo("987-654-3210", "updatedemail1@example.com", "789 Health Ave",
-              "Carecity", "CA", "34567", "INS003", "Male");
+      System.out.println(patient.displayPatientInfo().toString());
+      patient.updatePatientInfo("987-654-3210", "upatient@example.com", "789 Health Ave",
+              "Carecity", "CA", "34567", "INS003", "Male"); 
       System.out.println("\nPatient info after update:");
-      System.out.println(patient.toString());
+      System.out.println(patient.displayPatientInfo().toString());
 
       // Test viewing patient profile
       System.out.println("\nTesting viewing patient profile...");
-      Patient retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
-      if (retrievedPatient != null) {
-          System.out.println("Retrieved patient info:");
-          System.out.println(retrievedPatient.toString());
-      } else {
-          System.out.println("Patient not found!");
-      }
+      System.out.println(patient.displayPatientInfo().toString());
 
-      // Test viewing patient profile with non-existent ID
-      System.out.println("\nTesting viewing patient profile with non-existent ID...");
-      retrievedPatient = patient.displayPatientInfo("NONEXISTENT_ID");
-      if (retrievedPatient != null) {
-          System.out.println("Retrieved patient info:");
-          System.out.println(retrievedPatient.toString());
-      } else {
-          System.out.println("Patient not found!");
-      }
 
       // Test adding a new patient
       System.out.println("\nTesting adding new patient...");
@@ -531,13 +506,8 @@ public class Patient {
 
       // Test viewing added patient profile
       System.out.println("\nTesting viewing added patient profile...");
-      retrievedPatient = patient.displayPatientInfo(newPatient.getPatientId());
-      if (retrievedPatient != null) {
-          System.out.println("Retrieved added patient info:");
-          System.out.println(retrievedPatient.toString());
-      } else {
-          System.out.println("Patient not found!");
-      }
+      System.out.println(newPatient.displayPatientInfo().toString());
+      
       
       // Test viewing prescription balances
       System.out.println("\nTesting viewing prescription balances...");
@@ -545,11 +515,9 @@ public class Patient {
 
       // Test making payment
       System.out.println("\nTesting making payment...");
-<<<<<<< HEAD
       newPatient.makePayment("PAY022", "2024-05-01", "5", "PAT001", "PRSC001");
-=======
       patient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
->>>>>>> d9ceb0c37ded81ed0632e55a6942c0c8759ba27d
+
       // Assuming "PRSC001" is a valid prescription ID
   }
 
