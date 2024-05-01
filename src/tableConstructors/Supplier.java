@@ -313,7 +313,8 @@ public class Supplier {
   public static void main(String[] args) {
     try {
       // Create an instance of Supplier for testing
-      Supplier supplierTest = new Supplier();
+      @SuppressWarnings("unused")
+	Supplier supplierTest = new Supplier();
       
       // Test add medication
       //supplierTest.addMedication("SUP001","addedMed",10000);
