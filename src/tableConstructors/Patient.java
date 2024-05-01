@@ -1,7 +1,9 @@
 package tableConstructors;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Patient {
     private String patientId;
@@ -337,7 +339,7 @@ public class Patient {
      * 
      * 
      */
-    public void viewPrescriptionBalances(String PATIENTID) {
+    public void viewPrescriptionBalances(String patientId) {
       
       //Variable of type database connection
       Connection myConnection;
@@ -355,7 +357,7 @@ public class Patient {
         preparedStmt = myConnection.prepareStatement(queryString);
         
         // Bind the instance field values to the PreparedStatement's parameters.
-        preparedStmt.setString(1, PATIENTID);
+        preparedStmt.setString(1, patientId);
         
         // Execute the query
         ResultSet rs = preparedStmt.executeQuery(); 
@@ -365,12 +367,12 @@ public class Patient {
         
         // Iterate through the result set and print each row
         while (rs.next()) {
-          String patientId = rs.getString("PATIENT_ID");
+          String pId = rs.getString("PATIENT_ID");
           String prescriptionId = rs.getString("PRESCRIPTION_ID");
           Date dateIssued = rs.getDate("DATE_ISSUED");
           String prescriptionName = rs.getString("PRESCRIPTION_NAME");
           double amountOwed = rs.getDouble("AMOUNT_OWED");
-          System.out.println(patientId + "\t\t" + prescriptionId + "\t\t" + dateIssued + "\t" + prescriptionName + "\t" + amountOwed);
+          System.out.println(pId + "\t\t" + prescriptionId + "\t\t" + dateIssued + "\t" + prescriptionName + "\t" + amountOwed);
         }
       }
       
@@ -425,80 +427,112 @@ public class Patient {
       e.printStackTrace();
     }
   }
+  
+  public class AppointmentDetailsJDBC {
+    // JDBC method to retrieve data from the appointment_Details view
+    public List<AppointmentDetails> getAppointmentDetails() {
+        List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
 
-    @SuppressWarnings("deprecation")
- public static void main(String[] args) {
-        // Creating a sample patient
-        Patient patient = new Patient();
-        patient.setPatientId("PAT001");
-        patient.setFirstName("Jane");
-        patient.setLastName("Doe");
-        patient.setEmail("patient1@email.com");
-        patient.setPassword("thsbaibniincd58n");
-        patient.setDob(new Date(1990, 1, 1));
-        patient.setStreet("1234 Life St");
-        patient.setCity("Anytown");
-        patient.setState("NY");
-        patient.setZipCode("12345");
-        patient.setPhoneNumber("123-456-7890");
-        patient.setSex("Female");
-        patient.setInsuranceId("INS001");
+        try (Connection connection = openDBConnection()) {
+            String sql = "SELECT DOCTOR_NAME, APPOINTMENT_DATE, NOTE, PATIENT_ID FROM appointment_Details";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-        // Testing login functionality
-        System.out.println("Logging in...");
-        System.out.println(patient.login("patient1@email.com", "thsbaibniincd58n"));
+            while (resultSet.next()) {
+                String doctorName = resultSet.getString("DOCTOR_NAME");
+                Date appointmentDate = resultSet.getDate("APPOINTMENT_DATE");
+                String note = resultSet.getString("NOTE");
+                String patientId = resultSet.getString("PATIENT_ID");
 
-        // Testing editing patient info
-        System.out.println("\nEditing patient info before...");
-        System.out.println(patient.toString());
-
-        System.out.println("\nEdit patient info after....");
-        patient.updatePatientInfo("987-654-3210", "updatedemail1@example.com", "789 Health Ave",
-                "Carecity", "CA", "34567", "INS003", "Male");
-        System.out.println(patient.toString());
-
-        // Testing viewing patient profile
-        System.out.println("\nViewing patient profile...");
-        Patient retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
-        if (retrievedPatient != null) {
-            System.out.println(retrievedPatient.toString());
-        } else {
-            System.out.println("Patient not found!");
+                AppointmentDetails appointmentDetails = new AppointmentDetails(doctorName, appointmentDate, note, patientId);
+                appointmentDetailsList.add(appointmentDetails);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        // Testing adding a new patient
-        System.out.println("\nAdding new patient...");
-        Patient newPatient = new Patient();
-        newPatient.setFirstName("John");
-        newPatient.setLastName("Smith");
-        newPatient.setEmail("patient7@email.com");
-        newPatient.setPassword("password");
-        newPatient.setDob(new Date(1980, 5, 15));
-        newPatient.setStreet("456 New St");
-        newPatient.setCity("Newcity");
-        newPatient.setState("TX");
-        newPatient.setZipCode("23456");
-        newPatient.setPhoneNumber("234-567-8901");
-        newPatient.setSex("Male");
-        newPatient.setInsuranceId("INS002");
-
-        patient.addPatient(newPatient);
-        System.out.println("New patient added successfully!");
-
-        // Testing viewing added patient profile
-        System.out.println("\nViewing added patient profile...");
-        retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
-        if (retrievedPatient != null) {
-            System.out.println(retrievedPatient.toString());
-        } else {
-            System.out.println("Patient not found!");
-        }
-        
-        // testing to see if patients can view prescriptions
-        newPatient.viewPrescriptionBalances("PAT001"+"    ");
-        
-        // testing makePayment method with the given parameters
-        newPatient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
-        
+        return appointmentDetailsList;
     }
+  }
+
+
+  @SuppressWarnings("deprecation")
+  public static void main(String[] args) {
+      Patient patient = new Patient();
+      patient.setPatientId("PAT001");
+      patient.setFirstName("Jane");
+      patient.setLastName("Doe");
+      patient.setEmail("patient1@email.com");
+      patient.setPassword("thsbaibniincd58n");
+      patient.setDob(new Date(1990, 1, 1));
+      patient.setStreet("1234 Life St");
+      patient.setCity("Anytown");
+      patient.setState("NY");
+      patient.setZipCode("12345");
+      patient.setPhoneNumber("123-456-7890");
+      patient.setSex("Female");
+      patient.setInsuranceId("INS001");
+
+      // Test login functionality
+      System.out.println("Testing login functionality...");
+      boolean loginSuccess = patient.login("patient1@email.com", "thsbaibniincd58n");
+      System.out.println("Login successful: " + loginSuccess);
+
+      // Test editing patient info
+      System.out.println("\nTesting editing patient info...");
+      System.out.println("Patient info before update:");
+      System.out.println(patient.toString());
+      patient.updatePatientInfo("987-654-3210", "updatedemail1@example.com", "789 Health Ave",
+              "Carecity", "CA", "34567", "INS003", "Male");
+      System.out.println("\nPatient info after update:");
+      System.out.println(patient.toString());
+
+      // Test viewing patient profile
+      System.out.println("\nTesting viewing patient profile...");
+      Patient retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
+      if (retrievedPatient != null) {
+          System.out.println("Retrieved patient info:");
+          System.out.println(retrievedPatient.toString());
+      } else {
+          System.out.println("Patient not found!");
+      }
+
+      // Test adding a new patient
+      System.out.println("\nTesting adding new patient...");
+      Patient newPatient = new Patient();
+      newPatient.setFirstName("John");
+      newPatient.setLastName("Smith");
+      newPatient.setEmail("patient9999@email.com");
+      newPatient.setPassword("password");
+      newPatient.setDob(new Date(1980, 5, 15));
+      newPatient.setStreet("456 New St");
+      newPatient.setCity("Newcity");
+      newPatient.setState("TX");
+      newPatient.setZipCode("23456");
+      newPatient.setPhoneNumber("234-567-8901");
+      newPatient.setSex("Male");
+      newPatient.setInsuranceId("INS002");
+
+      patient.addPatient(newPatient);
+      System.out.println("New patient added successfully!");
+
+      // Test viewing added patient profile
+      System.out.println("\nTesting viewing added patient profile...");
+      retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
+      if (retrievedPatient != null) {
+          System.out.println("Retrieved added patient info:");
+          System.out.println(retrievedPatient.toString());
+      } else {
+          System.out.println("Patient not found!");
+      }
+      
+      // Test viewing prescription balances
+      System.out.println("\nTesting viewing prescription balances...");
+      patient.viewPrescriptionBalances("PAT001");
+
+      // Test making payment
+      System.out.println("\nTesting making payment...");
+      newPatient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
+      // Assuming "PRSC001" is a valid prescription ID
+  }
 }

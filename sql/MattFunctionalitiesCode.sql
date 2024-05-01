@@ -89,7 +89,7 @@ CREATE OR REPLACE TRIGGER create_Account
 BEFORE INSERT ON HealthCareManagement_Patient
 FOR EACH ROW
 BEGIN
-    :NEW.PATIENT_ID := NEW.PATIENT_ID;
+    :NEW.PATIENT_ID := :NEW.PATIENT_ID;
     :NEW.DOB := :NEW.DOB; -- DOB
     :NEW.STREET := :NEW.STREET; -- STREET
     :NEW.CITY := :NEW.CITY; -- CITY
@@ -117,18 +117,7 @@ SELECT * FROM HealthCareManagement_Patient;
 SELECT * FROM HealthCareManagement_Patient;
 
 
-
-
--- Create a view to provide patients with information about their appointments, 
--- including the name of the doctor, appointment date, and notes.
---Matt DeRosa
-CREATE OR REPLACE VIEW Patient_Appointment_Info AS
-SELECT D.LAST || ', ' || D.FIRST AS DOCTOR_NAME,
-       A.APPOINTMENT_DATE,
-       A.NOTE
-FROM HealthCareManagement_APPOINTMENT A
+CREATE OR REPLACE VIEW appointment_Details AS
+SELECT D.FIRST || ' '|| D.LAST AS DOCTOR_NAME, A.APPOINTMENT_DATE, A.NOTE, A.patient_id
+FROM HealthCareManagement_APPOINTMENT A 
 JOIN HealthCareManagement_DOCTOR D ON A.DOCTOR_ID = D.DOCTOR_ID;
-
---Test Patient_Appointment_Info
-Select * From Patient_Appointment_Info
-

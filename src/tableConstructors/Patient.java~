@@ -322,83 +322,187 @@ public class Patient {
                 System.out.println("Insurance ID: " + patient.getInsuranceId());
                 System.out.println("Sex: " + patient.getSex());
             }
-
+            
             // Close JDBC objects
             resultSet.close();
             preparedStatement.close();
             con.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+          e.printStackTrace();
         }
         return patient;
     }
-
-    @SuppressWarnings("deprecation")
-	public static void main(String[] args) {
-        // Creating a sample patient
-        Patient patient = new Patient();
-        patient.setPatientId("PAT001");
-        patient.setFirstName("Jane");
-        patient.setLastName("Doe");
-        patient.setEmail("patient1@email.com");
-        patient.setPassword("thsbaibniincd58n");
-        patient.setDob(new Date(1990, 1, 1));
-        patient.setStreet("1234 Life St");
-        patient.setCity("Anytown");
-        patient.setState("NY");
-        patient.setZipCode("12345");
-        patient.setPhoneNumber("123-456-7890");
-        patient.setSex("Female");
-        patient.setInsuranceId("INS001");
-
-        // Testing login functionality
-        System.out.println("Logging in...");
-        System.out.println(patient.login("patient1@email.com", "thsbaibniincd58n"));
-
-        // Testing editing patient info
-        System.out.println("\nEditing patient info before...");
-        System.out.println(patient.toString());
-
-        System.out.println("\nEdit patient info after....");
-        patient.updatePatientInfo("987-654-3210", "updatedemail1@example.com", "789 Health Ave",
-                "Carecity", "CA", "34567", "INS003", "Male");
-        System.out.println(patient.toString());
-
-        // Testing viewing patient profile
-        System.out.println("\nViewing patient profile...");
-        Patient retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
-        if (retrievedPatient != null) {
-            System.out.println(retrievedPatient.toString());
-        } else {
-            System.out.println("Patient not found!");
+    
+    /**
+     * 
+     * 
+     */
+    public void viewPrescriptionBalances(String patientId) {
+      
+      //Variable of type database connection
+      Connection myConnection;
+      //Variable of type prepared statement
+      PreparedStatement preparedStmt;
+      
+      try {
+        // Open a database connection.
+        myConnection = openDBConnection();
+        
+        // Prepare the SQL update statement.
+        String queryString = "SELECT * FROM Patient_Prescription_Balance WHERE PATIENT_ID = ?";
+        
+        // Create a PreparedStatement for executing the update.
+        preparedStmt = myConnection.prepareStatement(queryString);
+        
+        // Bind the instance field values to the PreparedStatement's parameters.
+        preparedStmt.setString(1, patientId);
+        
+        // Execute the query
+        ResultSet rs = preparedStmt.executeQuery(); 
+        
+        // Print the column headers
+        System.out.println("PATIENT_ID\tPRESCRIPTION_ID\tDATE_ISSUED\tPRESCRIPTION_NAME\tAMOUNT_OWED");
+        
+        // Iterate through the result set and print each row
+        while (rs.next()) {
+          String patientId = rs.getString("PATIENT_ID");
+          String prescriptionId = rs.getString("PRESCRIPTION_ID");
+          Date dateIssued = rs.getDate("DATE_ISSUED");
+          String prescriptionName = rs.getString("PRESCRIPTION_NAME");
+          double amountOwed = rs.getDouble("AMOUNT_OWED");
+          System.out.println(patientId + "\t\t" + prescriptionId + "\t\t" + dateIssued + "\t" + prescriptionName + "\t" + amountOwed);
         }
-
-        // Testing adding a new patient
-        System.out.println("\nAdding new patient...");
-        Patient newPatient = new Patient();
-        newPatient.setFirstName("John");
-        newPatient.setLastName("Smith");
-        newPatient.setEmail("patient7@email.com");
-        newPatient.setPassword("password");
-        newPatient.setDob(new Date(1980, 5, 15));
-        newPatient.setStreet("456 New St");
-        newPatient.setCity("Newcity");
-        newPatient.setState("TX");
-        newPatient.setZipCode("23456");
-        newPatient.setPhoneNumber("234-567-8901");
-        newPatient.setSex("Male");
-        newPatient.setInsuranceId("INS002");
-
-        patient.addPatient(newPatient);
-        System.out.println("New patient added successfully!");
-
-        // Testing viewing added patient profile
-        System.out.println("\nViewing added patient profile...");
-        retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
-        if (retrievedPatient != null) {
-            System.out.println(retrievedPatient.toString());
-        } else {
-            System.out.println("Patient not found!");
-        }
+      }
+      
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
+    
+    /**
+   * This method allows InsuranceCompanies to make a payment by inserting a value into HealthCareManagement_INSURANCEPAYMENT
+   * After inserting, trigger ChangePrescriptionBalanceAfterInsurancePayment alters InsuranceBalance in 
+   * HealthCareManagement_PRESCRIPTIONBALANCE table
+   * @param PAYMENT_ID
+   * @param PAYMENT_DATE
+   * @param AMOUNT
+   * @param INSURANCE_ID
+   * @param PRESCRIPTION_ID
+   */
+  public void makePayment(String PAYMENT_ID, String PAYMENT_DATE, String AMOUNT, String PATIENT_ID, String PRESCRIPTION_ID) {
+    // Variable of type database connection
+    Connection myConnection;
+    // Variable of type prepared statement
+    PreparedStatement preparedStmt;
+    
+    try {
+      // Open a database connection.
+      myConnection = openDBConnection();
+      
+      // Prepare the SQL statement with placeholders
+      String sqlStatement = "INSERT INTO HealthCareManagement_PATIENTPAYMENT (PAYMENT_ID, PAYMENT_DATE, AMOUNT, PATIENT_ID, PRESCRIPTION_ID) " +
+        "VALUES (?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?)";
+      
+      // Create a PreparedStatement for executing the statement
+      preparedStmt = myConnection.prepareStatement(sqlStatement);
+      
+      // Set the values for the placeholders
+      preparedStmt.setString(1, PAYMENT_ID);
+      preparedStmt.setString(2, PAYMENT_DATE);
+      preparedStmt.setString(3, AMOUNT);
+      preparedStmt.setString(4, PATIENT_ID);
+      preparedStmt.setString(5, PRESCRIPTION_ID);
+      
+      // Execute the prepared statement
+      preparedStmt.executeUpdate();
+      
+      // Print success message
+      System.out.println("Payment successfully made.");
+    } 
+    
+    catch (SQLException e) {
+      // Handle any SQL exceptions that occur during the operation.
+      e.printStackTrace();
+    }
+  }
+
+  @SuppressWarnings("deprecation")
+  public static void main(String[] args) {
+      Patient patient = new Patient();
+      patient.setPatientId("PAT001");
+      patient.setFirstName("Jane");
+      patient.setLastName("Doe");
+      patient.setEmail("patient1@email.com");
+      patient.setPassword("thsbaibniincd58n");
+      patient.setDob(new Date(1990, 1, 1));
+      patient.setStreet("1234 Life St");
+      patient.setCity("Anytown");
+      patient.setState("NY");
+      patient.setZipCode("12345");
+      patient.setPhoneNumber("123-456-7890");
+      patient.setSex("Female");
+      patient.setInsuranceId("INS001");
+
+      // Test login functionality
+      System.out.println("Testing login functionality...");
+      boolean loginSuccess = patient.login("patient1@email.com", "thsbaibniincd58n");
+      System.out.println("Login successful: " + loginSuccess);
+
+      // Test editing patient info
+      System.out.println("\nTesting editing patient info...");
+      System.out.println("Patient info before update:");
+      System.out.println(patient.toString());
+      patient.updatePatientInfo("987-654-3210", "updatedemail1@example.com", "789 Health Ave",
+              "Carecity", "CA", "34567", "INS003", "Male");
+      System.out.println("\nPatient info after update:");
+      System.out.println(patient.toString());
+
+      // Test viewing patient profile
+      System.out.println("\nTesting viewing patient profile...");
+      Patient retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
+      if (retrievedPatient != null) {
+          System.out.println("Retrieved patient info:");
+          System.out.println(retrievedPatient.toString());
+      } else {
+          System.out.println("Patient not found!");
+      }
+
+      // Test adding a new patient
+      System.out.println("\nTesting adding new patient...");
+      Patient newPatient = new Patient();
+      newPatient.setFirstName("John");
+      newPatient.setLastName("Smith");
+      newPatient.setEmail("patient9999@email.com");
+      newPatient.setPassword("password");
+      newPatient.setDob(new Date(1980, 5, 15));
+      newPatient.setStreet("456 New St");
+      newPatient.setCity("Newcity");
+      newPatient.setState("TX");
+      newPatient.setZipCode("23456");
+      newPatient.setPhoneNumber("234-567-8901");
+      newPatient.setSex("Male");
+      newPatient.setInsuranceId("INS002");
+
+      patient.addPatient(newPatient);
+      System.out.println("New patient added successfully!");
+
+      // Test viewing added patient profile
+      System.out.println("\nTesting viewing added patient profile...");
+      retrievedPatient = patient.displayPatientInfo(patient.getPatientId());
+      if (retrievedPatient != null) {
+          System.out.println("Retrieved added patient info:");
+          System.out.println(retrievedPatient.toString());
+      } else {
+          System.out.println("Patient not found!");
+      }
+      
+      // Test viewing prescription balances
+      System.out.println("\nTesting viewing prescription balances...");
+      patient.viewPrescriptionBalances("PAT001");
+
+      // Test making payment
+      System.out.println("\nTesting making payment...");
+      newPatient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
+      // Assuming "PRSC001" is a valid prescription ID
+  }
 }
