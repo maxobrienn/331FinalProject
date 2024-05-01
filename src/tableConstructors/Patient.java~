@@ -1,7 +1,9 @@
 package tableConstructors;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Patient {
     private String patientId;
@@ -365,12 +367,12 @@ public class Patient {
         
         // Iterate through the result set and print each row
         while (rs.next()) {
-          String patientId = rs.getString("PATIENT_ID");
+          String pId = rs.getString("PATIENT_ID");
           String prescriptionId = rs.getString("PRESCRIPTION_ID");
           Date dateIssued = rs.getDate("DATE_ISSUED");
           String prescriptionName = rs.getString("PRESCRIPTION_NAME");
           double amountOwed = rs.getDouble("AMOUNT_OWED");
-          System.out.println(patientId + "\t\t" + prescriptionId + "\t\t" + dateIssued + "\t" + prescriptionName + "\t" + amountOwed);
+          System.out.println(pId + "\t\t" + prescriptionId + "\t\t" + dateIssued + "\t" + prescriptionName + "\t" + amountOwed);
         }
       }
       
@@ -425,6 +427,34 @@ public class Patient {
       e.printStackTrace();
     }
   }
+  
+  public class AppointmentDetailsJDBC {
+    // JDBC method to retrieve data from the appointment_Details view
+    public List<AppointmentDetails> getAppointmentDetails() {
+        List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
+
+        try (Connection connection = openDBConnection()) {
+            String sql = "SELECT DOCTOR_NAME, APPOINTMENT_DATE, NOTE, PATIENT_ID FROM appointment_Details";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String doctorName = resultSet.getString("DOCTOR_NAME");
+                Date appointmentDate = resultSet.getDate("APPOINTMENT_DATE");
+                String note = resultSet.getString("NOTE");
+                String patientId = resultSet.getString("PATIENT_ID");
+
+                AppointmentDetails appointmentDetails = new AppointmentDetails(doctorName, appointmentDate, note, patientId);
+                appointmentDetailsList.add(appointmentDetails);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return appointmentDetailsList;
+    }
+  }
+
 
   @SuppressWarnings("deprecation")
   public static void main(String[] args) {

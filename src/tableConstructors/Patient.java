@@ -392,20 +392,15 @@ public class Patient {
    * @param PRESCRIPTION_ID
    */
   public void makePayment(String PAYMENT_ID, String PAYMENT_DATE, String AMOUNT, String PATIENT_ID, String PRESCRIPTION_ID) {
-    // Variable of type database connection
     Connection myConnection;
-    // Variable of type prepared statement
     PreparedStatement preparedStmt;
     
     try {
-      // Open a database connection.
       myConnection = openDBConnection();
-      
-      // Prepare the SQL statement with placeholders
+      // Make payment
       String sqlStatement = "INSERT INTO HealthCareManagement_PATIENTPAYMENT (PAYMENT_ID, PAYMENT_DATE, AMOUNT, PATIENT_ID, PRESCRIPTION_ID) " +
         "VALUES (?, TO_DATE(?, 'YYYY-MM-DD'), ?, ?, ?)";
       
-      // Create a PreparedStatement for executing the statement
       preparedStmt = myConnection.prepareStatement(sqlStatement);
       
       // Set the values for the placeholders
@@ -415,15 +410,13 @@ public class Patient {
       preparedStmt.setString(4, PATIENT_ID);
       preparedStmt.setString(5, PRESCRIPTION_ID);
       
-      // Execute the prepared statement
       preparedStmt.executeUpdate();
       
-      // Print success message
+      // Test success message
       System.out.println("Payment successfully made.");
     } 
     
     catch (SQLException e) {
-      // Handle any SQL exceptions that occur during the operation.
       e.printStackTrace();
     }
   }
@@ -532,7 +525,7 @@ public class Patient {
 
       // Test making payment
       System.out.println("\nTesting making payment...");
-      newPatient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
+      newPatient.makePayment("PAY022", "2024-05-01", "5", "PAT001", "PRSC001");
       // Assuming "PRSC001" is a valid prescription ID
   }
 }
