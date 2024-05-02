@@ -326,6 +326,55 @@ public class Patient {
     }
     
     /**
+     * This method displays all doctors, their info, and their specialties so patients can view and find the best doctor to schedule with 
+     */
+    /**
+ * This method displays all doctors, their info, and their specialties so patients can view and find the best doctor to schedule with 
+ */
+public void viewDoctorList(){
+    //Variable of type database connection
+    Connection myConnection;
+    //Variable of type prepared statement
+    PreparedStatement preparedStmt;
+    
+    try {
+        // Open a database connection.
+        myConnection = openDBConnection();
+        
+        // Prepare the SQL statement.
+        String queryString = "SELECT LAST, FIRST, EMAIL, SPECIALIZATION FROM HealthCareManagement_DOCTOR";
+        
+        // Create a PreparedStatement for executing the query.
+        preparedStmt = myConnection.prepareStatement(queryString);
+        
+        // Execute the query
+        ResultSet rs = preparedStmt.executeQuery(); 
+        
+        // Print the column headers
+        System.out.println("LAST\tFIRST\tEMAIL\tSPECIALIZATION");
+        
+        // Iterate through the result set and print each row
+        while (rs.next()) {
+            String dLast = rs.getString("LAST");
+            String dFirst = rs.getString("FIRST");
+            String dEmail = rs.getString("EMAIL");
+            String dSpecialization = rs.getString("SPECIALIZATION");
+            System.out.println(dLast + "\t\t" + dFirst + "\t\t" + dEmail + "\t\t" + dSpecialization);
+        }
+        
+        // Close the resources
+        rs.close();
+        preparedStmt.close();
+        myConnection.close();
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+      
+      
+    /**
      * 
      * 
      */
@@ -371,6 +420,48 @@ public class Patient {
       }
     }
     
+     /**
+     * This method allows users to view their diagnosis after they have a visit by matching PatientID with diagnosis in the HealthCareManagement_DIAGNOSIS table
+     * @param PATIENT_ID
+     */
+    public void viewDiagnoses(String patientId) {
+      
+      //Variable of type database connection
+      Connection myConnection;
+      //Variable of type prepared statement
+      PreparedStatement preparedStmt;
+      
+      try {
+        // Open a database connection.
+        myConnection = openDBConnection();
+        
+        // Prepare the SQL update statement.
+        String queryString = "SELECT * FROM DOCTOR_PATIENT_DIAGNOSES WHERE PATIENT_ID = ?";
+        
+        // Create a PreparedStatement for executing the update.
+        preparedStmt = myConnection.prepareStatement(queryString);
+        
+        // Bind the instance field values to the PreparedStatement's parameters.
+        preparedStmt.setString(1, patientId);
+        
+        // Execute the query
+        ResultSet rs = preparedStmt.executeQuery(); 
+        
+        // Print the column headers
+        System.out.println("PATIENT_ID\t          DIAGNOSES");
+        
+        // Iterate through the result set and print each row
+        while (rs.next()) {
+          String pId = rs.getString("PATIENT_ID");
+          String diagnoses = rs.getString("DIAGNOSES");
+          System.out.println(pId + "\t\t" + diagnoses);
+        }
+      }
+      
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
     /**
    * This method allows InsuranceCompanies to make a payment by inserting a value into HealthCareManagement_INSURANCEPAYMENT
    * After inserting, trigger ChangePrescriptionBalanceAfterInsurancePayment alters InsuranceBalance in 
@@ -514,7 +605,15 @@ public class Patient {
       // Test viewing prescription balances
       System.out.println("\nTesting viewing prescription balances...");
       patient.viewPrescriptionBalances("PAT001");
-
+      
+      //Test viewing patient diagnosis
+      System.out.println("\nTesting viewing patient diagnosises...");
+      patient.viewDiagnoses("PAT001");
+   
+      //Test viewing list of doctors and info
+      System.out.println("\nTesting viewing doctor list...");
+      patient.viewDoctorList();
+   
       // Test making payment
       System.out.println("\nTesting making payment...");
       newPatient.makePayment("PAY022", "2024-05-01", "5", "PAT001", "PRSC001");
@@ -534,6 +633,7 @@ public class Patient {
       System.out.println("Retrieved appointment details:");
       for (AppointmentDetails appointmentDetails : appointmentDetailsList) {
           System.out.println(appointmentDetails.toString());
+         
       }
   }
-}
+
