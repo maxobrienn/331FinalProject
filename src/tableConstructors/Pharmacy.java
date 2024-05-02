@@ -123,24 +123,25 @@ public class Pharmacy {
         return null;
     }
 
-    public boolean login(String email, String password) {
-        Connection con = openDBConnection();
-        try {
-            PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HEALTHCAREMANAGEMENT_PHARMACY WHERE EMAIL = ? AND PASSWORD = ?");
-            statement.setString(1, email);
-            statement.setString(2, password);
+	public boolean pharmacyLogin(String email, String password) {
+	    Connection con = openDBConnection();
+	    try {
+	        PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACY WHERE EMAIL = ? AND PASSWORD = ?");
+	        statement.setString(1, email);
+	        statement.setString(2, password);
 
-            ResultSet rs = statement.executeQuery();
+	        ResultSet rs = statement.executeQuery();
+	        
+	        if(rs.next() && rs.getInt(1) > 0){
+	            this.loggedIn = true;
+	            return true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
 
-            if (rs.next() && rs.getString(1) != null) {
-                this.loggedIn = true;
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     public void updatePharmacyInfo(String pharmacyId, String pharmacyName, String street, String city, String state, String zipCode, String phoneNumber, String password, String email) {
         try {

@@ -19,6 +19,7 @@ public class Supplier {
   private String phoneNumber;
   private String password;
   private String email;
+private boolean loggedIn = false;
   
   public Supplier() {
   }
@@ -182,11 +183,28 @@ public class Supplier {
         } catch (Exception E) {
           E.printStackTrace();
         }
-        return null;
- }
-
+    return null;
+  }
   
-   
+  public boolean supplierLogin(String email, String password) {
+	    Connection con = openDBConnection();
+	    try {
+	        PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_SUPPLIER WHERE EMAIL = ? AND PASSWORD = ?");
+	        statement.setString(1, email);
+	        statement.setString(2, password);
+
+	        ResultSet rs = statement.executeQuery();
+	        
+	        if(rs.next() && rs.getInt(1) > 0){
+	            this.setLoggedIn(true);
+	            return true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
   //Function to view Supplier Profile 
   public Supplier viewSupplierProfile(String supplierId) {
     Connection con = openDBConnection();
@@ -316,7 +334,8 @@ public class Supplier {
   public static void main(String[] args) {
     try {
       // Create an instance of Supplier for testing
-      Supplier supplierTest = new Supplier();
+      @SuppressWarnings("unused")
+	Supplier supplierTest = new Supplier();
       
       // Test add medication
       //supplierTest.addMedication("SUP001","addedMed",10000);
@@ -329,4 +348,18 @@ public class Supplier {
       e.printStackTrace();
     }
   }
+
+/**
+ * @return the loggedIn
+ */
+public boolean isLoggedIn() {
+	return loggedIn;
+}
+
+/**
+ * @param loggedIn the loggedIn to set
+ */
+public void setLoggedIn(boolean loggedIn) {
+	this.loggedIn = loggedIn;
+}
 }

@@ -70,4 +70,12 @@ public class AppointmentDetails {
 	public void setPatientId(String patientId) {
 		this.patientId = patientId;
 	}
+
+	@Override
+	public String toString() {
+		return "AppointmentDetails [doctorName=" + doctorName + ", appointmentDate=" + appointmentDate + ", note="
+				+ note + ", patientId=" + patientId + "]";
+	}
+	
+	
 }
