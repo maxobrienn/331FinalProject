@@ -198,6 +198,38 @@ public class PharmacyEmployee {
      return false;
  }
 
+  public void addPharmacyEmployee(PharmacyEmployee pharmacyEmployee) {
+	    try (Connection connection = openDBConnection()) {
+	        // Generate a new employee ID using stored procedure
+	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_PharmacyEmployee_ID}");
+	        callableStatement.registerOutParameter(1, Types.CHAR);
+	        callableStatement.execute();
+
+	        String generatedId = callableStatement.getString(1);
+	        callableStatement.close();
+
+	        // Insert employee data into the database
+	        String sql = "INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE (EMPLOYEE_ID, FIRST, LAST, SSN, PHONE_NUMBER, EMAIL, POSITION, PHARMACY_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, generatedId);
+	        preparedStatement.setString(2, pharmacyEmployee.getFirstName());
+	        preparedStatement.setString(3, pharmacyEmployee.getLastName());
+	        preparedStatement.setString(4, pharmacyEmployee.getSsn());
+	        preparedStatement.setString(5, pharmacyEmployee.getPhoneNumber());
+	        preparedStatement.setString(6, pharmacyEmployee.getEmail());
+	        preparedStatement.setString(7, pharmacyEmployee.getPosition());
+	        preparedStatement.setString(8, pharmacyEmployee.getPharmacyId());
+	        preparedStatement.setString(9, pharmacyEmployee.getPassword());
+
+	        preparedStatement.executeUpdate();
+	        System.out.println("Pharmacy Employee added successfully with ID: " + generatedId);
+
+	        preparedStatement.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
   
   public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
     try {
