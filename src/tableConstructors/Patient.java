@@ -8,6 +8,7 @@ import java.util.*;
 import java.text.*;
 
 
+@SuppressWarnings("unused")
 public class Patient {
   private String patientId;
   private java.util.Date dob;

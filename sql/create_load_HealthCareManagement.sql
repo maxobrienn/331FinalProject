@@ -219,12 +219,12 @@ INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT005', TO_DATE('1995-05-05',
 INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT006', TO_DATE('1988-06-10','YYYY-MM-DD'), '2468 Healing Blvd', 'Recovery City', 'CA', '98765', 'patient6@email.com', '789-012-3456', 'Carlson', 'Mary', 'Female', 'INS006', 'thsbaibniincd63n');
 
 
-INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC001', TO_DATE('2023-01-01','YYYY-MM-DD'), 'Amoxicillin', '500mg', '05', 25.00, '30', 'DOC001', 'PAT001');
-INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC002', TO_DATE('2023-02-01','YYYY-MM-DD'), 'Ibuprofen', '200mg', '03', 15.00, '20', 'DOC002', 'PAT002');
-INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC003', TO_DATE('2023-03-01','YYYY-MM-DD'), 'Metformin', '850mg', '02', 30.00, '60', 'DOC003', 'PAT003');
-INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC004', TO_DATE('2023-04-01','YYYY-MM-DD'), 'Lisinopril', '10mg', '04', 22.00, '90', 'DOC004', 'PAT004');
-INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC005', TO_DATE('2023-05-01','YYYY-MM-DD'), 'Atorvastatin', '20mg', '01', 45.00, '10', 'DOC005', 'PAT005');
-INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC006', TO_DATE('2023-06-01','YYYY-MM-DD'), 'Aspirin', '250mg', '02', 10.00, '40', 'DOC005', 'PAT006');
+INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC001', TO_DATE('2023-01-01','YYYY-MM-DD'), 'Amoxicillin', '500mg', '05', 25.00, '30', 'DOC001', 'PAT001', 'Yes');
+INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC002', TO_DATE('2023-02-01','YYYY-MM-DD'), 'Ibuprofen', '200mg', '03', 15.00, '20', 'DOC002', 'PAT002', 'No');
+INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC003', TO_DATE('2023-03-01','YYYY-MM-DD'), 'Metformin', '850mg', '02', 30.00, '60', 'DOC003', 'PAT003', 'No');
+INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC004', TO_DATE('2023-04-01','YYYY-MM-DD'), 'Lisinopril', '10mg', '04', 22.00, '90', 'DOC004', 'PAT004', 'Yes');
+INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC005', TO_DATE('2023-05-01','YYYY-MM-DD'), 'Atorvastatin', '20mg', '01', 45.00, '10', 'DOC005', 'PAT005', 'No');
+INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC006', TO_DATE('2023-06-01','YYYY-MM-DD'), 'Aspirin', '250mg', '02', 10.00, '40', 'DOC005', 'PAT006', 'Yes');
 
 
 INSERT INTO HealthCareManagement_MEDICATION VALUES ('Amoxicillin', '100', 'SUP001');

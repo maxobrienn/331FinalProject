@@ -7,6 +7,7 @@ import java.text.*;
 /**
  * @author Ellie Smith
  */
+@SuppressWarnings("unused")
 public class InsuranceCompany {
   private String insuranceId;
   private String insuranceName;
