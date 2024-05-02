@@ -10,18 +10,18 @@ import java.sql.SQLException;
  * @author Matt DeROsa
  */
 public class Supplier {
-    private String supplierId;
-    private String supplierName;
-    private String street;
-    private String city;
-    private String state;
-    private String zipCode;
-    private String phoneNumber;
-    private String password;
-    private String email;
-
-    public Supplier() {
-    }
+  private String supplierId;
+  private String supplierName;
+  private String street;
+  private String city;
+  private String state;
+  private String zipCode;
+  private String phoneNumber;
+  private String password;
+  private String email;
+  
+  public Supplier() {
+  }
 
     public Supplier(String supplierId, String supplierName, String street, String city, String state, String zipCode, String phoneNumber, String password, String email) {
         this.supplierId = supplierId;
@@ -183,47 +183,150 @@ public class Supplier {
           E.printStackTrace();
         }
         return null;
+ }
 
-   public Patient displayPatientInfo(String patientId) {
-        Patient patient = new Patient();
-        Connection con = openDBConnection();
-        try {
-            // Prepare and execute SQL query to retrieve patient information
-            String sql = "SELECT * FROM HealthCareManagement_PATIENT WHERE PATIENT_ID = ?";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            preparedStatement.setString(1, patientId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            // Print patient information
-            while (resultSet.next()) {
-                patient.setPatientId(resultSet.getString("PATIENT_ID"));
-                patient.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
-                patient.setEmail(resultSet.getString("EMAIL"));
-                patient.setStreet(resultSet.getString("STREET"));
-                patient.setCity(resultSet.getString("CITY"));
-                patient.setState(resultSet.getString("STATE"));
-                patient.setZipCode(resultSet.getString("ZIP_CODE"));
-                patient.setInsuranceId(resultSet.getString("INSURANCE_ID"));
-                patient.setSex(resultSet.getString("SEX"));
-
-                System.out.println("Patient ID: " + patient.getPatientId());
-                System.out.println("Phone Number: " + patient.getPhoneNumber());
-                System.out.println("Email: " + patient.getEmail());
-                System.out.println("Street: " + patient.getStreet());
-                System.out.println("City: " + patient.getCity());
-                System.out.println("State: " + patient.getState());
-                System.out.println("Zip Code: " + patient.getZipCode());
-                System.out.println("Insurance ID: " + patient.getInsuranceId());
-                System.out.println("Sex: " + patient.getSex());
-            }
-            
-            // Close JDBC objects
-            resultSet.close();
-            preparedStatement.close();
-            con.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
+  
+   
+  //Function to view Supplier Profile 
+  public Supplier viewSupplierProfile(String supplierId) {
+    Connection con = openDBConnection();
+    Supplier supplier = null;
+    String sql = "SELECT * FROM HealthCareManagement_SUPPLIER WHERE PATIENT_ID = ?";
+    try (PreparedStatement statement = con.prepareStatement(sql)) {
+      statement.setString(1, supplierId);
+      try (ResultSet resultSet = statement.executeQuery()) {
+        if (resultSet.next()) {
+          supplier = new Supplier(
+                                  resultSet.getString("SUPPLIER_ID"),
+                                  resultSet.getString("SUPPLIER_NAME"),
+                                  resultSet.getString("STREET"),
+                                  resultSet.getString("CITY"),
+                                  resultSet.getString("STATE"),
+                                  resultSet.getString("ZIP_CODE"),
+                                  resultSet.getString("PHONE_NUMBER"),
+                                  resultSet.getString("PASSWORD"),
+                                  resultSet.getString("EMAIL")
+                                 );
         }
-        return patient;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
- 
+    return supplier;
+  }
+  
+  //Function to edit supplier profile info
+  public void editSupplierInfo(String supplierId, String supplierName, String street, String city, String state, String zipCode, String phoneNumber, String password, String email) {
+    Connection con = openDBConnection();
+    String sql = "{CALL Edit_Supplier_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+    try (PreparedStatement statement = con.prepareStatement(sql)) {
+      statement.setString(1, supplierId);
+      statement.setString(2, supplierName);
+      statement.setString(3, street);
+      statement.setString(4, city);
+      statement.setString(5, state);
+      statement.setString(6, zipCode);
+      statement.setString(7, phoneNumber);
+      statement.setString(8, password);
+      statement.setString(9, email);
+      
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * Add a medication to the HealthCareManagement_MEDICATION table
+   * 
+   * @param supplierID -- NEED TO REMOVE THIS TO GET SUPPLIERID METHOD
+   * @param medicationName
+   * @param quantity 
+   */
+  public void addMedication(String supplierID, String medicationName, int quantity) {
+    Connection myConnection;
+    PreparedStatement preparedStmt;
+    
+    try {
+      myConnection = openDBConnection();
+      
+      String queryString = "INSERT INTO HealthCareManagement_MEDICATION (NAME, QUANTITY, SUPPLIER_ID) " +
+        "VALUES (?, ?, ?)";
+      
+      preparedStmt = myConnection.prepareStatement(queryString);
+      
+      preparedStmt.setString(1, medicationName);
+      preparedStmt.setInt(2, quantity);
+      preparedStmt.setString(3, supplierID);
+      
+      preparedStmt.executeQuery();
+    }
+    
+    catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * Add a medication to the HealthCareManagement_MEDICATION table
+   * 
+   * @param supplierID -- NEED TO REMOVE THIS TO GET SUPPLIERID METHOD
+   * @param medicationName
+   * 
+   */
+  public void removeMedication(String supplierID, String medicationName) {
+    Connection myConnection;
+    PreparedStatement preparedStmt;
+    
+    try {
+      myConnection = openDBConnection();
+      
+      // Check if the medication exists before removing it
+      String checkQuery = "SELECT * FROM HealthCareManagement_MEDICATION WHERE NAME = ? AND SUPPLIER_ID = ?";
+      preparedStmt = myConnection.prepareStatement(checkQuery);
+      preparedStmt.setString(1, medicationName);
+      preparedStmt.setString(2, supplierID);
+      ResultSet resultSet = preparedStmt.executeQuery();
+      
+      if (resultSet.next()) {
+        // Medication exists, proceed with removal
+        String removeQuery = "DELETE FROM HealthCareManagement_MEDICATION WHERE NAME = ? AND SUPPLIER_ID = ?";
+        preparedStmt = myConnection.prepareStatement(removeQuery);
+        preparedStmt.setString(1, medicationName);
+        preparedStmt.setString(2, supplierID);
+        preparedStmt.executeUpdate();
+        System.out.println("Medication removed successfully.");
+      } else {
+        // Medication does not exist
+        System.out.println("Medication not found.");
+      }
+      
+      // Close resources
+      resultSet.close();
+      preparedStmt.close();
+      myConnection.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * Main method to test JDBC methods
+   */
+  public static void main(String[] args) {
+    try {
+      // Create an instance of Supplier for testing
+      Supplier supplierTest = new Supplier();
+      
+      // Test add medication
+      //supplierTest.addMedication("SUP001","addedMed",10000);
+      
+      // Test remove medication
+      //supplierTest.removeMedication("SUP001","Amoxicillin");
+    } 
+    
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
