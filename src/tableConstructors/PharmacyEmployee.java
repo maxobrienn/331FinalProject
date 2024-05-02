@@ -180,23 +180,23 @@ public class PharmacyEmployee {
   }
   
   public boolean pharmacyEmployeeLogin(String email, String password) {
-	    Connection con = openDBConnection();
-	    try {
-	        PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
-	        statement.setString(1, email);
-	        statement.setString(2, password);
+     Connection con = openDBConnection();
+     try {
+         PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
+         statement.setString(1, email);
+         statement.setString(2, password);
 
-	        ResultSet rs = statement.executeQuery();
-	        
-	        if(rs.next() && rs.getInt(1) > 0){
-	            this.loggedIn = true;
-	            return true;
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return false;
-	}
+         ResultSet rs = statement.executeQuery();
+         
+         if(rs.next() && rs.getInt(1) > 0){
+             this.loggedIn = true;
+             return true;
+         }
+     } catch (SQLException e) {
+         e.printStackTrace();
+     }
+     return false;
+ }
 
   
   public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
@@ -402,6 +402,40 @@ public class PharmacyEmployee {
     return unpaidICBalance;
   }
   
+  public void fillPrescrption(String prescrptionId) {
+    Connection myConnection;
+    PreparedStatement preparedStmt;
+    
+    try {
+      myConnection = openDBConnection();
+      
+      // Check if the prescpription exists before fillings it
+      String checkQuery = "SELECT * FROM HealthCareManagement_PRESCRIPTION WHERE PRESCRIPTION_ID = ?";
+      preparedStmt = myConnection.prepareStatement(checkQuery);
+      preparedStmt.setString(1, prescrptionId);
+      ResultSet resultSet = preparedStmt.executeQuery();
+      
+      if (resultSet.next()) {
+        // prescrption exists, proceed with filling
+        String removeQuery = "UPDATE HealthCareManagement_PRESCRIPTION SET FILLED = 'YES' WHERE PRESCRIPTION_ID = ?";
+        preparedStmt = myConnection.prepareStatement(removeQuery);
+        preparedStmt.setString(1, prescrptionId);
+        preparedStmt.executeUpdate();
+        System.out.println("Prescprtion "+prescrptionId+" filled.");
+      } else {
+        // Medication does not exist
+        System.out.println("Prescprtion not found.");
+      }
+      
+      // Close resources
+      resultSet.close();
+      preparedStmt.close();
+      myConnection.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+  
   /**
    * Main method to test JDBC methods
    */
@@ -424,7 +458,9 @@ public class PharmacyEmployee {
       //call method for viewing medication info
       //test.viewMedicationInfo("PAT001");
       //call method to refill medication
-      //test.requestRefill("Aspirin");
+      //System.out.println(test.requestRefill("Aspirin",150));
+      
+      test.fillPrescrption("PRSC001");
     } 
     
     catch (Exception e) {
@@ -513,22 +549,23 @@ public class PharmacyEmployee {
   
    
  /**
- * Method for a pharmacy employee to request a refill for a certain medication
+ * Method for a pharmacy employee to refill a certain medication
  */
-  public String requestRefill(String prescriptionName) {
-  Connection con = openDBConnection();
-  String sql = "update healthcaremanagement_medication \n"
-          + "set QUANTITY = 200 \n"
-          + "where NAME = ?";
-  try (PreparedStatement statement = con.prepareStatement(sql)) {
-  statement.setString(1, prescriptionName);
-  statement.executeUpdate();
-  return "Refill Request Recieved";
-  } catch (SQLException e) {
-   e.printStackTrace();
-   return "Invalid Medication Name";
+  public String requestRefill(String prescriptionName, int updatedQty) {
+    Connection con = openDBConnection();
+    String sql = "update healthcaremanagement_medication \n"
+      + "set QUANTITY = ? \n"
+      + "where NAME = ?";
+    try (PreparedStatement statement = con.prepareStatement(sql)) {
+      statement.setInt(1, updatedQty);
+      statement.setString(2, prescriptionName);
+      statement.executeUpdate();
+      return "Medication quantity for "+prescriptionName+" updated to "+updatedQty;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return "Invalid Medication Name";
+    }
+    
   }
-
- }
   
 }

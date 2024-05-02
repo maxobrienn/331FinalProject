@@ -436,6 +436,44 @@ public class Patient {
 
         return appointmentDetailsList;
     }
+    
+    /**
+   * Method that allows patients to view diagnosis
+   * 
+   * @param patientID -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
+   * 
+   */
+  public void viewDiagnoses(String patientID) {
+    
+    Connection myConnection;
+    PreparedStatement preparedStmt;
+    
+    try {
+      myConnection = openDBConnection();
+      
+      // Prepare the SQL update statement.
+      String queryString = "SELECT * FROM HealthCareManagement_SEEDIAGNOSIS WHERE PATIENT_ID = patientID";
+      
+      preparedStmt = myConnection.prepareStatement(queryString);
+      
+      preparedStmt.setString(1, patientID);
+      
+      ResultSet rs = preparedStmt.executeQuery(); 
+      
+      // Print the column headers
+      System.out.println("DIAGNOSES");
+      
+      // Iterate through the result set and print each row
+      while (rs.next()) {
+        String diagnosis = rs.getString("DIAGNOSES");
+        System.out.println(diagnosis);
+      }
+    }
+    
+    catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 
 
   @SuppressWarnings("deprecation")
@@ -517,8 +555,8 @@ public class Patient {
 
       // Test making payment
       System.out.println("\nTesting making payment...");
-      newPatient.makePayment("PAY022", "2024-05-01", "5", "PAT001", "PRSC001");
-      patient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
+      newPatient.makePayment("PAY023", "2024-05-01", "5", "PAT001", "PRSC001");
+      patient.makePayment("PAY018", "2024-04-30", "2.5", "PAT001", "PRSC001");
 
       // Assuming "PRSC001" is a valid prescription ID
       
@@ -535,5 +573,9 @@ public class Patient {
       for (AppointmentDetails appointmentDetails : appointmentDetailsList) {
           System.out.println(appointmentDetails.toString());
       }
+      
+      // Test view diagnoses
+      System.out.println("\nTesting viewDiagnoses()...");
+      patient.viewDiagnoses("PAT001");
   }
 }
