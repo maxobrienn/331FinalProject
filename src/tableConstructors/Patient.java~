@@ -202,16 +202,16 @@ public class Patient {
         return null;
     }
 
-    public boolean login(String email, String password) {
+    public boolean patientLogin(String email, String password) {
         Connection con = openDBConnection();
         try {
-            PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HEALTHCAREMANAGEMENT_PATIENT WHERE email = ? AND password = ?");
+            PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PATIENT WHERE EMAIL = ? AND PASSWORD = ?");
             statement.setString(1, email);
             statement.setString(2, password);
 
             ResultSet rs = statement.executeQuery();
-
-            if(rs.next() && rs.getString(1) != null){
+            
+            if(rs.next() && rs.getInt(1) > 0){
                 this.loggedIn = true;
                 return true;
             }
@@ -411,14 +411,14 @@ public class Patient {
     }
   }
   
-  public class AppointmentDetailsJDBC {
-    // JDBC method to retrieve data from the appointment_Details view
+
     public List<AppointmentDetails> getAppointmentDetails() {
         List<AppointmentDetails> appointmentDetailsList = new ArrayList<>();
 
         try (Connection connection = openDBConnection()) {
-            String sql = "SELECT DOCTOR_NAME, APPOINTMENT_DATE, NOTE, PATIENT_ID FROM appointment_Details";
+            String sql = "SELECT DOCTOR_NAME, APPOINTMENT_DATE, NOTE, PATIENT_ID FROM appointment_Details WHERE PATIENT_ID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement .setString(1, getPatientId());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -436,7 +436,6 @@ public class Patient {
 
         return appointmentDetailsList;
     }
-  }
 
 
   @SuppressWarnings("deprecation")
@@ -458,17 +457,21 @@ public class Patient {
 
       // Test login functionality
       System.out.println("Testing login functionality...");
-      boolean loginSuccess = patient.login("patient1@email.com", "thsbaibniincd58n");
+      boolean loginSuccess = patient.patientLogin("patient9999@email.com", "password");
       System.out.println("Login successful: " + loginSuccess);
 
       // Test login with incorrect credentials
       System.out.println("\nTesting login with incorrect credentials...");
-      loginSuccess = patient.login("incorrect@email.com", "wrongpassword");
+      patient.setEmail("mderosa912@gov.edu"); 
+      patient.setPassword("notmypassword");
+      loginSuccess = patient.patientLogin("mderosa912@gov.edu","notmypassword");
       System.out.println("Login successful: " + loginSuccess);
 
       // Test login with null credentials
       System.out.println("\nTesting login with null credentials...");
-      loginSuccess = patient.login(null, null);
+      patient.setEmail(null); 
+      patient.setPassword(null);
+      loginSuccess = patient.patientLogin(null,null);
       System.out.println("Login successful: " + loginSuccess);
 
       // Test editing patient info
@@ -483,7 +486,6 @@ public class Patient {
       // Test viewing patient profile
       System.out.println("\nTesting viewing patient profile...");
       System.out.println(patient.displayPatientInfo().toString());
-
 
       // Test adding a new patient
       System.out.println("\nTesting adding new patient...");
@@ -519,6 +521,19 @@ public class Patient {
       patient.makePayment("PAY014", "2024-04-30", "2.5", "PAT001", "PRSC001");
 
       // Assuming "PRSC001" is a valid prescription ID
+      
+      // Test logout functionality
+      System.out.println("\nTesting logout functionality...");
+      patient.logout();
+      System.out.println("Logout successful.");
+      
+      // Test getAppointmentDetails()
+      System.out.println("\nTesting getAppointmentDetails()...");
+    
+      List<AppointmentDetails> appointmentDetailsList = patient.getAppointmentDetails();
+      System.out.println("Retrieved appointment details:");
+      for (AppointmentDetails appointmentDetails : appointmentDetailsList) {
+          System.out.println(appointmentDetails.toString());
+      }
   }
-
 }
