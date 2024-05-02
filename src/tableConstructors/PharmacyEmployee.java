@@ -179,23 +179,25 @@ public class PharmacyEmployee {
     return null;
   }
   
-  public boolean login(String email, String password) {
-    Connection con = openDBConnection();
-    try {
-      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM PHARMACY_EMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
-      statement.setString(1, email);
-      statement.setString(2, password);
-      
-      ResultSet rs = statement.executeQuery();
-      
-      if (rs.next() && rs.getString(1) != null) {
-        return true;
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return false;
-  }
+  public boolean pharmacyEmployeeLogin(String email, String password) {
+	    Connection con = openDBConnection();
+	    try {
+	        PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
+	        statement.setString(1, email);
+	        statement.setString(2, password);
+
+	        ResultSet rs = statement.executeQuery();
+	        
+	        if(rs.next() && rs.getInt(1) > 0){
+	            this.loggedIn = true;
+	            return true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
   
   public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
     try {

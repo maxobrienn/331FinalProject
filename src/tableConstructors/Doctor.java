@@ -159,7 +159,7 @@ public class Doctor {
         return null;
     }
 	
-	public boolean login(String email, String password) {
+	public boolean doctorLogin(String email, String password) {
 	    Connection con = openDBConnection();
 	    try {
 	        PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_DOCTOR WHERE EMAIL = ? AND PASSWORD = ?");
@@ -167,19 +167,13 @@ public class Doctor {
 	        statement.setString(2, password);
 
 	        ResultSet rs = statement.executeQuery();
-
-	        if (rs.next() && rs.getString(1) != null) {
-	            this.setLoggedIn(true);
+	        
+	        if(rs.next() && rs.getInt(1) > 0){
+	            this.loggedIn = true;
 	            return true;
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    } finally {
-	        try {
-	            con.close();
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
 	    }
 	    return false;
 	}
