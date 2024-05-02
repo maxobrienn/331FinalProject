@@ -2,7 +2,6 @@ package tableConstructors;
 
 import java.sql.*;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 /**
  * @author Matt DeROsa
  */
@@ -325,8 +324,7 @@ public class Doctor {
         myConnection = openDBConnection();
         stmt = myConnection.prepareStatement(sql);
         stmt.setString(1, note);
-        stmt.setDate(2, sqlDate);  // Set the SQL date directly
-        stmt.setString(3, patientId);
+        stmt.setDate(2, sqlDate);  // Set the SQL date directly        stmt.setString(3, patientId);
         stmt.setString(4, this.doctorId); // Use the doctor ID from the class field
 
         int affectedRows = stmt.executeUpdate();

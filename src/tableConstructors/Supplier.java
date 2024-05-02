@@ -1,10 +1,7 @@
 package tableConstructors;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
 
 /**
  * @author Matt DeROsa
@@ -204,6 +201,39 @@ private boolean loggedIn = false;
 	    }
 	    return false;
 	}
+  
+  public void addSupplier(Supplier supplier) {
+	    try (Connection connection = openDBConnection()) {
+	        // Generate a new supplier ID using stored procedure
+	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Supplier_ID}");
+	        callableStatement.registerOutParameter(1, Types.CHAR);
+	        callableStatement.execute();
+
+	        String generatedId = callableStatement.getString(1);
+	        callableStatement.close();
+
+	        // Insert supplier data into the database
+	        String sql = "INSERT INTO HealthCareManagement_SUPPLIER (SUPPLIER_ID, SUPPLIER_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, PASSWORD, EMAIL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, generatedId);
+	        preparedStatement.setString(2, supplier.getSupplierName());
+	        preparedStatement.setString(3, supplier.getStreet());
+	        preparedStatement.setString(4, supplier.getCity());
+	        preparedStatement.setString(5, supplier.getState());
+	        preparedStatement.setString(6, supplier.getZipCode());
+	        preparedStatement.setString(7, supplier.getPhoneNumber());
+	        preparedStatement.setString(8, supplier.getPassword());
+	        preparedStatement.setString(9, supplier.getEmail());
+
+	        preparedStatement.executeUpdate();
+	        System.out.println("Supplier added successfully with ID: " + generatedId);
+
+	        preparedStatement.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
   //Function to view Supplier Profile 
   public Supplier viewSupplierProfile(String supplierId) {
