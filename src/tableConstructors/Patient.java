@@ -1,5 +1,7 @@
 package tableConstructors;
 
+import tableConstructors.AppointmentDetails;
+
 import java.sql.*;
 import java.util.*;
 import java.text.*;
