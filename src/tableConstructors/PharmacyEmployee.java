@@ -199,36 +199,36 @@ public class PharmacyEmployee {
  }
 
   public void addPharmacyEmployee(PharmacyEmployee pharmacyEmployee) {
-	    try (Connection connection = openDBConnection()) {
-	        // Generate a new employee ID using stored procedure
-	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_PharmacyEmployee_ID}");
-	        callableStatement.registerOutParameter(1, Types.CHAR);
-	        callableStatement.execute();
+     try (Connection connection = openDBConnection()) {
+         // Generate a new employee ID using stored procedure
+         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_PharmacyEmployee_ID}");
+         callableStatement.registerOutParameter(1, Types.CHAR);
+         callableStatement.execute();
 
-	        String generatedId = callableStatement.getString(1);
-	        callableStatement.close();
+         String generatedId = callableStatement.getString(1);
+         callableStatement.close();
 
-	        // Insert employee data into the database
-	        String sql = "INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE (EMPLOYEE_ID, FIRST, LAST, SSN, PHONE_NUMBER, EMAIL, POSITION, PHARMACY_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setString(1, generatedId);
-	        preparedStatement.setString(2, pharmacyEmployee.getFirstName());
-	        preparedStatement.setString(3, pharmacyEmployee.getLastName());
-	        preparedStatement.setString(4, pharmacyEmployee.getSsn());
-	        preparedStatement.setString(5, pharmacyEmployee.getPhoneNumber());
-	        preparedStatement.setString(6, pharmacyEmployee.getEmail());
-	        preparedStatement.setString(7, pharmacyEmployee.getPosition());
-	        preparedStatement.setString(8, pharmacyEmployee.getPharmacyId());
-	        preparedStatement.setString(9, pharmacyEmployee.getPassword());
+         // Insert employee data into the database
+         String sql = "INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE (EMPLOYEE_ID, FIRST, LAST, SSN, PHONE_NUMBER, EMAIL, POSITION, PHARMACY_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+         preparedStatement.setString(1, generatedId);
+         preparedStatement.setString(2, pharmacyEmployee.getFirstName());
+         preparedStatement.setString(3, pharmacyEmployee.getLastName());
+         preparedStatement.setString(4, pharmacyEmployee.getSsn());
+         preparedStatement.setString(5, pharmacyEmployee.getPhoneNumber());
+         preparedStatement.setString(6, pharmacyEmployee.getEmail());
+         preparedStatement.setString(7, pharmacyEmployee.getPosition());
+         preparedStatement.setString(8, pharmacyEmployee.getPharmacyId());
+         preparedStatement.setString(9, pharmacyEmployee.getPassword());
 
-	        preparedStatement.executeUpdate();
-	        System.out.println("Pharmacy Employee added successfully with ID: " + generatedId);
+         preparedStatement.executeUpdate();
+         System.out.println("Pharmacy Employee added successfully with ID: " + generatedId);
 
-	        preparedStatement.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+         preparedStatement.close();
+     } catch (SQLException e) {
+         e.printStackTrace();
+     }
+ }
 
   
   public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
@@ -490,7 +490,7 @@ public class PharmacyEmployee {
       //call method for viewing medication info
       //test.viewMedicationInfo("PAT001");
       //call method to refill medication
-      //System.out.println(test.requestRefill("Aspirin",150));
+      System.out.println(test.requestRefill("SUP001","200"));
       
       test.fillPrescrption("PRSC001");
     } 
@@ -581,18 +581,17 @@ public class PharmacyEmployee {
   
    
  /**
- * Method for a pharmacy employee to refill a certain medication
+ * Method for a pharmacy employee to refill a certain medication from a supplier
  */
-  public String requestRefill(String prescriptionName, int updatedQty) {
+  public String requestRefill(String supplierName, String amount) {
     Connection con = openDBConnection();
-    String sql = "update healthcaremanagement_medication \n"
-      + "set QUANTITY = ? \n"
-      + "where NAME = ?";
-    try (PreparedStatement statement = con.prepareStatement(sql)) {
-      statement.setInt(1, updatedQty);
-      statement.setString(2, prescriptionName);
-      statement.executeUpdate();
-      return "Medication quantity for "+prescriptionName+" updated to "+updatedQty;
+    String sql = "{CALL UpdateSupplierQuantity(?, ?)}";
+    try (CallableStatement statement = con.prepareCall(sql)) {
+      statement.setString(1, supplierName);
+      statement.setString(2, amount);
+
+      statement.execute();
+      return "Medication quantity for "+supplierName+" updated to "+amount;
     } catch (SQLException e) {
       e.printStackTrace();
       return "Invalid Medication Name";
@@ -600,4 +599,5 @@ public class PharmacyEmployee {
     
   }
   
+
 }
