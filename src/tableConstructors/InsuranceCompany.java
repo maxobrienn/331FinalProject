@@ -1,4 +1,5 @@
 package tableConstructors;
+import java.math.BigDecimal;
 import java.sql.*;
 
 /**
@@ -14,19 +15,21 @@ public class InsuranceCompany {
   private String phoneNumber;
   private String email;
   private String password;
+  private BigDecimal percent;
   
   /**
    * The following stores whether or not the customer has successfully logged
    * to the System
    */    
   private boolean loggedIn = false;
+
   
   //need log in method
   
   public InsuranceCompany() {
   }
   
-  public InsuranceCompany(String insuranceId, String insuranceName, String street, String city, String state, String zipCode, String phoneNumber, String email, String password) {
+  public InsuranceCompany(String insuranceId, String insuranceName, String street, String city, String state, String zipCode, String phoneNumber, String email, String password, Float percent) {
     this.insuranceId = insuranceId;
     this.insuranceName = insuranceName;
     this.street = street;
@@ -36,6 +39,7 @@ public class InsuranceCompany {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.password = password;
+    this.setPercent(percent);
   }
   
   /**
@@ -232,6 +236,40 @@ public String toString() {
 	    }
 	    return false;
 	}
+  
+  public void addInsuranceCompany(InsuranceCompany insuranceCompany) {
+	    try (Connection connection = openDBConnection()) {
+	        // Generate a new insurance company ID using stored procedure
+	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_InsuranceCompany_ID}");
+	        callableStatement.registerOutParameter(1, Types.CHAR);
+	        callableStatement.execute();
+
+	        String generatedId = callableStatement.getString(1);
+	        callableStatement.close();
+
+	        // Insert insurance company data into the database
+	        String sql = "INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, generatedId);
+	        preparedStatement.setString(2, insuranceCompany.getInsuranceName());
+	        preparedStatement.setString(3, insuranceCompany.getStreet());
+	        preparedStatement.setString(4, insuranceCompany.getCity());
+	        preparedStatement.setString(5, insuranceCompany.getState());
+	        preparedStatement.setString(6, insuranceCompany.getZipCode());
+	        preparedStatement.setString(7, insuranceCompany.getPhoneNumber());
+	        preparedStatement.setString(8, insuranceCompany.getEmail());
+	        preparedStatement.setString(9, insuranceCompany.getPassword());
+	        preparedStatement.setBigDecimal(10, insuranceCompany.getPercent());
+
+	        preparedStatement.executeUpdate();
+	        System.out.println("Insurance Company added successfully with ID: " + generatedId);
+
+	        preparedStatement.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
   
   /**
@@ -380,4 +418,18 @@ public String toString() {
       e.printStackTrace();
     }
   }
+
+/**
+ * @return the percent
+ */
+public BigDecimal getPercent() {
+	return percent;
+}
+
+/**
+ * @param percent the percent to set
+ */
+public void setPercent(Float percent) {
+	this.percent = percent;
+}
 }

@@ -141,6 +141,39 @@ public class Pharmacy {
 	    }
 	    return false;
 	}
+	
+	public void addPharmacy(Pharmacy pharmacy) {
+	    try (Connection connection = openDBConnection()) {
+	        // Generate a new pharmacy ID using stored procedure
+	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Pharmacy_ID}");
+	        callableStatement.registerOutParameter(1, Types.CHAR);
+	        callableStatement.execute();
+
+	        String generatedId = callableStatement.getString(1);
+	        callableStatement.close();
+
+	        // Insert pharmacy data into the database
+	        String sql = "INSERT INTO HealthCareManagement_PHARMACY (PHARMACY_ID, PHARMACY_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, PASSWORD, EMAIL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, generatedId);
+	        preparedStatement.setString(2, pharmacy.getPharmacyName());
+	        preparedStatement.setString(3, pharmacy.getStreet());
+	        preparedStatement.setString(4, pharmacy.getCity());
+	        preparedStatement.setString(5, pharmacy.getState());
+	        preparedStatement.setString(6, pharmacy.getZipCode());
+	        preparedStatement.setString(7, pharmacy.getPhoneNumber());
+	        preparedStatement.setString(8, pharmacy.getPassword());
+	        preparedStatement.setString(9, pharmacy.getEmail());
+
+	        preparedStatement.executeUpdate();
+	        System.out.println("Pharmacy added successfully with ID: " + generatedId);
+
+	        preparedStatement.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
 
     public void updatePharmacyInfo(String pharmacyId, String pharmacyName, String street, String city, String state, String zipCode, String phoneNumber, String password, String email) {

@@ -177,6 +177,37 @@ public class Doctor {
 	    }
 	    return false;
 	}
+	
+	public void addDoctor(Doctor doctor) {
+	    try (Connection connection = openDBConnection()) {
+	        // Generate a new doctor ID using stored procedure
+	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Doctor_ID}");
+	        callableStatement.registerOutParameter(1, Types.CHAR);
+	        callableStatement.execute();
+
+	        String generatedId = callableStatement.getString(1);
+	        callableStatement.close();
+
+	        // Insert doctor data into the database
+	        String sql = "INSERT INTO HealthCareManagement_DOCTOR (DOCTOR_ID, FIRST, LAST, EMAIL, PASSWORD, SPECIALIZATION, OFFICE_NUMBER) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+	        preparedStatement.setString(1, generatedId);
+	        preparedStatement.setString(2, doctor.getFirstName());
+	        preparedStatement.setString(3, doctor.getLastName());
+	        preparedStatement.setString(4, doctor.getEmail());
+	        preparedStatement.setString(5, doctor.getPassword());
+	        preparedStatement.setString(6, doctor.getSpecialization());
+	        preparedStatement.setString(7, doctor.getOfficeNumber());
+
+	        preparedStatement.executeUpdate();
+	        System.out.println("Doctor added successfully with ID: " + generatedId);
+
+	        preparedStatement.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
     public void updateDoctorInfo(String doctorId, String lastName, String firstName, String email, String password, String specialization, String officeNumber) {
         try {
