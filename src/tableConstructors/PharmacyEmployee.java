@@ -416,11 +416,119 @@ public class PharmacyEmployee {
       test.GetUnpaidBalanceForPatient("PHRM001","PAT001");
       
       test.GetUnpaidBalanceForInsuranceCompany("PHRM001","INS001");
+      
+   // Call method for viewing all available medication
+      //test.viewAvailableMedication();
+      //call method for billing insurance
+      //test.billInsurance("PRSC001");
+      //call method for viewing medication info
+      //test.viewMedicationInfo("PAT001");
+      //call method to refill medication
+      //test.requestRefill("Aspirin");
     } 
     
     catch (Exception e) {
       e.printStackTrace();
     }
   }
+  /**
+   * Method to view all of the medication available at the pharmacy
+   */
+  
+  public void viewAvailableMedication() {
+    Connection con = openDBConnection();
+    String sql = "select *\n"
+      + "from healthcaremanagement_medication";
+    
+    try (PreparedStatement statement = con.prepareStatement(sql)) {
+      try (ResultSet rs = statement.executeQuery()) {
+        while (rs.next()) {
+          String name = rs.getString("NAME");
+          String supplierID = rs.getString("SUPPLIER_ID");
+          String quantity = rs.getString("QUANTITY");
+          System.out.println(name + "\t\t" + supplierID + "\t\t" + quantity);
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+     }
+   
+  
+  /**
+   * 
+   * @param prescriptionId
+   * @return amount due
+   */
+  public String billInsurance(String prescriptionId) {
+    Connection con = openDBConnection();
+    String sql = "select insurancebalance from prescriptionbalancetable WHERE prescription_id = ?";
+    try (PreparedStatement statement = con.prepareStatement(sql)) {
+      statement.setString(1, prescriptionId);
+      try (ResultSet rs = statement.executeQuery()) {
+        while(rs.next()){
+          String due = rs.getString("INSURANCEBALANCE");
+          
+          System.out.println(due);
+          return due;
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      
+    }
+    return "Unknown Insurance";
+  }
+  
+  /**
+   * Method to view information about a prescription
+   * @param patientID is the ID of the patient whose prescription info we are finding
+   */
+  public void viewMedicationInfo(String patientID) {
+     Connection con = openDBConnection();
+     String sql = "select *\n"
+       + "from healthcaremanagement_prescription\n"
+       + "where patient_id = ?";
+     
+     try (PreparedStatement statement = con.prepareStatement(sql)) {
+      statement.setString(1, patientID);
+       try (ResultSet rs = statement.executeQuery()) {
+         while (rs.next()) {
+           String prescriptionID = rs.getString("PRESCRIPTION_ID");
+           String date = rs.getString("DATE_ISSUED");
+           String prescriptionName = rs.getString("PRESCRIPTION_NAME");
+           String dosage = rs.getString("DOSAGE");
+           String refills = rs.getString("REFILLS_REMAINING");
+           String price = rs.getString("PRICE");
+           String quantity = rs.getString("QUANTITY");
+           String doctorID = rs.getString("DOCTOR_ID");
+           //String newPatientID = rs.getString("PATIENT_ID");
+           System.out.println(prescriptionID + "\t\t" + date + "\t\t" + prescriptionName + "\t\t" + dosage + "\t\t" + refills + "\t\t" + price + "\t\t" + quantity + "\t\t" + doctorID + "\t\t" + patientID);
+         }
+       }
+     } catch (SQLException e) {
+       e.printStackTrace();
+     }
+  }
+  
+   
+ /**
+ * Method for a pharmacy employee to request a refill for a certain medication
+ */
+  public String requestRefill(String prescriptionName) {
+  Connection con = openDBConnection();
+  String sql = "update healthcaremanagement_medication \n"
+          + "set QUANTITY = 200 \n"
+          + "where NAME = ?";
+  try (PreparedStatement statement = con.prepareStatement(sql)) {
+  statement.setString(1, prescriptionName);
+  statement.executeUpdate();
+  return "Refill Request Recieved";
+  } catch (SQLException e) {
+   e.printStackTrace();
+   return "Invalid Medication Name";
+  }
+
+ }
   
 }
