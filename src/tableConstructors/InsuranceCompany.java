@@ -29,7 +29,7 @@ public class InsuranceCompany {
   public InsuranceCompany() {
   }
   
-  public InsuranceCompany(String insuranceId, String insuranceName, String street, String city, String state, String zipCode, String phoneNumber, String email, String password, Float percent) {
+  public InsuranceCompany(String insuranceId, String insuranceName, String street, String city, String state, String zipCode, String phoneNumber, String email, String password, BigDecimal percent) {
     this.insuranceId = insuranceId;
     this.insuranceName = insuranceName;
     this.street = street;
@@ -429,7 +429,7 @@ public BigDecimal getPercent() {
 /**
  * @param percent the percent to set
  */
-public void setPercent(Float percent) {
+public void setPercent(BigDecimal percent) {
 	this.percent = percent;
 }
 }
