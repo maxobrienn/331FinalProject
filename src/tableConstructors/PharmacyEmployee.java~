@@ -490,7 +490,7 @@ public class PharmacyEmployee {
       //call method for viewing medication info
       //test.viewMedicationInfo("PAT001");
       //call method to refill medication
-      System.out.println(test.requestRefill("SUP001","150"));
+      System.out.println(test.requestRefill("SUP001","200"));
       
       test.fillPrescrption("PRSC001");
     } 
