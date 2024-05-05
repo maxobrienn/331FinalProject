@@ -370,11 +370,11 @@ public class Patient {
    * @param password The password of the patient.
    * @return True if the login is successful, otherwise false.
    */
-  public boolean patientLogin(String email, String password) {
+  public boolean patientLogin(String patientId, String password) {
     Connection con = openDBConnection();
     try {
-      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PATIENT WHERE EMAIL = ? AND PASSWORD = ?");
-      statement.setString(1, email);
+      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PATIENT WHERE PATIENT_ID = ? AND PASSWORD = ?");
+      statement.setString(1, patientId);
       statement.setString(2, password);
       
       ResultSet rs = statement.executeQuery();
@@ -515,7 +515,7 @@ public class Patient {
       // Prepare and execute SQL query to retrieve patient information
       String sql = "SELECT * FROM HealthCareManagement_PATIENT WHERE PATIENT_ID = ?";
       PreparedStatement preparedStatement = con.prepareStatement(sql);
-      preparedStatement.setString(1, String patientId);
+      preparedStatement.setString(1, patientId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
       // Print patient information
@@ -812,15 +812,15 @@ public class Patient {
     // Test editing patient info
     System.out.println("\nTesting editing patient info...");
     System.out.println("Patient info before update:");
-    System.out.println(patient.displayPatientInfo().toString());
+    System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
     patient.updatePatientInfo("987-654-3210", "upatient@example.com", "789 Health Ave",
                               "Carecity", "CA", "34567", "INS003", "Male"); 
     System.out.println("\nPatient info after update:");
-    System.out.println(patient.displayPatientInfo().toString());
+    System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
     
     // Test viewing patient profile
     System.out.println("\nTesting viewing patient profile...");
-    System.out.println(patient.displayPatientInfo().toString());
+    System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
     
     // Test adding a new patient
     System.out.println("\nTesting adding new patient...");
@@ -843,7 +843,7 @@ public class Patient {
     
     // Test viewing added patient profile
     System.out.println("\nTesting viewing added patient profile...");
-    System.out.println(newPatient.displayPatientInfo().toString());
+    System.out.println(newPatient.displayPatientInfo(newPatient.getPatientId()).toString());
     
     
     // Test viewing prescription balances
