@@ -246,9 +246,9 @@ public class Doctor {
         throw new IllegalStateException("Doctor must be logged in to access patient information.");
     }
 
-    String query = "SELECT p.PATIENT_ID, p.FIRST, p.LAST, p.EMAIL, p.PHONE_NUMBER, p.DIAGNOSES " +
+    String query = "SELECT p.PATIENT_ID, p.FIRST, p.LAST, p.EMAIL, p.PHONE_NUMBER, a.DIAGNOSES " +
                    "FROM HealthCareManagement_PATIENT p " +
-                   "JOIN HealthCareManagement_APPOINTMENT a ON p.PATIENT_ID = a.PATIENT_ID " +
+                   "JOIN HealthCareManagement_DIAGNOSES a ON p.PATIENT_ID = a.PATIENT_ID " +
                    "WHERE a.DOCTOR_ID = ? " +
                    "ORDER BY p.LAST, p.FIRST";
 
@@ -276,8 +276,8 @@ public class Doctor {
     }
 
     String sql = "INSERT INTO HealthCareManagement_PRESCRIPTION " +
-                 "(PRESCRIPTION_ID, DATE_ISSUED, PRESCRIPTION_NAME, DOSAGE, REFILLS_REMAINING, PRICE, QUANTITY, DOCTOR_ID, PATIENT_ID, FILLED) " +
-                 "VALUES (?, CURRENT_DATE, ?, ?, ?, ?, ?, ?, ?, 'NO')";
+                 "(PRESCRIPTION_ID, DATE_ISSUED, PRESCRIPTION_NAME, DOSAGE, REFILLS_REMAINING, PRICE, QUANTITY, DOCTOR_ID, PATIENT_ID) " +
+                 "VALUES (?, CURRENT_DATE, ?, ?, ?, ?, ?, ?, ?)";
 
     Connection myConnection = null;
     PreparedStatement stmt = null;
@@ -325,6 +325,7 @@ public class Doctor {
         stmt = myConnection.prepareStatement(sql);
         stmt.setString(1, note);
         stmt.setDate(2, sqlDate);  // Set the SQL date directly        stmt.setString(3, patientId);
+        stmt.setString(3, patientId); // Third placeholder ?
         stmt.setString(4, this.doctorId); // Use the doctor ID from the class field
 
         int affectedRows = stmt.executeUpdate();
