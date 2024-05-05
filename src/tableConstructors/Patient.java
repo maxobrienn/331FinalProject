@@ -515,7 +515,7 @@ public class Patient {
       // Prepare and execute SQL query to retrieve patient information
       String sql = "SELECT * FROM HealthCareManagement_PATIENT WHERE PATIENT_ID = ?";
       PreparedStatement preparedStatement = con.prepareStatement(sql);
-      preparedStatement.setString(1, String patientId);
+      preparedStatement.setString(1, patientId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
       // Print patient information
