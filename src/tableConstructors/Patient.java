@@ -508,14 +508,14 @@ public class Patient {
   
   
   
-  public Patient displayPatientInfo() {
+  public Patient displayPatientInfo(String patientId) {
     Patient patient = new Patient();
     Connection con = openDBConnection();
     try {
       // Prepare and execute SQL query to retrieve patient information
       String sql = "SELECT * FROM HealthCareManagement_PATIENT WHERE PATIENT_ID = ?";
       PreparedStatement preparedStatement = con.prepareStatement(sql);
-      preparedStatement.setString(1, getPatientId());
+      preparedStatement.setString(1, String patientId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
       // Print patient information
