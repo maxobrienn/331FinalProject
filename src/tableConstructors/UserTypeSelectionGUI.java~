@@ -1,0 +1,56 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class UserTypeSelectionGUI extends JFrame implements ActionListener {
+    private JButton patientButton;
+    private JButton insuranceCompanyButton;
+
+    public UserTypeSelectionGUI() {
+        setTitle("User Type Selection");
+        setSize(300, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center the window
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 1));
+
+        patientButton = new JButton("Patient");
+        patientButton.addActionListener(this);
+        panel.add(patientButton);
+
+        insuranceCompanyButton = new JButton("Insurance Company");
+        insuranceCompanyButton.addActionListener(this);
+        panel.add(insuranceCompanyButton);
+
+        add(panel);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == patientButton) {
+            openLoginGUI("Patient");
+        } else if (e.getSource() == insuranceCompanyButton) {
+            openLoginGUI("Insurance Company");
+        }
+        setVisible(false); // Hide the user type selection window
+    }
+
+    private void openLoginGUI(String userType) {
+        if (userType.equals("Patient")) {
+            Patient patient = new Patient();
+            UserLoginGUI patientLoginGUI = new UserLoginGUI(patient);
+            patientLoginGUI.setVisible(true);
+        } else if (userType.equals("Insurance Company")) {
+            InsuranceCompany insuranceCompany = new InsuranceCompany();
+            UserLoginGUI insuranceLoginGUI = new UserLoginGUI(insuranceCompany);
+            insuranceLoginGUI.setVisible(true);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            UserTypeSelectionGUI userTypeSelectionGUI = new UserTypeSelectionGUI();
+            userTypeSelectionGUI.setVisible(true);
+        });
+    }
+}

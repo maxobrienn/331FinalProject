@@ -15,9 +15,6 @@ BEGIN
     RETURN unpaid_balance;
 END;
 
--- currently returns the entire sum of PB.PatientBalance and doesn't filter
-SELECT GetUnpaidBalanceForPatient('PAT001') FROM DUAL;
-
 
 -- returns unpaid balance for a insurance company to a pharmacy employee
 CREATE OR REPLACE FUNCTION GetUnpaidBalanceForInsuranceCompany(
@@ -36,7 +33,18 @@ BEGIN
 END;
 
 
--- currently returns the entire sum of PB.InsuranceBalance and doesn't filter
-SELECT GetUnpaidBalanceForInsuranceCompany('INS001', 'PHRM001') FROM DUAL;
+SELECT * from HealthCareManagement_PRESCRIPTIONBALANCE;
+--PRESRIPTION_ID    PATIENT_ID  INSURANCE_ID    INSURANCEBALANCE    PATIENTBALANCE
+--PRSC001	        PAT001	    INS001	        2.5	                22.5
+--PRSC002	        PAT002	    INS002	        3.75	            11.25
+--PRSC003	        PAT003	    INS003	        12	                18
+--PRSC004	        PAT004	    INS004	        3.3	                18.7
+--PRSC005	        PAT005	    INS005	        4.5	                40.5
+--PRSC006	        PAT006	    INS006	        0	                10
 
+SELECT GetUnpaidBalanceForPatient('PAT001') FROM DUAL;
+--23
+
+SELECT GetUnpaidBalanceForInsuranceCompany('INS001', 'PHRM001') FROM DUAL;
+--3
 

@@ -1,13 +1,19 @@
 package tableConstructors;
+
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 import java.text.*;
 
 /**
- * @author Ellie Smith
+ * This class represents an Insurance Company with its attributes and functionalities.
+ * It includes methods for login, logout, adding insurance companies, making payments, and viewing covered patients' information.
+ * It also provides database connectivity methods and utility methods for generating IDs and formatting dates.
+ * 
+ * @author Matt DeRosa, Ellie Smith, Evan Quinn, Max O'Brien, and Mason Meyer
  */
 @SuppressWarnings("unused")
+
 public class InsuranceCompany {
   private String insuranceId;
   private String insuranceName;
@@ -29,9 +35,15 @@ public class InsuranceCompany {
   
   //need log in method
   
+  /**
+   * Default constructor
+   */
   public InsuranceCompany() {
   }
   
+  /**
+   * Parameterized constructor
+   */
   public InsuranceCompany(String insuranceId, String insuranceName, String street, String city, String state, String zipCode, String phoneNumber, String email, String password, BigDecimal percent) {
     this.insuranceId = insuranceId;
     this.insuranceName = insuranceName;
@@ -240,40 +252,40 @@ public class InsuranceCompany {
     }
     return false;
   }
-	    
+     
   
   public void addInsuranceCompany(InsuranceCompany insuranceCompany) {
-	    try (Connection connection = openDBConnection()) {
-	        // Generate a new insurance company ID using stored procedure
-	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_InsuranceCompany_ID}");
-	        callableStatement.registerOutParameter(1, Types.CHAR);
-	        callableStatement.execute();
+     try (Connection connection = openDBConnection()) {
+         // Generate a new insurance company ID using stored procedure
+         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_InsuranceCompany_ID}");
+         callableStatement.registerOutParameter(1, Types.CHAR);
+         callableStatement.execute();
 
-	        String generatedId = callableStatement.getString(1);
-	        callableStatement.close();
+         String generatedId = callableStatement.getString(1);
+         callableStatement.close();
 
-	        // Insert insurance company data into the database
-	        String sql = "INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setString(1, generatedId);
-	        preparedStatement.setString(2, insuranceCompany.getInsuranceName());
-	        preparedStatement.setString(3, insuranceCompany.getStreet());
-	        preparedStatement.setString(4, insuranceCompany.getCity());
-	        preparedStatement.setString(5, insuranceCompany.getState());
-	        preparedStatement.setString(6, insuranceCompany.getZipCode());
-	        preparedStatement.setString(7, insuranceCompany.getPhoneNumber());
-	        preparedStatement.setString(8, insuranceCompany.getEmail());
-	        preparedStatement.setString(9, insuranceCompany.getPassword());
-	        preparedStatement.setBigDecimal(10, insuranceCompany.getPercent());
+         // Insert insurance company data into the database
+         String sql = "INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+         preparedStatement.setString(1, generatedId);
+         preparedStatement.setString(2, insuranceCompany.getInsuranceName());
+         preparedStatement.setString(3, insuranceCompany.getStreet());
+         preparedStatement.setString(4, insuranceCompany.getCity());
+         preparedStatement.setString(5, insuranceCompany.getState());
+         preparedStatement.setString(6, insuranceCompany.getZipCode());
+         preparedStatement.setString(7, insuranceCompany.getPhoneNumber());
+         preparedStatement.setString(8, insuranceCompany.getEmail());
+         preparedStatement.setString(9, insuranceCompany.getPassword());
+         preparedStatement.setBigDecimal(10, insuranceCompany.getPercent());
 
-	        preparedStatement.executeUpdate();
-	        System.out.println("Insurance Company added successfully with ID: " + generatedId);
+         preparedStatement.executeUpdate();
+         System.out.println("Insurance Company added successfully with ID: " + generatedId);
 
-	        preparedStatement.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+         preparedStatement.close();
+     } catch (SQLException e) {
+         e.printStackTrace();
+     }
+ }
 
   
   /**
@@ -477,13 +489,13 @@ public class InsuranceCompany {
  * @return the percent
  */
 public BigDecimal getPercent() {
-	return percent;
+ return percent;
 }
 
 /**
  * @param percent the percent to set
  */
 public void setPercent(BigDecimal percent) {
-	this.percent = percent;
+ this.percent = percent;
 }
 }
