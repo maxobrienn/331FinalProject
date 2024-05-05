@@ -180,56 +180,55 @@ public class PharmacyEmployee {
   }
   
   public boolean pharmacyEmployeeLogin(String email, String password) {
-	    Connection con = openDBConnection();
-	    try {
-	        PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
-	        statement.setString(1, email);
-	        statement.setString(2, password);
+     Connection con = openDBConnection();
+     try {
+         PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
+         statement.setString(1, email);
+         statement.setString(2, password);
 
-	        ResultSet rs = statement.executeQuery();
-	        
-	        if(rs.next() && rs.getInt(1) > 0){
-	            this.loggedIn = true;
-	            return true;
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    return false;
-	}
-  
+         ResultSet rs = statement.executeQuery();
+         
+         if(rs.next() && rs.getInt(1) > 0){
+             this.loggedIn = true;
+             return true;
+         }
+     } catch (SQLException e) {
+         e.printStackTrace();
+     }
+     return false;
+ }
+
   public void addPharmacyEmployee(PharmacyEmployee pharmacyEmployee) {
-	    try (Connection connection = openDBConnection()) {
-	        // Generate a new employee ID using stored procedure
-	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_PharmacyEmployee_ID}");
-	        callableStatement.registerOutParameter(1, Types.CHAR);
-	        callableStatement.execute();
+     try (Connection connection = openDBConnection()) {
+         // Generate a new employee ID using stored procedure
+         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_PharmacyEmployee_ID}");
+         callableStatement.registerOutParameter(1, Types.CHAR);
+         callableStatement.execute();
 
-	        String generatedId = callableStatement.getString(1);
-	        callableStatement.close();
+         String generatedId = callableStatement.getString(1);
+         callableStatement.close();
 
-	        // Insert employee data into the database
-	        String sql = "INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE (EMPLOYEE_ID, FIRST, LAST, SSN, PHONE_NUMBER, EMAIL, POSITION, PHARMACY_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setString(1, generatedId);
-	        preparedStatement.setString(2, pharmacyEmployee.getFirstName());
-	        preparedStatement.setString(3, pharmacyEmployee.getLastName());
-	        preparedStatement.setString(4, pharmacyEmployee.getSsn());
-	        preparedStatement.setString(5, pharmacyEmployee.getPhoneNumber());
-	        preparedStatement.setString(6, pharmacyEmployee.getEmail());
-	        preparedStatement.setString(7, pharmacyEmployee.getPosition());
-	        preparedStatement.setString(8, pharmacyEmployee.getPharmacyId());
-	        preparedStatement.setString(9, pharmacyEmployee.getPassword());
+         // Insert employee data into the database
+         String sql = "INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE (EMPLOYEE_ID, FIRST, LAST, SSN, PHONE_NUMBER, EMAIL, POSITION, PHARMACY_ID, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+         preparedStatement.setString(1, generatedId);
+         preparedStatement.setString(2, pharmacyEmployee.getFirstName());
+         preparedStatement.setString(3, pharmacyEmployee.getLastName());
+         preparedStatement.setString(4, pharmacyEmployee.getSsn());
+         preparedStatement.setString(5, pharmacyEmployee.getPhoneNumber());
+         preparedStatement.setString(6, pharmacyEmployee.getEmail());
+         preparedStatement.setString(7, pharmacyEmployee.getPosition());
+         preparedStatement.setString(8, pharmacyEmployee.getPharmacyId());
+         preparedStatement.setString(9, pharmacyEmployee.getPassword());
 
-	        preparedStatement.executeUpdate();
-	        System.out.println("Pharmacy Employee added successfully with ID: " + generatedId);
+         preparedStatement.executeUpdate();
+         System.out.println("Pharmacy Employee added successfully with ID: " + generatedId);
 
-	        preparedStatement.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-
+         preparedStatement.close();
+     } catch (SQLException e) {
+         e.printStackTrace();
+     }
+ }
 
   
   public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
@@ -257,13 +256,14 @@ public class PharmacyEmployee {
     }
   }
   
-  public PharmacyEmployee displayEmployeeInfo(String employeeId) {
+  public PharmacyEmployee displayEmployeeInfo() {
     PharmacyEmployee employee = new PharmacyEmployee();
     Connection con = openDBConnection();
     try {
       String sql = "SELECT * FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMPLOYEE_ID = ?";
       
       PreparedStatement preparedStatement = con.prepareStatement(sql);
+      String employeeId = getEmployeeId();
       preparedStatement.setString(1, employeeId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
@@ -315,13 +315,12 @@ public class PharmacyEmployee {
   /**
    * Method that allows pharmacy employees to view all presscriptions including any unpaid balance for each
    * 
-   * @param PHARMACY_ID -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
-   * 
    */
-  public void viewPrescriptions(String PHARMACY_ID) {
+  public void viewPrescriptions() {
     
     Connection myConnection;
     PreparedStatement preparedStmt;
+    String pharmacyId = getPharmacyId();
     
     try {
       myConnection = openDBConnection();
@@ -331,7 +330,7 @@ public class PharmacyEmployee {
       
       preparedStmt = myConnection.prepareStatement(queryString);
       
-      preparedStmt.setString(1, PHARMACY_ID);
+      preparedStmt.setString(1, pharmacyId);
       
       ResultSet rs = preparedStmt.executeQuery(); 
       
@@ -360,7 +359,7 @@ public class PharmacyEmployee {
    * @param pharmacyId -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
    * @param patientId
    */
-  public double GetUnpaidBalanceForPatient(String pharmacyId, String patientId) {
+  public double GetUnpaidBalanceForPatient(String patientId) {
     
     Connection myConnection = null;
     PreparedStatement preparedStmt = null;
@@ -370,14 +369,13 @@ public class PharmacyEmployee {
     try {
       myConnection = openDBConnection();
       
-      String queryString = "SELECT GetUnpaidBalanceForPatient(?, ?) FROM DUAL";
+      String queryString = "SELECT GetUnpaidBalanceForPatient(?) FROM DUAL";
       
       preparedStmt = myConnection.prepareStatement(queryString);
       
       preparedStmt.clearParameters();
       
       preparedStmt.setString(1,patientId);
-      preparedStmt.setString(2,pharmacyId);
       
       result = preparedStmt.executeQuery();
       
@@ -398,15 +396,15 @@ public class PharmacyEmployee {
    * Method that allows pharamacy employees to see total unpaid balance
    * for a given patient
    * 
-   * @param pharmacyId -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
-   * @param patientId
+   * @param insuranceId
    */
-  public double GetUnpaidBalanceForInsuranceCompany(String pharmacyId, String insuranceId) {
+  public double GetUnpaidBalanceForInsuranceCompany(String insuranceId) {
     
     Connection myConnection = null;
     PreparedStatement preparedStmt = null;
     ResultSet result = null;
     double unpaidICBalance = -1;
+    String pharmacyId = getPharmacyId();
     
     try {
       myConnection = openDBConnection();
@@ -435,6 +433,45 @@ public class PharmacyEmployee {
     return unpaidICBalance;
   }
   
+  /*
+   * Method that allows Pharmacy Employees to set prescrption to "FILLED"
+   * 
+   * @param prescrptionId they filled
+   */
+  public void fillPrescrption(String prescrptionId) {
+    Connection myConnection;
+    PreparedStatement preparedStmt;
+    
+    try {
+      myConnection = openDBConnection();
+      
+      // Check if the prescpription exists before fillings it
+      String checkQuery = "SELECT * FROM HealthCareManagement_PRESCRIPTION WHERE PRESCRIPTION_ID = ?";
+      preparedStmt = myConnection.prepareStatement(checkQuery);
+      preparedStmt.setString(1, prescrptionId);
+      ResultSet resultSet = preparedStmt.executeQuery();
+      
+      if (resultSet.next()) {
+        // prescrption exists, proceed with filling
+        String removeQuery = "UPDATE HealthCareManagement_PRESCRIPTION SET FILLED = 'YES' WHERE PRESCRIPTION_ID = ?";
+        preparedStmt = myConnection.prepareStatement(removeQuery);
+        preparedStmt.setString(1, prescrptionId);
+        preparedStmt.executeUpdate();
+        System.out.println("Prescprtion "+prescrptionId+" filled.");
+      } else {
+        // Medication does not exist
+        System.out.println("Prescprtion not found.");
+      }
+      
+      // Close resources
+      resultSet.close();
+      preparedStmt.close();
+      myConnection.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+  
   /**
    * Main method to test JDBC methods
    */
@@ -442,13 +479,14 @@ public class PharmacyEmployee {
     try {
       // Create an instance of InsuranceCompanyController
       PharmacyEmployee test = new PharmacyEmployee();
+      test.setPharmacyId("PHRM001");
       
       // Call the instance method on the created instance to view covered patients information
-      test.viewPrescriptions("PHRM001");
+      test.viewPrescriptions();
       
-      test.GetUnpaidBalanceForPatient("PHRM001","PAT001");
+      test.GetUnpaidBalanceForPatient("PAT001");
       
-      test.GetUnpaidBalanceForInsuranceCompany("PHRM001","INS001");
+      test.GetUnpaidBalanceForInsuranceCompany("INS001");
       
    // Call method for viewing all available medication
       //test.viewAvailableMedication();
@@ -457,7 +495,9 @@ public class PharmacyEmployee {
       //call method for viewing medication info
       //test.viewMedicationInfo("PAT001");
       //call method to refill medication
-      //test.requestRefill("Aspirin");
+      System.out.println(test.requestRefill("SUP001","200"));
+      
+      test.fillPrescrption("PRSC001");
     } 
     
     catch (Exception e) {
@@ -467,7 +507,6 @@ public class PharmacyEmployee {
   /**
    * Method to view all of the medication available at the pharmacy
    */
-  
   public void viewAvailableMedication() {
     Connection con = openDBConnection();
     String sql = "select *\n"
@@ -546,22 +585,23 @@ public class PharmacyEmployee {
   
    
  /**
- * Method for a pharmacy employee to request a refill for a certain medication
+ * Method for a pharmacy employee to refill a certain medication from a supplier
  */
-  public String requestRefill(String prescriptionName) {
-  Connection con = openDBConnection();
-  String sql = "update healthcaremanagement_medication \n"
-          + "set QUANTITY = 200 \n"
-          + "where NAME = ?";
-  try (PreparedStatement statement = con.prepareStatement(sql)) {
-  statement.setString(1, prescriptionName);
-  statement.executeUpdate();
-  return "Refill Request Recieved";
-  } catch (SQLException e) {
-   e.printStackTrace();
-   return "Invalid Medication Name";
-  }
+  public String requestRefill(String supplierName, String amount) {
+    Connection con = openDBConnection();
+    String sql = "{CALL UpdateSupplierQuantity(?, ?)}";
+    try (CallableStatement statement = con.prepareCall(sql)) {
+      statement.setString(1, supplierName);
+      statement.setString(2, amount);
 
- }
+      statement.execute();
+      return "Medication quantity for "+supplierName+" updated to "+amount;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return "Invalid Medication Name";
+    }
+    
+  }
   
+
 }
