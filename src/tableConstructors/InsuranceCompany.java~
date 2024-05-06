@@ -233,12 +233,12 @@ public class InsuranceCompany {
   /**
    * 
    */
-  public boolean insuranceCompanyLogin(String email, String password) {
+  public boolean insuranceCompanyLogin(String insuanceCompanyId, String password) {
 
     Connection con = openDBConnection();
     try {
-      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_INSURANCECOMPANY WHERE EMAIL = ? AND PASSWORD = ?");
-      statement.setString(1, email);
+      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_INSURANCECOMPANY WHERE INSURANCE_ID = ? AND PASSWORD = ?");
+      statement.setString(1, insuanceCompanyId);
       statement.setString(2, password);
       
       ResultSet rs = statement.executeQuery();
