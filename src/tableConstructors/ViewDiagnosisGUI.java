@@ -1,13 +1,14 @@
-package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
+import tableConstructors.Patient;
 
 public class ViewDiagnosisGUI extends JFrame {
     private JTextField patientIdField;
     private JTextArea resultArea;
     private JButton viewButton;
+    private JButton returnButton; // New button for returning to PatientMenu
     private Patient patient;
 
     public ViewDiagnosisGUI(Patient patient) {
@@ -31,16 +32,16 @@ public class ViewDiagnosisGUI extends JFrame {
         resultArea.setEditable(false);
 
         viewButton = new JButton("View Diagnoses");
-        viewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                viewDiagnoses();
-            }
-        });
+        viewButton.addActionListener(e -> viewDiagnoses());
+
+        returnButton = new JButton("Return to Patient Menu");
+        returnButton.addActionListener(e -> returnToMenu());
 
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("Patient ID:"));
         topPanel.add(patientIdField);
         topPanel.add(viewButton);
+        topPanel.add(returnButton); // Add return button to the top panel
 
         JScrollPane scrollPane = new JScrollPane(resultArea);
 
@@ -90,6 +91,12 @@ public class ViewDiagnosisGUI extends JFrame {
                 ex.printStackTrace();
             }
         }
+    }
+
+    // Method to return to the Patient Menu
+    private void returnToMenu() {
+        dispose(); // Close the current window
+        SwingUtilities.invokeLater(() -> new PatientMenu(patient)); // Open PatientMenu
     }
 
     public static void main(String[] args) {

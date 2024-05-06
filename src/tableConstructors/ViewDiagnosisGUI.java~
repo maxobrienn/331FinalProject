@@ -1,15 +1,16 @@
+package tableConstructors;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 
-public class DiagnosisGUI extends JFrame {
+public class ViewDiagnosisGUI extends JFrame {
     private JTextField patientIdField;
     private JTextArea resultArea;
     private JButton viewButton;
     private Patient patient;
 
-    public DiagnosisGUI(Patient patient) {
+    public ViewDiagnosisGUI(Patient patient) {
         this.patient = patient;
         createAndShowGUI();
     }
@@ -17,7 +18,7 @@ public class DiagnosisGUI extends JFrame {
     private void createAndShowGUI() {
         // Frame initial setup
         setTitle("Patient Diagnosis Viewer");
-        setSize(400, 300);
+        setSize(600, 400); // Larger size
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -95,6 +96,6 @@ public class DiagnosisGUI extends JFrame {
         // Assuming Patient is logged in and Patient instance is created accordingly
         Patient patient = new Patient("123456", new java.util.Date(), "123 Elm St", "Anytown", "Anystate", "12345", "email@example.com",
                                       "555-1234", "Doe", "John", "M", "12345-67890", "password123");
-        SwingUtilities.invokeLater(() -> new DiagnosisGUI(patient));
+        SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }
 }
