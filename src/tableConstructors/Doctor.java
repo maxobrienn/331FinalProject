@@ -296,17 +296,16 @@ public class Doctor {
    * @param specialization The specialization of the doctor.
    * @param officeNumber The office number of the doctor.
    */
-  public void updateDoctorInfo(String lastName, String firstName, String email, String password, String specialization, String officeNumber) {
+  public void updateDoctorInfo(String lastName, String firstName, String email, String specialization, String officeNumber) {
     try {
       Connection connection = openDBConnection();
-      CallableStatement callableStatement = connection.prepareCall("{call Edit_Doctor_Info(?,?,?,?,?,?,?)}");
+      CallableStatement callableStatement = connection.prepareCall("{call Edit_Doctor_Info(?,?,?,?,?,?)}");
       callableStatement.setString(1, getDoctorId());
       callableStatement.setString(2, lastName);
       callableStatement.setString(3, firstName);
       callableStatement.setString(4, email);
       callableStatement.setString(5, specialization);
       callableStatement.setString(6, officeNumber);
-      callableStatement.setString(7, password);
       
       callableStatement.execute();
       
