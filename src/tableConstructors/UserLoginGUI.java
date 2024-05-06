@@ -131,14 +131,14 @@ public class UserLoginGUI extends JFrame implements ActionListener {
 //        PharmacyMenu pharmacyMenu = new PharmacyMenu();
 //        pharmacyMenu.setVisible(true);
 //      } 
-//      else if (user instanceof PharmacyEmployee) {
-//        PharmacyEmployeeMenu pharmacyEmployeeMenu = new PharmacyEmployeeMenu();
-//        pharmacyEmployeeMenu.setVisible(true);
-//      } 
-//      else if (user instanceof Supplier) {
-//        SupplierMenu supplierMenu = new SupplierMenu();
-//        supplierMenu.setVisible(true);
-//      }
+      else if (user instanceof PharmacyEmployee) {
+        PharmacyEmployeeMenu pharmacyEmployeeMenu = new PharmacyEmployeeMenu(((PharmacyEmployee) user).displayEmployeeInfo(id));
+        pharmacyEmployeeMenu.setVisible(true);
+      } 
+      else if (user instanceof Supplier) {
+        SupplierMenu supplierMenu = new SupplierMenu(((Supplier) user).displaySupplierInfo(id));
+        supplierMenu.setVisible(true);
+      }
         
     }
 

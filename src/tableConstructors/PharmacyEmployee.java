@@ -256,14 +256,13 @@ public class PharmacyEmployee {
     }
   }
   
-  public PharmacyEmployee displayEmployeeInfo() {
+  public PharmacyEmployee displayEmployeeInfo(String employeeId) {
     PharmacyEmployee employee = new PharmacyEmployee();
     Connection con = openDBConnection();
     try {
       String sql = "SELECT * FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMPLOYEE_ID = ?";
       
       PreparedStatement preparedStatement = con.prepareStatement(sql);
-      String employeeId = getEmployeeId();
       preparedStatement.setString(1, employeeId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
