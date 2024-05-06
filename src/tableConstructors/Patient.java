@@ -524,7 +524,6 @@ public class Patient {
         patient.setFirstName(resultSet.getString("FIRST"));
         patient.setLastName(resultSet.getString("LAST"));
         patient.setDob(resultSet.getDate("DOB"));
-        
         patient.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
         patient.setEmail(resultSet.getString("EMAIL"));
         patient.setStreet(resultSet.getString("STREET"));
