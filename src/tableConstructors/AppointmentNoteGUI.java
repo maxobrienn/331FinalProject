@@ -9,7 +9,7 @@ import java.util.Date;
 public class AppointmentNoteGUI extends JFrame {
     private JTextField patientIdField, doctorIdField, noteField;
     private JSpinner dateSpinner;
-    private JButton submitButton;
+    private JButton submitButton, returnToMenuButton;
     private Doctor doctor;  // Assuming the Doctor class is accessible and has the required methods.
 
     public AppointmentNoteGUI(Doctor doctor) {
@@ -20,7 +20,7 @@ public class AppointmentNoteGUI extends JFrame {
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Add Appointment Note");
-        setLayout(new GridLayout(5, 2, 10, 10));
+        setLayout(new GridLayout(6, 2, 10, 10));  // Updated grid layout for additional button
 
         // Adding labels and fields to the form
         add(new JLabel("Patient ID:"));
@@ -43,14 +43,15 @@ public class AppointmentNoteGUI extends JFrame {
 
         // Submit button
         submitButton = new JButton("Submit Note");
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                submitNote();
-            }
-        });
+        submitButton.addActionListener(e -> submitNote());
         add(submitButton);
 
-        pack();
+        // Return to Doctor Menu button
+        returnToMenuButton = new JButton("Return to Doctor Menu");
+        returnToMenuButton.addActionListener(e -> returnToMenu());
+        add(returnToMenuButton);
+
+        pack();  // Size the frame
         setLocationRelativeTo(null);  // Center the window
         setVisible(true);
     }
@@ -71,6 +72,11 @@ public class AppointmentNoteGUI extends JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
+    }
+
+    private void returnToMenu() {
+        this.dispose();  // Close the current window
+        new DoctorMenu(doctor).setVisible(true);  // Open the Doctor Menu
     }
 
     public static void main(String[] args) {

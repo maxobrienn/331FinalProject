@@ -296,17 +296,16 @@ public class Doctor {
    * @param specialization The specialization of the doctor.
    * @param officeNumber The office number of the doctor.
    */
-  public void updateDoctorInfo(String lastName, String firstName, String email, String password, String specialization, String officeNumber) {
+  public void updateDoctorInfo(String lastName, String firstName, String email, String specialization, String officeNumber) {
     try {
       Connection connection = openDBConnection();
-      CallableStatement callableStatement = connection.prepareCall("{call Edit_Doctor_Info(?,?,?,?,?,?,?)}");
+      CallableStatement callableStatement = connection.prepareCall("{call Edit_Doctor_Info(?,?,?,?,?,?)}");
       callableStatement.setString(1, getDoctorId());
       callableStatement.setString(2, lastName);
       callableStatement.setString(3, firstName);
       callableStatement.setString(4, email);
       callableStatement.setString(5, specialization);
       callableStatement.setString(6, officeNumber);
-      callableStatement.setString(7, password);
       
       callableStatement.execute();
       
@@ -368,10 +367,7 @@ public class Doctor {
    * @throws SQLException If an SQL exception occurs.
    */
   public ResultSet getPatientDetails() throws SQLException {
-    if (!getLoggedIn()) {
-      throw new IllegalStateException("Doctor must be logged in to access patient information.");
-    }
-
+   
 
     
     String query =  "SELECT " +
@@ -404,9 +400,7 @@ public class Doctor {
 
    
   public boolean addPrescription(String patientId, String prescriptionName, String dosage, String refillsRemaining, double price, String quantity) throws SQLException {
-    if (!getLoggedIn()) {
-      throw new IllegalStateException("Doctor must be logged in to create a prescription.");
-    }
+  
     
     String prescriptionId = generatePrescriptionId();
     
@@ -448,9 +442,7 @@ public class Doctor {
    * @throws SQLException If an SQL exception occurs.
    */
   public boolean addAppointmentNote(String patientId, String doctorId, String note, Date appointmentDate) throws SQLException {
-    if (!getLoggedIn()) {
-      throw new IllegalStateException("Doctor must be logged in to add or update an appointment note.");
-    }
+    
     
     java.sql.Date sqlDate = new java.sql.Date(appointmentDate.getTime());  // Convert java.util.Date to java.sql.Date
    String sql = "INSERT INTO HealthCareManagement_APPOINTMENT (PATIENT_ID, DOCTOR_ID, NOTE, APPOINTMENT_DATE) VALUES (?, ?, ?, ?)";
@@ -474,9 +466,7 @@ public class Doctor {
     * 
     */
   public boolean editPatientDiagnosis(String patientId, String newDiagnosis) throws SQLException {
-    if (!getLoggedIn()) {
-        throw new IllegalStateException("Doctor must be logged in to edit a diagnosis.");
-    }
+    
 
     String sql = "UPDATE HealthCareManagement_DIAGNOSES SET " +
                  "DIAGNOSES = ? " +

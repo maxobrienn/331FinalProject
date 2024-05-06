@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class PrescriptionGUI extends JFrame {
-    private JTextField patientIdField, prescriptionNameField, dosageField, refillsField, priceField, quantityField;
-    private JButton submitButton;
+     private JTextField patientIdField, prescriptionNameField, dosageField, refillsField, priceField, quantityField;
+    private JButton submitButton, returnToMenuButton;
     private Doctor doctor;  // Assuming the Doctor class is accessible and has the required methods.
 
     public PrescriptionGUI(Doctor doctor) {
@@ -17,7 +17,8 @@ public class PrescriptionGUI extends JFrame {
 
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(7, 2));
+        setTitle("Create Prescription");
+        setLayout(new GridLayout(8, 2));  // Adjusted for an additional button
 
         // Create text fields and labels
         add(new JLabel("Patient ID:"));
@@ -44,14 +45,15 @@ public class PrescriptionGUI extends JFrame {
         quantityField = new JTextField(20);
         add(quantityField);
 
-        // Create and add the submit button
+        // Submit button
         submitButton = new JButton("Create Prescription");
+        submitButton.addActionListener(e -> submitPrescription());
         add(submitButton);
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                submitPrescription();
-            }
-        });
+
+        // Return to Doctor Menu button
+        returnToMenuButton = new JButton("Return to Doctor Menu");
+        returnToMenuButton.addActionListener(e -> returnToMenu());
+        add(returnToMenuButton);
 
         pack();  // Size the frame
         setLocationRelativeTo(null);  // Center the window
@@ -76,6 +78,11 @@ public class PrescriptionGUI extends JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
+    }
+
+    private void returnToMenu() {
+        this.dispose();  // Close the current window
+        new DoctorMenu(doctor).setVisible(true);  // Open the Doctor Menu
     }
 
     public static void main(String[] args) {

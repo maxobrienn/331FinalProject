@@ -1,7 +1,9 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import tableConstructors.Doctor;
+import tableConstructors.*;
 
 public class DoctorMenu extends JFrame {
     private Doctor doctor;
@@ -15,58 +17,56 @@ public class DoctorMenu extends JFrame {
         setTitle("Doctor Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
-
-        // Calculate center coordinates of the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int centerX = (int) ((screenSize.getWidth() - getWidth()) / 2);
-        int centerY = (int) ((screenSize.getHeight() - getHeight()) / 2);
-
-        // Set location of the window to the center of the screen
-        setLocation(centerX, centerY);
+        setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));
 
         JButton viewProfileButton = new JButton("View Profile");
         JButton updateInfoButton = new JButton("Update Info");
-        JButton viewPatientsButton = new JButton("View Patients");
+        JButton viewPatientsInfoButton = new JButton("View Patients Information");
+        JButton createPrescriptionButton = new JButton("Create Prescription");
+        JButton addAppointmentNoteButton = new JButton("Add Appointment Note");
+        JButton editPatientDiagnosesButton = new JButton("Edit Patient Diagnoses");
 
-        viewProfileButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                displayProfile();
-            }
-        });
-
-        updateInfoButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                updateInfo();
-            }
-        });
-
-        viewPatientsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                viewPatients();
-            }
-        });
+        viewProfileButton.addActionListener(e -> displayProfile());
+        updateInfoButton.addActionListener(e -> updateInfo());
+        viewPatientsInfoButton.addActionListener(e -> viewPatientsInfo());
+        createPrescriptionButton.addActionListener(e -> createPrescription());
+        addAppointmentNoteButton.addActionListener(e -> addAppointmentNote());
+        editPatientDiagnosesButton.addActionListener(e -> editPatientDiagnoses());
 
         panel.add(viewProfileButton);
         panel.add(updateInfoButton);
-        panel.add(viewPatientsButton);
+        panel.add(viewPatientsInfoButton);
+        panel.add(createPrescriptionButton);
+        panel.add(addAppointmentNoteButton);
+        panel.add(editPatientDiagnosesButton);
 
         add(panel);
     }
 
     private void displayProfile() {
-        //SwingUtilities.invokeLater(() -> new DoctorInfoGUI(doctor));
+        // Open doctor profile window
     }
 
     private void updateInfo() {
-        // Open a dialog to update doctor information
-        // Example: new UpdateInfoDialog(doctor).setVisible(true);
+        // Open update info dialog
     }
 
-    private void viewPatients() {
-        // Display the list of patients associated with this doctor
-        // Example: doctor.viewPatients();
+    private void viewPatientsInfo() {
+        // View patients information
+    }
+
+    private void createPrescription() {
+        // Create prescription logic
+    }
+
+    private void addAppointmentNote() {
+        // Add appointment note logic
+    }
+
+    private void editPatientDiagnoses() {
+        // Edit patient diagnoses logic
     }
 
     public static void main(String[] args) {

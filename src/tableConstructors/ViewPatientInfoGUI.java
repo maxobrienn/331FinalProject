@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class ViewPatientInfoGUI extends JFrame {
-    private JTextField patientIdField;
-    private JButton viewButton;
+   private JTextField patientIdField;
+    private JButton viewButton, returnToMenuButton;
     private JTextArea infoArea;
     private Doctor doctor;  // Assuming the Doctor class is accessible
 
@@ -29,13 +29,14 @@ public class ViewPatientInfoGUI extends JFrame {
         inputPanel.add(new JLabel("Patient ID:"));
         patientIdField = new JTextField(15);
         inputPanel.add(patientIdField);
+
         viewButton = new JButton("View Info");
-        viewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                viewPatientInfo();
-            }
-        });
+        viewButton.addActionListener(e -> viewPatientInfo());
         inputPanel.add(viewButton);
+
+        returnToMenuButton = new JButton("Return to Doctor Menu");
+        returnToMenuButton.addActionListener(e -> returnToMenu());
+        inputPanel.add(returnToMenuButton);
 
         // Text area for displaying patient info
         infoArea = new JTextArea(15, 40);
@@ -51,6 +52,9 @@ public class ViewPatientInfoGUI extends JFrame {
         viewButton.setFont(new Font("Arial", Font.BOLD, 14));
         viewButton.setBackground(new Color(100, 149, 237));  // Cornflower blue
         viewButton.setForeground(Color.WHITE);
+        returnToMenuButton.setFont(new Font("Arial", Font.BOLD, 14));
+        returnToMenuButton.setBackground(new Color(100, 149, 237));  // Matching style with the view button
+        returnToMenuButton.setForeground(Color.WHITE);
         infoArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
         infoArea.setBackground(new Color(245, 245, 245));  // White smoke
 
@@ -78,9 +82,14 @@ public class ViewPatientInfoGUI extends JFrame {
                 infoArea.setText("No information found for Patient ID: " + patientId);
             }
             rs.close(); // Don't forget to close ResultSet
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error retrieving patient information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error retrieving patient information: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void returnToMenu() {
+        this.dispose();  // Close the current window
+        new DoctorMenu(doctor).setVisible(true);  // Open the Doctor Menu
     }
 
     public static void main(String[] args) {
