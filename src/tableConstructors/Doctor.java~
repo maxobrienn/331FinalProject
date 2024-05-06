@@ -266,11 +266,11 @@ public class Doctor {
    * @param password The password of the doctor.
    * @return True if the login is successful, otherwise false.
    */
-  public boolean doctorLogin(String email, String password) {
+  public boolean doctorLogin(String doctorId, String password) {
     Connection con = openDBConnection();
     try {
-      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_DOCTOR WHERE EMAIL = ? AND PASSWORD = ?");
-      statement.setString(1, email);
+      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_DOCTOR WHERE DOCTOR_ID = ? AND PASSWORD = ?");
+      statement.setString(1, doctorId);
       statement.setString(2, password);
       
       ResultSet rs = statement.executeQuery();

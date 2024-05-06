@@ -1,6 +1,9 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import tableConstructors.*;
 
 public class InsuranceMenu extends JFrame {
 

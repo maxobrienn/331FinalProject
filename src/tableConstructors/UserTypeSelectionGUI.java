@@ -1,12 +1,16 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import tableConstructors.Patient;
-import tableConstructors.InsuranceCompany;
-import tableConstructors.Doctor;
-import tableConstructors.Pharmacy;
-import tableConstructors.PharmacyEmployee;
-import tableConstructors.Supplier;
+import tableConstructors.*;
+//import tableConstructors.Patient;
+//import tableConstructors.InsuranceCompany;
+//import tableConstructors.Doctor;
+//import tableConstructors.Pharmacy;
+//import tableConstructors.PharmacyEmployee;
+//import tableConstructors.Supplier;
+//import tableConstructors.PatientMenu;
 
 public class UserTypeSelectionGUI extends JFrame implements ActionListener {
     private JButton patientButton;

@@ -1,3 +1,5 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -77,7 +79,6 @@ public class PatientInfoGUI extends JFrame {
     private void returnToPatientMenu() {
         // Close this window and return to the PatientMenu
         dispose();
-        new PatientMenu(patient).setVisible(true);
     }
 
     public static void main(String[] args) {

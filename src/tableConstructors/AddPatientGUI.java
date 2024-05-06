@@ -1,3 +1,5 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -6,7 +8,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import tableConstructors.Patient;
+import tableConstructors.*;
 
 public class AddPatientGUI extends JFrame {
 

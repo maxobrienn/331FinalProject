@@ -1,15 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class InsuranceMenu extends JFrame {
 
-    private JPanel panel;
-    private JButton btnMakePayment;
-    private JButton btnViewCoveredPatients;
-
     public InsuranceMenu() {
+        initializeUI();
+    }
+
+    private void initializeUI() {
         setTitle("Insurance Company Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
@@ -22,27 +21,27 @@ public class InsuranceMenu extends JFrame {
         // Set location of the window to the center of the screen
         setLocation(centerX, centerY);
 
-        panel = new JPanel();
-        btnMakePayment = new JButton("Make Payment");
-        btnViewCoveredPatients = new JButton("View Covered Patients");
+        JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
 
-        btnMakePayment.addActionListener(new ActionListener() {
+        JButton makePaymentButton = new JButton("Make Payment");
+        JButton viewCoveredPatientsButton = new JButton("View Covered Patients");
+
+        makePaymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 makePayment();
             }
         });
 
-        btnViewCoveredPatients.addActionListener(new ActionListener() {
+        viewCoveredPatientsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 viewCoveredPatients();
             }
         });
 
-        panel.add(btnMakePayment);
-        panel.add(btnViewCoveredPatients);
-        add(panel);
+        panel.add(makePaymentButton);
+        panel.add(viewCoveredPatientsButton);
 
-        setVisible(true);
+        add(panel);
     }
 
     private void makePayment() {

@@ -1,6 +1,8 @@
+package tableConstructors;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.*;
 import java.awt.event.*;
 import tableConstructors.Patient;
 

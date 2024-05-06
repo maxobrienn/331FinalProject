@@ -9,7 +9,7 @@ public class ViewPatientInfoGUI extends JFrame {
     private JTextField patientIdField;
     private JButton viewButton;
     private JTextArea infoArea;
-    private Doctor doctor;  // Assuming the Doctor class is accessible and has methods to get patient info
+    private Doctor doctor;  // Assuming the Doctor class is accessible
 
     public ViewPatientInfoGUI(Doctor doctor) {
         this.doctor = doctor;
@@ -19,7 +19,7 @@ public class ViewPatientInfoGUI extends JFrame {
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("View Patient Information");
-        setSize(400, 300);  // Set frame size
+        setSize(500, 400);  // Set frame size
         setLocationRelativeTo(null);  // Center on screen
 
         // Panel for input
@@ -37,7 +37,7 @@ public class ViewPatientInfoGUI extends JFrame {
         inputPanel.add(viewButton);
 
         // Text area for displaying patient info
-        infoArea = new JTextArea(10, 30);
+        infoArea = new JTextArea(15, 40);
         infoArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(infoArea);
 
@@ -59,17 +59,24 @@ public class ViewPatientInfoGUI extends JFrame {
     private void viewPatientInfo() {
         String patientId = patientIdField.getText().trim();
         try {
-            ResultSet rs = doctor.getPatientDetails(patientId);  // Assuming this method exists and fetches details based on patient ID
-            if (rs.next()) {
-                String info = "Patient ID: " + rs.getString("PATIENT_ID") + "\n" +
-                              "Name: " + rs.getString("FIRST") + " " + rs.getString("LAST") + "\n" +
-                              "Email: " + rs.getString("EMAIL") + "\n" +
-                              "Phone: " + rs.getString("PHONE_NUMBER") + "\n" +
-                              "Diagnosis: " + rs.getString("DIAGNOSIS");
-                infoArea.setText(info);
-            } else {
+            ResultSet rs = doctor.getPatientDetails();  // Fetches details for all patients
+            boolean found = false;
+            while (rs.next()) {
+                if (rs.getString("PATIENT_ID").equals(patientId)) {
+                    String info = "Patient ID: " + rs.getString("PATIENT_ID") + "\n" +
+                                  "Name: " + rs.getString("FIRST") + " " + rs.getString("LAST") + "\n" +
+                                  "Email: " + rs.getString("EMAIL") + "\n" +
+                                  "Phone: " + rs.getString("PHONE_NUMBER") + "\n" +
+                                  "Diagnosis: " + rs.getString("DIAGNOSIS");
+                    infoArea.setText(info);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
                 infoArea.setText("No information found for Patient ID: " + patientId);
             }
+            rs.close(); // Don't forget to close ResultSet
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error retrieving patient information: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
