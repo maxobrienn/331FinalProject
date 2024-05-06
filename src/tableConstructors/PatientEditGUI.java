@@ -1,8 +1,9 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import tableConstructors.Patient;
 
 public class PatientEditGUI extends JFrame {
@@ -22,7 +23,9 @@ public class PatientEditGUI extends JFrame {
 
         setTitle("Update Patient Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 400);
+
+        // Adjust window size to show all fields
+        setSize(500, 450); // Increased height to accommodate the "Return to PatientMenu" button
         setLocationRelativeTo(null); // Center the window
 
         JPanel panel = new JPanel(new GridBagLayout());
@@ -56,8 +59,29 @@ public class PatientEditGUI extends JFrame {
             }
         });
 
+        // Add "Return to PatientMenu" button
+        JButton returnButton = new JButton("Return to PatientMenu");
+        gbc.gridy++;
+        panel.add(returnButton, gbc);
+
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle the action to return to PatientMenu
+                dispose(); // Close the current GUI
+                // Assuming you have a method to open the PatientMenu GUI
+                openPatientMenu();
+            }
+        });
+
         add(panel);
         setVisible(true);
+    }
+
+    // Method to open the PatientMenu GUI
+    private void openPatientMenu() {
+        // Code to open the PatientMenu GUI
+        // Replace this with your implementation to open the PatientMenu
     }
 
     private void addRow(JPanel panel, GridBagConstraints gbc, String labelText, String valueText, Font labelFont, Color labelColor) {

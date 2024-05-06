@@ -3,9 +3,14 @@ package tableConstructors;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
+import java.awt.event.*;
+import tableConstructors.Patient;
 
 public class ViewDiagnosisGUI extends JFrame {
     private JTextArea resultArea;
+
+    private JButton viewButton;
+    private JButton returnButton; // New button for returning to PatientMenu
     private Patient patient;
 
     public ViewDiagnosisGUI(Patient patient) {
@@ -24,6 +29,18 @@ public class ViewDiagnosisGUI extends JFrame {
         resultArea = new JTextArea(10, 60);
         resultArea.setEditable(false);
         resultArea.setFont(new Font("Arial", Font.BOLD, 16)); // Set font to large and bold
+
+
+        viewButton = new JButton("View Diagnoses");
+        viewButton.addActionListener(e -> viewDiagnoses());
+
+        returnButton = new JButton("Return to Patient Menu");
+        returnButton.addActionListener(e -> returnToMenu());
+
+        JPanel topPanel = new JPanel();
+        topPanel.add(new JLabel("Patient ID:"));
+        topPanel.add(viewButton);
+        topPanel.add(returnButton); // Add return button to the top panel
 
         JScrollPane scrollPane = new JScrollPane(resultArea);
 
@@ -76,5 +93,18 @@ public class ViewDiagnosisGUI extends JFrame {
                 ex.printStackTrace();
             }
         }
+    }
+
+    // Method to return to the Patient Menu
+    private void returnToMenu() {
+        dispose(); // Close the current window
+        SwingUtilities.invokeLater(() -> new PatientMenu(patient)); // Open PatientMenu
+    }
+
+    public static void main(String[] args) {
+        // Assuming Patient is logged in and Patient instance is created accordingly
+        Patient patient = new Patient("123456", new java.util.Date(), "123 Elm St", "Anytown", "Anystate", "12345", "email@example.com",
+                                      "555-1234", "Doe", "John", "M", "12345-67890", "password123");
+        SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }
 }

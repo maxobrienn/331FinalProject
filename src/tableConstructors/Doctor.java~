@@ -266,11 +266,11 @@ public class Doctor {
    * @param password The password of the doctor.
    * @return True if the login is successful, otherwise false.
    */
-  public boolean doctorLogin(String email, String password) {
+  public boolean doctorLogin(String doctorId, String password) {
     Connection con = openDBConnection();
     try {
-      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_DOCTOR WHERE EMAIL = ? AND PASSWORD = ?");
-      statement.setString(1, email);
+      PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_DOCTOR WHERE DOCTOR_ID = ? AND PASSWORD = ?");
+      statement.setString(1, doctorId);
       statement.setString(2, password);
       
       ResultSet rs = statement.executeQuery();
@@ -324,13 +324,13 @@ public class Doctor {
    * 
    * @return The Doctor object containing the information of the doctor.
    */
-  public Doctor displayDoctorInfo() {
+  public Doctor displayDoctorInfo(String doctorId) {
     Doctor doctor = new Doctor();
     Connection con = openDBConnection();
     try {
       String sql = "SELECT * FROM HealthCareManagement_DOCTOR WHERE DOCTOR_ID = ?";
       PreparedStatement preparedStatement = con.prepareStatement(sql);
-      preparedStatement.setString(1, getDoctorId());
+      preparedStatement.setString(1, doctorId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
       while (resultSet.next()) {
@@ -416,7 +416,7 @@ public class Doctor {
     
     Connection myConnection = null;
     PreparedStatement stmt = null;
-   
+    try{
       myConnection = openDBConnection();
       stmt = myConnection.prepareStatement(sql);
       
@@ -434,10 +434,7 @@ public class Doctor {
     } catch (SQLException e) {
       e.printStackTrace();
       throw e; // Rethrow the exception to allow further handling by the caller
-    } finally {
-      if (stmt != null) stmt.close();
-      if (myConnection != null) myConnection.close();
-    }
+  }
   }
 
 
@@ -450,36 +447,55 @@ public class Doctor {
    * @return True if the appointment note is added or updated successfully, otherwise false.
    * @throws SQLException If an SQL exception occurs.
    */
-  public boolean addAppointmentNote(String patientId, String note, Date appointmentDate) throws SQLException {
+  public boolean addAppointmentNote(String patientId, String doctorId, String note, Date appointmentDate) throws SQLException {
     if (!getLoggedIn()) {
       throw new IllegalStateException("Doctor must be logged in to add or update an appointment note.");
     }
     
-    String sql = "UPDATE HealthCareManagement_APPOINTMENT SET " +
-      "NOTE = ?, APPOINTMENT_DATE = ? " +
-      "WHERE PATIENT_ID = ? AND DOCTOR_ID = ?";
-    
     java.sql.Date sqlDate = new java.sql.Date(appointmentDate.getTime());  // Convert java.util.Date to java.sql.Date
+   String sql = "INSERT INTO HealthCareManagement_APPOINTMENT (PATIENT_ID, DOCTOR_ID, NOTE, APPOINTMENT_DATE) VALUES (?, ?, ?, ?)";
     
-    Connection myConnection = null;
-    PreparedStatement stmt = null;
-    try {
-      myConnection = openDBConnection();
-      stmt = myConnection.prepareStatement(sql);
-      stmt.setString(1, note);
-      stmt.setDate(2, sqlDate);  // Set the SQL date directly        stmt.setString(3, patientId);
-      stmt.setString(4, this.doctorId); // Use the doctor ID from the class field
-      
-      int affectedRows = stmt.executeUpdate();
-      return affectedRows > 0;
+
+    try(Connection myConnection = openDBConnection();
+        PreparedStatement stmt = myConnection.prepareStatement(sql)){
+          stmt.setString(1, patientId);
+          stmt.setString(2, doctorId);  // Set the SQL date directly        
+          stmt.setString(3, note);
+          stmt.setDate(4, sqlDate); // Use the doctor ID from the class field
+          
+         int affectedRows = stmt.executeUpdate();
+        return affectedRows > 0;
     } catch (SQLException e) {
-      e.printStackTrace();
-      throw e; // Rethrow to allow further handling
-    } finally {
-      if (stmt != null) stmt.close();
-      if (myConnection != null) myConnection.close();
+        e.printStackTrace();
+        throw e;  // Rethrow the exception to allow further handling
     }
-  }
+}
+  /** Method that Allows doctors to edit diagnosis for a patient. 
+    * 
+    */
+  public boolean editPatientDiagnosis(String patientId, String newDiagnosis) throws SQLException {
+    if (!getLoggedIn()) {
+        throw new IllegalStateException("Doctor must be logged in to edit a diagnosis.");
+    }
+
+    String sql = "UPDATE HealthCareManagement_DIAGNOSES SET " +
+                 "DIAGNOSES = ? " +
+                 "WHERE PATIENT_ID = ?";
+
+    try (Connection myConnection = openDBConnection();
+         PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+
+        stmt.setString(1, newDiagnosis);
+        stmt.setString(2, patientId);
+
+        int affectedRows = stmt.executeUpdate();
+        return affectedRows > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw e; // Rethrow the exception to allow further handling by the caller
+    }
+}
+  
   
   /**
    * Main method to test functionalities.
@@ -499,14 +515,14 @@ public class Doctor {
       System.out.println("Doctor Information:");
       Doctor doctorInfo = new Doctor();
       doctorInfo.setDoctorId("DOC001");
-      doctor.displayDoctorInfo();
+      doctor.displayDoctorInfo(doctorInfo.getDoctorId());
       System.out.println(doctorInfo);
       
       try {
         // Get patient details
         System.out.println("\nPatient Details:");
         doctor.setDoctorId("DOC004");
-        ResultSet patientResultSet = doctor.getPatientDetails();
+        try(ResultSet patientResultSet = doctor.getPatientDetails()){
         while (patientResultSet.next()) {
           System.out.println("Patient ID: " + patientResultSet.getString("PATIENT_ID"));
           System.out.println("Last Name: " + patientResultSet.getString("LAST"));
@@ -518,7 +534,10 @@ public class Doctor {
           
           System.out.println("-----------------------------------");
         }
-        
+        } catch (SQLException e) {
+                System.out.println("An error occurred while retrieving patient details:");
+                e.printStackTrace();
+            }
         // Add a prescription
         System.out.println("\nAdding Prescription...");
         String patientId = "PAT001";
@@ -537,19 +556,31 @@ public class Doctor {
         // Add appointment note
         System.out.println("\nAdding Appointment Note...");
         String patientIdForNote = "PAT003";
-        String note = "Additional appointment scheduled.";
+        String note = "Additional app scheduled.";
         Date appointmentDate = new Date();
-        boolean noteAdded = doctor.addAppointmentNote(patientIdForNote, note, appointmentDate);
+        boolean noteAdded = doctor.addAppointmentNote(patientIdForNote,doctor.getDoctorId(), note, appointmentDate );
         if (noteAdded) {
           System.out.println("Appointment note added successfully.");
         } else {
-          System.out.println("Failed to add appointment note.");
+          System.out.println("Failed to add appointment note.No appointment notes were updated. Check patient and doctor IDs.");
         }
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    } else {
-      System.out.println("Doctor login failed. Please check email and password.");
-    }
+     
+      //edit a diagnosis
+      System.out.println("\nEditing Diagnosis...");
+            String newDiagnosis = "Updated diagnosis information";
+            boolean diagnosisUpdated = doctor.editPatientDiagnosis(patientIdForNote, newDiagnosis);
+            if (diagnosisUpdated) {
+                System.out.println("Diagnosis updated successfully.");
+            } else {
+                System.out.println("Failed to update diagnosis. Check patient and doctor IDs.");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred:");
+            e.printStackTrace();
+        }
+      } else {
+        System.out.println("Doctor login failed. Please check email and password.");
   }
+      
+}
 }

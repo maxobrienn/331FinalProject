@@ -524,7 +524,6 @@ public class Patient {
         patient.setFirstName(resultSet.getString("FIRST"));
         patient.setLastName(resultSet.getString("LAST"));
         patient.setDob(resultSet.getDate("DOB"));
-        
         patient.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
         patient.setEmail(resultSet.getString("EMAIL"));
         patient.setStreet(resultSet.getString("STREET"));
@@ -700,11 +699,17 @@ public class Patient {
    * @return The generated payment ID.
    */
   private String generatePaymentId() {
-    // Generate a random UUID
-    UUID uuid = UUID.randomUUID();
-    // Convert UUID to String and return it
-    return uuid.toString();
+    StringBuilder sb = new StringBuilder("PAY");
+    Random random = new Random();
+    
+    // Generate four random digits
+    for (int i = 0; i < 4; i++) {
+      sb.append(random.nextInt(10)); // Append a random digit (0-9)
+    }
+    
+    return sb.toString();
   }
+  
   
   /**
    * Check if a payment ID already exists in the database.

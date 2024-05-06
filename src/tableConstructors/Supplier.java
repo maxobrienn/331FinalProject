@@ -183,11 +183,11 @@ private boolean loggedIn = false;
     return null;
   }
   
-  public boolean supplierLogin(String email, String password) {
+  public boolean supplierLogin(String supplierId, String password) {
      Connection con = openDBConnection();
      try {
-         PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_SUPPLIER WHERE EMAIL = ? AND PASSWORD = ?");
-         statement.setString(1, email);
+         PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_SUPPLIER WHERE SUPPLIER_ID = ? AND PASSWORD = ?");
+         statement.setString(1, supplierId);
          statement.setString(2, password);
          ResultSet rs = statement.executeQuery();
          
@@ -202,36 +202,36 @@ private boolean loggedIn = false;
  }
 
   public void addSupplier(Supplier supplier) {
-	    try (Connection connection = openDBConnection()) {
-	        // Generate a new supplier ID using stored procedure
-	        CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Supplier_ID}");
-	        callableStatement.registerOutParameter(1, Types.CHAR);
-	        callableStatement.execute();
+     try (Connection connection = openDBConnection()) {
+         // Generate a new supplier ID using stored procedure
+         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Supplier_ID}");
+         callableStatement.registerOutParameter(1, Types.CHAR);
+         callableStatement.execute();
 
-	        String generatedId = callableStatement.getString(1);
-	        callableStatement.close();
+         String generatedId = callableStatement.getString(1);
+         callableStatement.close();
 
-	        // Insert supplier data into the database
-	        String sql = "INSERT INTO HealthCareManagement_SUPPLIER (SUPPLIER_ID, SUPPLIER_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, PASSWORD, EMAIL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-	        preparedStatement.setString(1, generatedId);
-	        preparedStatement.setString(2, supplier.getSupplierName());
-	        preparedStatement.setString(3, supplier.getStreet());
-	        preparedStatement.setString(4, supplier.getCity());
-	        preparedStatement.setString(5, supplier.getState());
-	        preparedStatement.setString(6, supplier.getZipCode());
-	        preparedStatement.setString(7, supplier.getPhoneNumber());
-	        preparedStatement.setString(8, supplier.getPassword());
-	        preparedStatement.setString(9, supplier.getEmail());
+         // Insert supplier data into the database
+         String sql = "INSERT INTO HealthCareManagement_SUPPLIER (SUPPLIER_ID, SUPPLIER_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, PASSWORD, EMAIL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+         preparedStatement.setString(1, generatedId);
+         preparedStatement.setString(2, supplier.getSupplierName());
+         preparedStatement.setString(3, supplier.getStreet());
+         preparedStatement.setString(4, supplier.getCity());
+         preparedStatement.setString(5, supplier.getState());
+         preparedStatement.setString(6, supplier.getZipCode());
+         preparedStatement.setString(7, supplier.getPhoneNumber());
+         preparedStatement.setString(8, supplier.getPassword());
+         preparedStatement.setString(9, supplier.getEmail());
 
-	        preparedStatement.executeUpdate();
-	        System.out.println("Supplier added successfully with ID: " + generatedId);
+         preparedStatement.executeUpdate();
+         System.out.println("Supplier added successfully with ID: " + generatedId);
 
-	        preparedStatement.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+         preparedStatement.close();
+     } catch (SQLException e) {
+         e.printStackTrace();
+     }
+ }
 
 
   //Function to view Supplier Profile 

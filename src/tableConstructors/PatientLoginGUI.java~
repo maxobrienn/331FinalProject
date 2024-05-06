@@ -1,11 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import tableConstructors.Patient;
 
 public class PatientLoginGUI extends JFrame implements ActionListener {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    private Patient patient;
 
     public PatientLoginGUI() {
         setTitle("Patient Login");
@@ -33,13 +35,14 @@ public class PatientLoginGUI extends JFrame implements ActionListener {
         panel.add(loginButton);
 
         add(panel);
+
+        patient = new Patient(); // Create Patient object
     }
 
     public void actionPerformed(ActionEvent e) {
         String email = emailField.getText();
         String password = new String(passwordField.getPassword());
 
-        // Perform login authentication
         boolean loginSuccess = patient.patientLogin(email, password);
         if (loginSuccess) {
             JOptionPane.showMessageDialog(this, "Login successful!");
