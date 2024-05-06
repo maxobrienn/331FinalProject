@@ -188,10 +188,10 @@ END;
 CREATE OR REPLACE FUNCTION Generate_Random_Pharmacy_ID
 RETURN CHAR IS
     l_prefix CHAR(4) := 'PHRM';
-    l_suffix CHAR(7);
+    l_suffix CHAR(6);
 BEGIN
     -- Generate a random number between 1000000 and 9999999
-    l_suffix := TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(1000000, 9999999)));
+    l_suffix := TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(100000, 999999)));
 
     -- Concatenate prefix and suffix to form the Pharmacy ID
     RETURN l_prefix || l_suffix;
@@ -218,7 +218,7 @@ END;
 -- Function to generate a random Pharmacy Employee ID
 CREATE OR REPLACE FUNCTION Generate_Random_PharmacyEmployee_ID
 RETURN CHAR IS
-    l_prefix CHAR(4) := 'EMP';
+    l_prefix CHAR(3) := 'EMP';
     l_suffix CHAR(7);
 BEGIN
     -- Generate a random number between 1000000 and 9999999
@@ -250,10 +250,10 @@ END;
 CREATE OR REPLACE FUNCTION Generate_Random_Supplier_ID
 RETURN CHAR IS
     l_prefix CHAR(4) := 'SUPP';
-    l_suffix CHAR(7);
+    l_suffix CHAR(6);
 BEGIN
     -- Generate a random number between 1000000 and 9999999
-    l_suffix := TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(1000000, 9999999)));
+    l_suffix := TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(10000, 99999)));
 
     -- Concatenate prefix and suffix to form the Supplier ID
     RETURN l_prefix || l_suffix;

@@ -1,0 +1,165 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+
+public class AddSupplierGUI extends JFrame {
+
+    private JTextField supplierNameField;
+    private JTextField streetField;
+    private JTextField cityField;
+    private JTextField stateField;
+    private JTextField zipCodeField;
+    private JTextField phoneNumberField;
+    private JTextField emailField;
+    private JTextField passwordField;
+
+    public SupplierAddGUI() {
+        setTitle("Add New Supplier");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create the main panel
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        // Supplier Name
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Supplier Name:"), gbc);
+        supplierNameField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(supplierNameField, gbc);
+
+        // Street
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Street:"), gbc);
+        streetField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(streetField, gbc);
+
+        // City
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("City:"), gbc);
+        cityField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(cityField, gbc);
+
+        // State
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("State:"), gbc);
+        stateField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(stateField, gbc);
+
+        // Zip Code
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("ZIP Code:"), gbc);
+        zipCodeField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(zipCodeField, gbc);
+
+        // Phone Number
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Phone Number:"), gbc);
+        phoneNumberField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(phoneNumberField, gbc);
+
+        // Email
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Email:"), gbc);
+        emailField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(emailField, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Password:"), gbc);
+        passwordField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(passwordField, gbc);
+
+        // Add Button
+        JButton addButton = new JButton("Add Supplier");
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        panel.add(addButton, gbc);
+
+        // Action Listener for Add Button
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addSupplier();
+            }
+        });
+
+        // Add panel to frame
+        add(panel);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    // Method to add a new supplier
+    private void addSupplier() {
+        Supplier supplier = new Supplier(
+                supplierNameField.getText(),
+                streetField.getText(),
+                cityField.getText(),
+                stateField.getText(),
+                zipCodeField.getText(),
+                phoneNumberField.getText(),
+                emailField.getText(),
+                passwordField.getText()
+        );
+
+        try (Connection connection = supplier.openDBConnection()) {
+            // Generate a new supplier ID using stored procedure
+            CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Supplier_ID}");
+            callableStatement.registerOutParameter(1, Types.CHAR);
+            callableStatement.execute();
+
+            String generatedId = callableStatement.getString(1);
+            callableStatement.close();
+
+            // Insert supplier data into the database
+            String sql = "INSERT INTO HealthCareManagement_SUPPLIER (SUPPLIER_ID, SUPPLIER_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, PASSWORD, EMAIL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, generatedId);
+            preparedStatement.setString(2, supplier.getSupplierName());
+            preparedStatement.setString(3, supplier.getStreet());
+            preparedStatement.setString(4, supplier.getCity());
+            preparedStatement.setString(5, supplier.getState());
+            preparedStatement.setString(6, supplier.getZipCode());
+            preparedStatement.setString(7, supplier.getPhoneNumber());
+            preparedStatement.setString(8, supplier.getPassword());
+            preparedStatement.setString(9, supplier.getEmail());
+
+            preparedStatement.executeUpdate();
+            System.out.println("Supplier added successfully with ID: " + generatedId);
+
+            preparedStatement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new SupplierAddGUI();
+    }
+}
