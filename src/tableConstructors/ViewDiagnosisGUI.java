@@ -1,13 +1,11 @@
 package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.sql.*;
 
 public class ViewDiagnosisGUI extends JFrame {
-    private JTextField patientIdField;
     private JTextArea resultArea;
-    private JButton viewButton;
     private Patient patient;
 
     public ViewDiagnosisGUI(Patient patient) {
@@ -18,38 +16,25 @@ public class ViewDiagnosisGUI extends JFrame {
     private void createAndShowGUI() {
         // Frame initial setup
         setTitle("Patient Diagnosis Viewer");
-        setSize(600, 400); // Larger size
-        setLocationRelativeTo(null);
+        setSize(800, 400); // Larger size
+        setLocationRelativeTo(null); // Center the frame on the screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Components
-        patientIdField = new JTextField(10);
-        patientIdField.setText(patient.getPatientId());
-        patientIdField.setEditable(false);
-
-        resultArea = new JTextArea(10, 30);
+        resultArea = new JTextArea(10, 60);
         resultArea.setEditable(false);
-
-        viewButton = new JButton("View Diagnoses");
-        viewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                viewDiagnoses();
-            }
-        });
-
-        JPanel topPanel = new JPanel();
-        topPanel.add(new JLabel("Patient ID:"));
-        topPanel.add(patientIdField);
-        topPanel.add(viewButton);
+        resultArea.setFont(new Font("Arial", Font.BOLD, 16)); // Set font to large and bold
 
         JScrollPane scrollPane = new JScrollPane(resultArea);
 
         // Adding components to frame
-        add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
         // Display the window
         setVisible(true);
+
+        // View the diagnoses when the GUI is created
+        viewDiagnoses();
     }
 
     private void viewDiagnoses() {
@@ -73,11 +58,12 @@ public class ViewDiagnosisGUI extends JFrame {
             rs = pstmt.executeQuery();
 
             // Process the results
-            resultArea.append("PATIENT_ID\tDIAGNOSES\n");
+            resultArea.append(String.format("%-25s | %s\n", "Patient_ID", "Diagnoses")); // Header
+            resultArea.append("---------------------------------------------------------------\n"); // Separator
             while (rs.next()) {
                 String pId = rs.getString("PATIENT_ID");
                 String diagnoses = rs.getString("DIAGNOSES");
-                resultArea.append(pId + "\t" + diagnoses + "\n");
+                resultArea.append(String.format("%-25s | %s\n", pId, diagnoses));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error accessing database: " + ex.getMessage());
@@ -90,12 +76,5 @@ public class ViewDiagnosisGUI extends JFrame {
                 ex.printStackTrace();
             }
         }
-    }
-
-    public static void main(String[] args) {
-        // Assuming Patient is logged in and Patient instance is created accordingly
-        Patient patient = new Patient("123456", new java.util.Date(), "123 Elm St", "Anytown", "Anystate", "12345", "email@example.com",
-                                      "555-1234", "Doe", "John", "M", "12345-67890", "password123");
-        SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }
 }
