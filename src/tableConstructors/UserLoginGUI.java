@@ -124,7 +124,7 @@ public class UserLoginGUI extends JFrame implements ActionListener {
       } 
       // change this to take insurance company object similar to patient
       else if (user instanceof InsuranceCompany) {
-        InsuranceMenu insuranceCompanyMenu = new InsuranceMenu();
+        InsuranceMenu insuranceCompanyMenu = new InsuranceMenu(((InsuranceCompany) user).displayInsuranceCompanyInfo(id));
         insuranceCompanyMenu.setVisible(true);
       } 
 //      else if (user instanceof Pharmacy) {

@@ -6,11 +6,14 @@ import java.awt.event.*;
 import tableConstructors.*;
 
 public class InsuranceMenu extends JFrame {
+  
+  private InsuranceCompany insurance;
 
-    public InsuranceMenu() {
+    public InsuranceMenu(InsuranceCompany insurance) {
+      this.insurance = insurance;
         initializeUI();
     }
-
+    
     private void initializeUI() {
         setTitle("Insurance Company Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,7 +30,7 @@ public class InsuranceMenu extends JFrame {
         JPanel panel = new JPanel(new GridLayout(2, 1, 10, 10));
 
         JButton makePaymentButton = new JButton("Make Payment");
-        JButton viewCoveredPatientsButton = new JButton("View Covered Patients");
+        JButton viewCoveredPatientsButton = new JButton("View Covered Patients' Prescrptions");
 
         makePaymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -46,11 +49,12 @@ public class InsuranceMenu extends JFrame {
 
         add(panel);
     }
-
+    
     private void makePayment() {
-        // This is where you can implement the logic to make a payment
-        // For demonstration purpose, let's display a message
-        JOptionPane.showMessageDialog(this, "Make Payment functionality will be implemented here.");
+      // Create a new instance of PatientPaymentGUI
+      InsurancePaymentGUI paymentGUI = new InsurancePaymentGUI(insurance);
+      // Make the PatientPaymentGUI window visible
+      paymentGUI.setVisible(true);
     }
 
     private void viewCoveredPatients() {
@@ -61,6 +65,6 @@ public class InsuranceMenu extends JFrame {
 
     public static void main(String[] args) {
         // Create and display the menu GUI
-        SwingUtilities.invokeLater(() -> new InsuranceMenu());
+        //SwingUtilities.invokeLater(() -> new InsuranceMenu());
     }
 }

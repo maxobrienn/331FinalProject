@@ -286,6 +286,41 @@ public class InsuranceCompany {
          e.printStackTrace();
      }
  }
+  
+  public InsuranceCompany displayInsuranceCompanyInfo(String insuranceId) {
+    InsuranceCompany insuranceCompany = new InsuranceCompany();
+    Connection con = openDBConnection();
+    try {
+        // Prepare and execute SQL query to retrieve insurance company information
+        String sql = "SELECT * FROM HealthCareManagement_INSURANCECOMPANY WHERE INSURANCE_ID = ?";
+        PreparedStatement preparedStatement = con.prepareStatement(sql);
+        preparedStatement.setString(1, insuranceId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        // Set insurance company information
+        while (resultSet.next()) {
+            insuranceCompany.setInsuranceId(resultSet.getString("INSURANCE_ID"));
+            insuranceCompany.setInsuranceName(resultSet.getString("INSURANCE_NAME"));
+            insuranceCompany.setStreet(resultSet.getString("STREET"));
+            insuranceCompany.setCity(resultSet.getString("CITY"));
+            insuranceCompany.setState(resultSet.getString("STATE"));
+            insuranceCompany.setZipCode(resultSet.getString("ZIP_CODE"));
+            insuranceCompany.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
+            insuranceCompany.setEmail(resultSet.getString("EMAIL"));
+            insuranceCompany.setPassword(resultSet.getString("PASSWORD"));
+            insuranceCompany.setPercent(resultSet.getBigDecimal("PERCENT"));
+        }
+
+        // Close JDBC objects
+        resultSet.close();
+        preparedStatement.close();
+        con.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return insuranceCompany;
+}
+
 
   
   /**
