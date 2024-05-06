@@ -256,13 +256,14 @@ public class PharmacyEmployee {
     }
   }
   
-  public PharmacyEmployee displayEmployeeInfo(String employeeId) {
+  public PharmacyEmployee displayEmployeeInfo() {
     PharmacyEmployee employee = new PharmacyEmployee();
     Connection con = openDBConnection();
     try {
       String sql = "SELECT * FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMPLOYEE_ID = ?";
       
       PreparedStatement preparedStatement = con.prepareStatement(sql);
+      String employeeId = getEmployeeId();
       preparedStatement.setString(1, employeeId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
@@ -314,13 +315,12 @@ public class PharmacyEmployee {
   /**
    * Method that allows pharmacy employees to view all presscriptions including any unpaid balance for each
    * 
-   * @param PHARMACY_ID -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
-   * 
    */
-  public void viewPrescriptions(String PHARMACY_ID) {
+  public void viewPrescriptions() {
     
     Connection myConnection;
     PreparedStatement preparedStmt;
+    String pharmacyId = getPharmacyId();
     
     try {
       myConnection = openDBConnection();
@@ -330,7 +330,7 @@ public class PharmacyEmployee {
       
       preparedStmt = myConnection.prepareStatement(queryString);
       
-      preparedStmt.setString(1, PHARMACY_ID);
+      preparedStmt.setString(1, pharmacyId);
       
       ResultSet rs = preparedStmt.executeQuery(); 
       
@@ -359,7 +359,7 @@ public class PharmacyEmployee {
    * @param pharmacyId -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
    * @param patientId
    */
-  public double GetUnpaidBalanceForPatient(String pharmacyId, String patientId) {
+  public double GetUnpaidBalanceForPatient(String patientId) {
     
     Connection myConnection = null;
     PreparedStatement preparedStmt = null;
@@ -369,14 +369,13 @@ public class PharmacyEmployee {
     try {
       myConnection = openDBConnection();
       
-      String queryString = "SELECT GetUnpaidBalanceForPatient(?, ?) FROM DUAL";
+      String queryString = "SELECT GetUnpaidBalanceForPatient(?) FROM DUAL";
       
       preparedStmt = myConnection.prepareStatement(queryString);
       
       preparedStmt.clearParameters();
       
       preparedStmt.setString(1,patientId);
-      preparedStmt.setString(2,pharmacyId);
       
       result = preparedStmt.executeQuery();
       
@@ -397,15 +396,15 @@ public class PharmacyEmployee {
    * Method that allows pharamacy employees to see total unpaid balance
    * for a given patient
    * 
-   * @param pharmacyId -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
-   * @param patientId
+   * @param insuranceId
    */
-  public double GetUnpaidBalanceForInsuranceCompany(String pharmacyId, String insuranceId) {
+  public double GetUnpaidBalanceForInsuranceCompany(String insuranceId) {
     
     Connection myConnection = null;
     PreparedStatement preparedStmt = null;
     ResultSet result = null;
     double unpaidICBalance = -1;
+    String pharmacyId = getPharmacyId();
     
     try {
       myConnection = openDBConnection();
@@ -434,6 +433,11 @@ public class PharmacyEmployee {
     return unpaidICBalance;
   }
   
+  /*
+   * Method that allows Pharmacy Employees to set prescrption to "FILLED"
+   * 
+   * @param prescrptionId they filled
+   */
   public void fillPrescrption(String prescrptionId) {
     Connection myConnection;
     PreparedStatement preparedStmt;
@@ -475,13 +479,14 @@ public class PharmacyEmployee {
     try {
       // Create an instance of InsuranceCompanyController
       PharmacyEmployee test = new PharmacyEmployee();
+      test.setPharmacyId("PHRM001");
       
       // Call the instance method on the created instance to view covered patients information
-      test.viewPrescriptions("PHRM001");
+      test.viewPrescriptions();
       
-      test.GetUnpaidBalanceForPatient("PHRM001","PAT001");
+      test.GetUnpaidBalanceForPatient("PAT001");
       
-      test.GetUnpaidBalanceForInsuranceCompany("PHRM001","INS001");
+      test.GetUnpaidBalanceForInsuranceCompany("INS001");
       
    // Call method for viewing all available medication
       //test.viewAvailableMedication();
@@ -502,7 +507,6 @@ public class PharmacyEmployee {
   /**
    * Method to view all of the medication available at the pharmacy
    */
-  
   public void viewAvailableMedication() {
     Connection con = openDBConnection();
     String sql = "select *\n"

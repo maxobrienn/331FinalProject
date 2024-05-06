@@ -181,22 +181,22 @@ ON DELETE CASCADE);
 
 
 INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) 
-VALUES ('INS001', 'HealthPlus', '1234 Main St', 'Anytown', 'NY', '12345', '123-456-7890', 'info@healthplus.com', 'ths8673incd58n', 0.10);
+VALUES ('INS001', 'HealthPlus', '1234 Main St', 'Anytown', 'NY', '12345', '123-456-7890', 'info@healthplus.com', 'password', 0.10);
 
 INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) 
-VALUES ('INS002', 'MediCare', '5678 Elm St', 'Springfield', 'IL', '23456', '234-567-8901', 'support@medicare.com', 'thsbth6793niincd58n', 0.25);
+VALUES ('INS002', 'MediCare', '5678 Elm St', 'Springfield', 'IL', '23456', '234-567-8901', 'support@medicare.com', 'password', 0.25);
 
 INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) 
 VALUES ('INS003', 'WellFare', '9101 Oak St', 'Liberty', 'TX', '34567', '345-678-9012', 'contact@wellfare.com', 'password', 0.40);
 
 INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) 
-VALUES ('INS004', 'SureHealth', '1213 Pine St', 'Centerville', 'CA', '45678', '456-789-0123', 'help@surehealth.com', 'password1', 0.15);
+VALUES ('INS004', 'SureHealth', '1213 Pine St', 'Centerville', 'CA', '45678', '456-789-0123', 'help@surehealth.com', 'password', 0.15);
 
 INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) 
-VALUES ('INS005', 'LifeSecure', '1415 Maple St', 'New Hope', 'FL', '56789', '567-890-1234', 'info@lifesecure.com', 'password2', 0.10);
+VALUES ('INS005', 'LifeSecure', '1415 Maple St', 'New Hope', 'FL', '56789', '567-890-1234', 'info@lifesecure.com', 'password', 0.10);
 
 INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, EMAIL, PASSWORD, PERCENT) 
-VALUES ('INS006', 'NoInsurance', 'No Address', 'No City', 'NA', '00000', '000-000-0000', 'noinsurance@example.com', 'nopassword', 0.00);
+VALUES ('INS006', 'NoInsurance', 'No Address', 'No City', 'NA', '00000', '000-000-0000', 'noinsurance@example.com', 'password', 0.00);
 
 
 INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP001', 'PharmaCo', '1234 Drug St', 'Medicity', 'CA', '67890', '678-901-2345', 'password', 'supply@pharmaco.com');

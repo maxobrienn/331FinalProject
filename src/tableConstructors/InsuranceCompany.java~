@@ -425,10 +425,8 @@ public class InsuranceCompany {
   /**
    * Method that allows insurance companies to view Covered Patients Information
    * 
-   * @param INSURANCEID -- NEED TO REMOVE THIS TO GET INSURANCEID METHOD
-   * 
    */
-  public void viewCoveredPatientsInformation(String INSURANCEID) {
+  public void viewCoveredPatientsInformation() {
     
     Connection myConnection;
     PreparedStatement preparedStmt;
@@ -441,7 +439,7 @@ public class InsuranceCompany {
       
       preparedStmt = myConnection.prepareStatement(queryString);
       
-      preparedStmt.setString(1, INSURANCEID);
+      preparedStmt.setString(1, getInsuranceId());
       
       ResultSet rs = preparedStmt.executeQuery(); 
       
@@ -477,7 +475,7 @@ public class InsuranceCompany {
       test.makePayment("2.5","PRSC001");
       
       // Call the instance method on the created instance to view covered patients information
-      test.viewCoveredPatientsInformation("INS002");
+      test.viewCoveredPatientsInformation();
     } 
     
     catch (Exception e) {
