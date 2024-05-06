@@ -324,13 +324,13 @@ public class Doctor {
    * 
    * @return The Doctor object containing the information of the doctor.
    */
-  public Doctor displayDoctorInfo() {
+  public Doctor displayDoctorInfo(String doctorId) {
     Doctor doctor = new Doctor();
     Connection con = openDBConnection();
     try {
       String sql = "SELECT * FROM HealthCareManagement_DOCTOR WHERE DOCTOR_ID = ?";
       PreparedStatement preparedStatement = con.prepareStatement(sql);
-      preparedStatement.setString(1, getDoctorId());
+      preparedStatement.setString(1, doctorId);
       ResultSet resultSet = preparedStatement.executeQuery();
       
       while (resultSet.next()) {
@@ -515,7 +515,7 @@ public class Doctor {
       System.out.println("Doctor Information:");
       Doctor doctorInfo = new Doctor();
       doctorInfo.setDoctorId("DOC001");
-      doctor.displayDoctorInfo();
+      doctor.displayDoctorInfo(doctorInfo.getDoctorId());
       System.out.println(doctorInfo);
       
       try {
