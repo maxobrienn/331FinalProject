@@ -199,24 +199,24 @@ INSERT INTO HealthCareManagement_INSURANCECOMPANY (INSURANCE_ID, INSURANCE_NAME,
 VALUES ('INS006', 'NoInsurance', 'No Address', 'No City', 'NA', '00000', '000-000-0000', 'noinsurance@example.com', 'nopassword', 0.00);
 
 
-INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP001', 'PharmaCo', '1234 Drug St', 'Medicity', 'CA', '67890', '678-901-2345', 'password00', 'supply@pharmaco.com');
-INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP002', 'MedSupplies', '5678 Pharma St', 'Careville', 'TX', '78901', '789-012-3456', 'password194', 'order@medsupplies.com');
-INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP003', 'DrugNest', '9101 Health St', 'Pilltown', 'FL', '89012', '890-123-4567', 'password90732', 'contact@drugnest.com');
-INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP004', 'VitaPharm', '1213 Vitamin St', 'Supplecity', 'NY', '90123', '901-234-5678', 'password320', 'info@vitapharm.com');
-INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP005', 'CareGoods', '1415 Remedy St', 'Aidville', 'IL', '01234', '012-345-6789', 'password-4392', 'service@caregoods.com');
+INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP001', 'PharmaCo', '1234 Drug St', 'Medicity', 'CA', '67890', '678-901-2345', 'password', 'supply@pharmaco.com');
+INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP002', 'MedSupplies', '5678 Pharma St', 'Careville', 'TX', '78901', '789-012-3456', 'password', 'order@medsupplies.com');
+INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP003', 'DrugNest', '9101 Health St', 'Pilltown', 'FL', '89012', '890-123-4567', 'password', 'contact@drugnest.com');
+INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP004', 'VitaPharm', '1213 Vitamin St', 'Supplecity', 'NY', '90123', '901-234-5678', 'password', 'info@vitapharm.com');
+INSERT INTO HealthCareManagement_SUPPLIER VALUES ('SUP005', 'CareGoods', '1415 Remedy St', 'Aidville', 'IL', '01234', '012-345-6789', 'password', 'service@caregoods.com');
 
-INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC001', 'Smith', 'John', 'john.smith@hospital.com', 'thsbaibniincd68n', 'Cardiology', '101');
-INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC002', 'Johnson', 'Emily', 'emily.johnson@clinic.com', 'thsbaibniincd08n', 'Dermatology', '102');
-INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC003', 'Williams', 'David', 'david.williams@medcenter.com', 'thsbaibniincd98n', 'Neurology', '103');
-INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC004', 'Brown', 'Sophia', 'sophia.brown@healthcare.com', 'thsbaib', 'Pediatrics', '104');
-INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC005', 'Davis', 'Michael', 'michael.davis@generalhospital.com', 'ibnincd98n', 'General', '105');
+INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC001', 'Smith', 'John', 'john.smith@hospital.com', 'password', 'Cardiology', '101');
+INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC002', 'Johnson', 'Emily', 'emily.johnson@clinic.com', 'password', 'Dermatology', '102');
+INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC003', 'Williams', 'David', 'david.williams@medcenter.com', 'password', 'Neurology', '103');
+INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC004', 'Brown', 'Sophia', 'sophia.brown@healthcare.com', 'password', 'Pediatrics', '104');
+INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC005', 'Davis', 'Michael', 'michael.davis@generalhospital.com', 'password', 'General', '105');
 
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT001', TO_DATE('1990-01-01','YYYY-MM-DD'), '1234 Life St', 'Anytown', 'NY', '12345', 'patient1@email.com', '123-456-7890', 'Doe', 'Jane', 'Female', 'INS001', 'thsbaibniincd58n');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT002', TO_DATE('1985-02-02','YYYY-MM-DD'), '5678 Health Rd', 'Wellville', 'TX', '23456', 'patient2@email.com', '234-567-8901', 'Brown', 'John', 'Male', 'INS002', 'thsbaibniincd59n');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT003', TO_DATE('1975-03-03','YYYY-MM-DD'), '9101 Care Ave', 'Curecity', 'CA', '34567', 'patient3@email.com', '345-678-9012', 'Smith', 'Emily', 'Female', 'INS003', 'thsbaibniincd60n');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT004', TO_DATE('2000-04-04','YYYY-MM-DD'), '1213 Remedy Blvd', 'Aidtown', 'FL', '45678', 'patient4@email.com', '456-789-0123', 'Johnson', 'Michael', 'Male', 'INS004', 'thsbaibniincd61n');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT005', TO_DATE('1995-05-05','YYYY-MM-DD'), '1415 Wellness Ln', 'Hopetown', 'IL', '56789', 'patient5@email.com', '567-890-1234', 'Williams', 'Sophia', 'Female', 'INS005', 'thsbaibniincd62n');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT006', TO_DATE('1988-06-10','YYYY-MM-DD'), '2468 Healing Blvd', 'Recovery City', 'CA', '98765', 'patient6@email.com', '789-012-3456', 'Carlson', 'Mary', 'Female', 'INS006', 'thsbaibniincd63n');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT001', TO_DATE('1990-01-01','YYYY-MM-DD'), '1234 Life St', 'Anytown', 'NY', '12345', 'patient1@email.com', '123-456-7890', 'Doe', 'Jane', 'Female', 'INS001', 'password');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT002', TO_DATE('1985-02-02','YYYY-MM-DD'), '5678 Health Rd', 'Wellville', 'TX', '23456', 'patient2@email.com', '234-567-8901', 'Brown', 'John', 'Male', 'INS002', 'password');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT003', TO_DATE('1975-03-03','YYYY-MM-DD'), '9101 Care Ave', 'Curecity', 'CA', '34567', 'patient3@email.com', '345-678-9012', 'Smith', 'Emily', 'Female', 'INS003', 'password');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT004', TO_DATE('2000-04-04','YYYY-MM-DD'), '1213 Remedy Blvd', 'Aidtown', 'FL', '45678', 'patient4@email.com', '456-789-0123', 'Johnson', 'Michael', 'Male', 'INS004', 'password');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT005', TO_DATE('1995-05-05','YYYY-MM-DD'), '1415 Wellness Ln', 'Hopetown', 'IL', '56789', 'patient5@email.com', '567-890-1234', 'Williams', 'Sophia', 'Female', 'INS005', 'password');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT006', TO_DATE('1988-06-10','YYYY-MM-DD'), '2468 Healing Blvd', 'Recovery City', 'CA', '98765', 'patient6@email.com', '789-012-3456', 'Carlson', 'Mary', 'Female', 'INS006', 'password');
 
 
 INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC001', TO_DATE('2023-01-01','YYYY-MM-DD'), 'Amoxicillin', '500mg', '05', 25.00, '30', 'DOC001', 'PAT001', 'Yes');
@@ -234,17 +234,17 @@ INSERT INTO HealthCareManagement_MEDICATION VALUES ('Lisinopril', '120', 'SUP004
 INSERT INTO HealthCareManagement_MEDICATION VALUES ('Atorvastatin', '80', 'SUP005');
 INSERT INTO HealthCareManagement_MEDICATION VALUES ('Aspirin', '80', 'SUP005');
 
-INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM001', 'City Pharmacy', '123 Cure St', 'Healtown', 'NY', '12345', '123-456-1111', 'password9', 'pharmacy@citypharm.com');
-INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM002', 'MediPharm', '456 Pill Rd', 'Medville', 'TX', '23456', '234-567-2222', 'password10', 'info@medipharm.com');
-INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM003', 'CarePlus Pharmacy', '789 Health Ave', 'Carecity', 'CA', '34567', '345-678-3333', 'password11', 'support@carepluspharm.com');
-INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM004', 'Wellness Pharmacy', '1012 Remedy Blvd', 'Welltown', 'FL', '45678', '456-789-4444', 'password12', 'contact@wellnesspharm.com');
-INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM005', 'Hope Pharmacy', '1314 Wellness Ln', 'Hopetown', 'IL', '56789', '567-890-5555', 'password13', 'service@hopepharm.com');
+INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM001', 'City Pharmacy', '123 Cure St', 'Healtown', 'NY', '12345', '123-456-1111', 'password', 'pharmacy@citypharm.com');
+INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM002', 'MediPharm', '456 Pill Rd', 'Medville', 'TX', '23456', '234-567-2222', 'password', 'info@medipharm.com');
+INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM003', 'CarePlus Pharmacy', '789 Health Ave', 'Carecity', 'CA', '34567', '345-678-3333', 'password', 'support@carepluspharm.com');
+INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM004', 'Wellness Pharmacy', '1012 Remedy Blvd', 'Welltown', 'FL', '45678', '456-789-4444', 'password', 'contact@wellnesspharm.com');
+INSERT INTO HealthCareManagement_PHARMACY VALUES ('PHRM005', 'Hope Pharmacy', '1314 Wellness Ln', 'Hopetown', 'IL', '56789', '567-890-5555', 'password', 'service@hopepharm.com');
 
-INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP001', 'Miller', 'Alice', '123456789', '123-456-6666', 'alice.miller@pharmacy.com', 'Pharmacist', 'PHRM001', 'password123');
-INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP002', 'Wilson', 'Bob', '987654321', '234-567-7777', 'bob.wilson@pharmacy.com', 'Assistant', 'PHRM002', 'password1234');
-INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP003', 'Moore', 'Clara', '456789123', '345-678-8888', 'clara.moore@pharmacy.com', 'Manager', 'PHRM003', 'password93483');
-INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP004', 'Taylor', 'Dan', '654321987', '456-789-9999', 'dan.taylor@pharmacy.com', 'Technician', 'PHRM004', 'password0383');
-INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP005', 'Anderson', 'Eva', '321654987', '567-890-0000', 'eva.anderson@pharmacy.com', 'Clerk', 'PHRM005', 'password1849');
+INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP001', 'Miller', 'Alice', '123456789', '123-456-6666', 'alice.miller@pharmacy.com', 'Pharmacist', 'PHRM001', 'password');
+INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP002', 'Wilson', 'Bob', '987654321', '234-567-7777', 'bob.wilson@pharmacy.com', 'Assistant', 'PHRM002', 'password');
+INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP003', 'Moore', 'Clara', '456789123', '345-678-8888', 'clara.moore@pharmacy.com', 'Manager', 'PHRM003', 'password');
+INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP004', 'Taylor', 'Dan', '654321987', '456-789-9999', 'dan.taylor@pharmacy.com', 'Technician', 'PHRM004', 'password');
+INSERT INTO HealthCareManagement_PHARMACYEMPLOYEE VALUES ('EMP005', 'Anderson', 'Eva', '321654987', '567-890-0000', 'eva.anderson@pharmacy.com', 'Clerk', 'PHRM005', 'password');
 
 --INSERT INTO HealthCareManagement_PAYSFOR VALUES ('PRSC001', 'INS001');
 --INSERT INTO HealthCareManagement_PAYSFOR VALUES ('PRSC002', 'INS002');
