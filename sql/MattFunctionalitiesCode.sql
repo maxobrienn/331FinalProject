@@ -277,6 +277,189 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE PROCEDURE Edit_Doctor_Info(
+    p_doctor_id IN VARCHAR,
+    p_phone_number IN VARCHAR,
+    p_email IN VARCHAR,
+    p_last IN VARCHAR,
+    p_first IN VARCHAR,
+    p_specialization IN VARCHAR,
+    p_office_number IN CHAR
+)
+AS
+BEGIN
+    -- Update the specified columns for the doctor
+    UPDATE HealthCareManagement_DOCTOR
+    SET 
+        PHONE_NUMBER = p_phone_number,
+        EMAIL = p_email,
+        LAST = p_last,
+        FIRST = p_first,
+        SPECIALIZATION = p_specialization,
+        OFFICE_NUMBER = p_office_number
+    WHERE DOCTOR_ID = p_doctor_id;
+    
+    -- Commit the transaction
+    COMMIT;
+    
+    -- Output success message
+    DBMS_OUTPUT.PUT_LINE('Doctor information updated successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Output error message if an exception occurs
+        DBMS_OUTPUT.PUT_LINE('Error updating doctor information: ' || SQLERRM);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE Edit_InsuranceCompany_Info(
+    p_insurance_id IN VARCHAR,
+    p_phone_number IN VARCHAR,
+    p_email IN VARCHAR,
+    p_street IN VARCHAR,
+    p_city IN VARCHAR,
+    p_state IN CHAR,
+    p_zip_code IN CHAR,
+    p_insurance_name IN VARCHAR,
+    p_percent IN DECIMAL
+)
+AS
+BEGIN
+    -- Update the specified columns for the insurance company
+    UPDATE HealthCareManagement_INSURANCECOMPANY
+    SET 
+        PHONE_NUMBER = p_phone_number,
+        EMAIL = p_email,
+        STREET = p_street,
+        CITY = p_city,
+        STATE = p_state,
+        ZIP_CODE = p_zip_code,
+        INSURANCE_NAME = p_insurance_name,
+        PERCENT = p_percent
+    WHERE INSURANCE_ID = p_insurance_id;
+    
+    -- Commit the transaction
+    COMMIT;
+    
+    -- Output success message
+    DBMS_OUTPUT.PUT_LINE('Insurance company information updated successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Output error message if an exception occurs
+        DBMS_OUTPUT.PUT_LINE('Error updating insurance company information: ' || SQLERRM);
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE Edit_Pharmacy_Info(
+    p_pharmacy_id IN VARCHAR,
+    p_phone_number IN VARCHAR,
+    p_email IN VARCHAR,
+    p_street IN VARCHAR,
+    p_city IN VARCHAR,
+    p_state IN CHAR,
+    p_zip_code IN CHAR,
+    p_pharmacy_name IN VARCHAR
+)
+AS
+BEGIN
+    -- Update the specified columns for the pharmacy
+    UPDATE HealthCareManagement_PHARMACY
+    SET 
+        PHONE_NUMBER = p_phone_number,
+        EMAIL = p_email,
+        STREET = p_street,
+        CITY = p_city,
+        STATE = p_state,
+        ZIP_CODE = p_zip_code,
+        PHARMACY_NAME = p_pharmacy_name
+    WHERE PHARMACY_ID = p_pharmacy_id;
+    
+    -- Commit the transaction
+    COMMIT;
+    
+    -- Output success message
+    DBMS_OUTPUT.PUT_LINE('Pharmacy information updated successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Output error message if an exception occurs
+        DBMS_OUTPUT.PUT_LINE('Error updating pharmacy information: ' || SQLERRM);
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE Edit_PharmacyEmployee_Info(
+    p_employee_id IN VARCHAR,
+    p_phone_number IN VARCHAR,
+    p_email IN VARCHAR,
+    p_last IN VARCHAR,
+    p_first IN VARCHAR,
+    p_ssn IN VARCHAR,
+    p_position IN VARCHAR
+)
+AS
+BEGIN
+    -- Update the specified columns for the pharmacy employee
+    UPDATE HealthCareManagement_PHARMACYEMPLOYEE
+    SET 
+        PHONE_NUMBER = p_phone_number,
+        EMAIL = p_email,
+        LAST = p_last,
+        FIRST = p_first,
+        SSN = p_ssn,
+        POSITION = p_position
+    WHERE EMPLOYEE_ID = p_employee_id;
+    
+    -- Commit the transaction
+    COMMIT;
+    
+    -- Output success message
+    DBMS_OUTPUT.PUT_LINE('Pharmacy employee information updated successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Output error message if an exception occurs
+        DBMS_OUTPUT.PUT_LINE('Error updating pharmacy employee information: ' || SQLERRM);
+END;
+/
+
+
+CREATE OR REPLACE PROCEDURE Edit_Supplier_Info(
+    p_supplier_id IN VARCHAR,
+    p_phone_number IN VARCHAR,
+    p_email IN VARCHAR,
+    p_street IN VARCHAR,
+    p_city IN VARCHAR,
+    p_state IN CHAR,
+    p_zip_code IN CHAR,
+    p_supplier_name IN VARCHAR
+)
+AS
+BEGIN
+    -- Update the specified columns for the supplier
+    UPDATE HealthCareManagement_SUPPLIER
+    SET 
+        PHONE_NUMBER = p_phone_number,
+        EMAIL = p_email,
+        STREET = p_street,
+        CITY = p_city,
+        STATE = p_state,
+        ZIP_CODE = p_zip_code,
+        SUPPLIER_NAME = p_supplier_name
+    WHERE SUPPLIER_ID = p_supplier_id;
+    
+    -- Commit the transaction
+    COMMIT;
+    
+    -- Output success message
+    DBMS_OUTPUT.PUT_LINE('Supplier information updated successfully.');
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Output error message if an exception occurs
+        DBMS_OUTPUT.PUT_LINE('Error updating supplier information: ' || SQLERRM);
+END;
+/
+
+
+
 
 
 
