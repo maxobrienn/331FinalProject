@@ -1,0 +1,117 @@
+package tableConstructors;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import tableConstructors.*;
+public class AddDoctorGUI extends JFrame {
+
+    private JTextField lastNameField;
+    private JTextField firstNameField;
+    private JTextField emailField;
+    private JTextField passwordField;
+    private JTextField specializationField;
+    private JTextField officeNumberField;
+
+    public AddDoctorGUI() {
+        setTitle("Add New Doctor");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Adjust window size to show all fields
+        setSize(500, 300);
+        setLocationRelativeTo(null); // Center the window
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        Font labelFont = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+        Color labelColor = Color.BLUE;
+
+        lastNameField = addRow(panel, gbc, "Last Name:", labelFont, labelColor);
+        firstNameField = addRow(panel, gbc, "First Name:", labelFont, labelColor);
+        emailField = addRow(panel, gbc, "Email:", labelFont, labelColor);
+        passwordField = addRow(panel, gbc, "Password:", labelFont, labelColor);
+        specializationField = addRow(panel, gbc, "Specialization:", labelFont, labelColor);
+        officeNumberField = addRow(panel, gbc, "Office Number:", labelFont, labelColor);
+
+        JButton addButton = new JButton("Add Doctor");
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        panel.add(addButton, gbc);
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addNewDoctor();
+            }
+        });
+
+        add(panel);
+        setVisible(true);
+    }
+
+    private JTextField addRow(JPanel panel, GridBagConstraints gbc, String labelText, Font labelFont, Color labelColor) {
+        JLabel label = new JLabel(labelText);
+        label.setFont(labelFont);
+        label.setForeground(labelColor);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(label, gbc);
+
+        JTextField textField = new JTextField(15);
+        textField.setFont(labelFont);
+        gbc.gridx = 1;
+        panel.add(textField, gbc);
+
+        return textField;
+    }
+
+    private void addNewDoctor() {
+        // Get data from text fields
+        String lastName = lastNameField.getText();
+        String firstName = firstNameField.getText();
+        String email = emailField.getText();
+        String password = new String(passwordField.getPassword());
+        String specialization = specializationField.getText();
+        String officeNumber = officeNumberField.getText();
+
+        // Create a new Doctor object
+        Doctor newDoctor = new Doctor();
+        newDoctor.setLastName(lastName);
+        newDoctor.setFirstName(firstName);
+        newDoctor.setEmail(email);
+        newDoctor.setPassword(password);
+        newDoctor.setSpecialization(specialization);
+        newDoctor.setOfficeNumber(officeNumber);
+
+        // Call the addDoctor method directly from the Doctor class
+        try {
+            newDoctor.addDoctor(newDoctor);
+            // Display a success message
+            JOptionPane.showMessageDialog(this, "Doctor added successfully!");
+        } catch (SQLException ex) {
+            // Display an error message if something went wrong
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Set look and feel to Nimbus
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Create and display the GUI
+        SwingUtilities.invokeLater(AddDoctorGUI::new);
+    }
+}

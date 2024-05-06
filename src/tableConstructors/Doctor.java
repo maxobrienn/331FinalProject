@@ -207,6 +207,38 @@ public class Doctor {
       return prescriptionId;
     }
   }
+  
+   public void addDoctor(Doctor newDoctor) {
+        try (Connection connection = openDBConnection()) {
+            // Generate a new doctor ID
+            CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Doctor_ID}");
+            callableStatement.registerOutParameter(1, Types.CHAR);
+            callableStatement.execute();
+
+            String generatedId = callableStatement.getString(1);
+            callableStatement.close();
+
+            String sql = "INSERT INTO HealthCareManagement_Doctor " +
+                    "(DOCTOR_ID, LAST, FIRST, EMAIL, PASSWORD, SPECIALIZATION, OFFICE_NUMBER) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, generatedId);
+            preparedStatement.setString(2, newDoctor.getLastName());
+            preparedStatement.setString(3, newDoctor.getFirstName());
+            preparedStatement.setString(4, newDoctor.getEmail());
+            preparedStatement.setString(5, newDoctor.getPassword());
+            preparedStatement.setString(6, newDoctor.getSpecialization());
+            preparedStatement.setString(7, newDoctor.getOfficeNumber());
+
+            preparedStatement.executeUpdate();
+            System.out.println("Doctor added successfully with ID: " + generatedId);
+
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
   /**
    * Checks if the given prescription ID exists in the database.
