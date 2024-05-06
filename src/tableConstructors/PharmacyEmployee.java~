@@ -179,11 +179,11 @@ public class PharmacyEmployee {
     return null;
   }
   
-  public boolean pharmacyEmployeeLogin(String email, String password) {
+  public boolean pharmacyEmployeeLogin(String employeeId, String password) {
      Connection con = openDBConnection();
      try {
-         PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMAIL = ? AND PASSWORD = ?");
-         statement.setString(1, email);
+         PreparedStatement statement = con.prepareStatement("SELECT COUNT(*) FROM HealthCareManagement_PHARMACYEMPLOYEE WHERE EMPLOYEE_ID = ? AND PASSWORD = ?");
+         statement.setString(1, employeeId);
          statement.setString(2, password);
 
          ResultSet rs = statement.executeQuery();

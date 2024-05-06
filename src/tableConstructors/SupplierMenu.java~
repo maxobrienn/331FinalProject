@@ -1,0 +1,86 @@
+package tableConstructors;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class SupplierMenu extends JFrame {
+  
+    private Supplier supplier;
+
+    public SupplierMenu(Supplier supplier) {
+        this.supplier = supplier;
+        initializeUI();
+    }
+    
+    private void initializeUI() {
+        setTitle("Supplier Menu");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 300);
+
+        // Calculate center coordinates of the screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int centerX = (int) ((screenSize.getWidth() - getWidth()) / 2);
+        int centerY = (int) ((screenSize.getHeight() - getHeight()) / 2);
+
+        // Set location of the window to the center of the screen
+        setLocation(centerX, centerY);
+
+        JPanel panel = new JPanel(new GridLayout(3, 1, 10, 10));
+
+        JButton viewProfileButton = new JButton("View Profile");
+        JButton updateInfoButton = new JButton("Update Info");
+        JButton editMedicationsButton = new JButton("Edit Medications");
+
+        viewProfileButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                viewProfile();
+            }
+        });
+
+        updateInfoButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                updateInfo();
+            }
+        });
+
+        editMedicationsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                editMedications();
+            }
+        });
+
+        panel.add(viewProfileButton);
+        panel.add(updateInfoButton);
+        panel.add(editMedicationsButton);
+
+        add(panel);
+    }
+    
+    private void viewProfile() {
+        // Create a new instance of SupplierProfileGUI
+        SupplierProfileGUI profileGUI = new SupplierProfileGUI(supplier);
+        // Make the SupplierProfileGUI window visible
+        profileGUI.setVisible(true);
+    }
+    
+    private void updateInfo() {
+        // Create a new instance of SupplierUpdateGUI
+        SupplierUpdateGUI updateGUI = new SupplierUpdateGUI(supplier);
+        // Make the SupplierUpdateGUI window visible
+        updateGUI.setVisible(true);
+    }
+    
+    private void editMedications() {
+        // Create a new instance of EditMedicationsGUI
+        EditMedicationsGUI editMedicationsGUI = new EditMedicationsGUI(supplier);
+        // Make the EditMedicationsGUI window visible
+        editMedicationsGUI.setVisible(true);
+    }
+    
+    public static void main(String[] args) {
+        // For testing purposes, you can create and display the menu GUI like this:
+        // Supplier supplier = new Supplier();
+        // SwingUtilities.invokeLater(() -> new SupplierMenu(supplier).setVisible(true));
+    }
+}
