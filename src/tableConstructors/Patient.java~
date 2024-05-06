@@ -1,6 +1,6 @@
 package tableConstructors;
 
-import tableConstructors.AppointmentDetails;
+import tableConstructors.*;
 
 import java.sql.*;
 import java.sql.Date;
