@@ -1,0 +1,158 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.math.BigDecimal;
+import java.sql.*;
+
+public class InsuranceCompanyEditGUI extends JFrame {
+
+    private JTextField phoneNumberField;
+    private JTextField emailField;
+    private JTextField streetField;
+    private JTextField cityField;
+    private JTextField stateField;
+    private JTextField zipCodeField;
+    private JTextField insuranceIdField;
+    private JTextField insuranceNameField;
+    private JTextField percentField;
+
+    public InsuranceCompanyEditGUI() {
+        setTitle("Update Insurance Company Information");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Adjust window size to show all fields
+        setSize(500, 450);
+        setLocationRelativeTo(null); // Center the window
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        Font labelFont = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+        Color labelColor = Color.BLUE;
+
+        phoneNumberField = addEditableRow(panel, gbc, "Phone Number:", "", labelFont, labelColor);
+        emailField = addEditableRow(panel, gbc, "Email:", "", labelFont, labelColor);
+        streetField = addEditableRow(panel, gbc, "Street:", "", labelFont, labelColor);
+        cityField = addEditableRow(panel, gbc, "City:", "", labelFont, labelColor);
+        stateField = addEditableRow(panel, gbc, "State:", "", labelFont, labelColor);
+        zipCodeField = addEditableRow(panel, gbc, "ZIP Code:", "", labelFont, labelColor);
+        insuranceIdField = addEditableRow(panel, gbc, "Insurance ID:", "", labelFont, labelColor);
+        insuranceNameField = addEditableRow(panel, gbc, "Insurance Name:", "", labelFont, labelColor);
+        percentField = addEditableRow(panel, gbc, "Percent:", "", labelFont, labelColor);
+
+        JButton saveButton = new JButton("Save");
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        panel.add(saveButton, gbc);
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveChanges();
+            }
+        });
+
+        // Add "Return to InsuranceMenu" button
+        JButton returnButton = new JButton("Return to InsuranceMenu");
+        gbc.gridy++;
+        panel.add(returnButton, gbc);
+
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle the action to return to InsuranceMenu
+                dispose(); // Close the current GUI
+                // Assuming you have a method to open the InsuranceMenu GUI
+                openInsuranceMenu();
+            }
+        });
+
+        add(panel);
+        setVisible(true);
+    }
+
+    // Method to open the InsuranceMenu GUI
+    private void openInsuranceMenu() {
+        // Code to open the InsuranceMenu GUI
+        // Replace this with your implementation to open the InsuranceMenu
+    }
+
+    private JTextField addEditableRow(JPanel panel, GridBagConstraints gbc, String labelText, String valueText, Font labelFont, Color labelColor) {
+        JLabel label = new JLabel(labelText);
+        label.setFont(labelFont);
+        label.setForeground(labelColor);
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(label, gbc);
+
+        JTextField textField = new JTextField(valueText, 15);
+        textField.setFont(labelFont);
+        gbc.gridx = 1;
+        panel.add(textField, gbc);
+
+        return textField;
+    }
+
+    private void saveChanges() {
+        String phoneNumber = phoneNumberField.getText();
+        String email = emailField.getText();
+        String street = streetField.getText();
+        String city = cityField.getText();
+        String state = stateField.getText();
+        String zipCode = zipCodeField.getText();
+        String insuranceId = insuranceIdField.getText();
+        String insuranceName = insuranceNameField.getText();
+        BigDecimal percent = new BigDecimal(percentField.getText());
+
+        try {
+            // Connect to Oracle database
+            Connection connection = openDBConnection();
+
+            // Prepare the stored procedure call
+            CallableStatement callableStatement = connection.prepareCall("{call Edit_InsuranceCompany_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+
+            // Set the input parameters
+            callableStatement.setString(1, insuranceId);
+            callableStatement.setString(2, phoneNumber);
+            callableStatement.setString(3, email);
+            callableStatement.setString(4, street);
+            callableStatement.setString(5, city);
+            callableStatement.setString(6, state);
+            callableStatement.setString(7, zipCode);
+            callableStatement.setString(8, insuranceName);
+            callableStatement.setBigDecimal(9, percent);
+
+            // Execute the stored procedure
+            callableStatement.execute();
+
+            // Output success message
+            System.out.println("Insurance company information updated successfully.");
+
+            // Close JDBC objects
+            callableStatement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private Connection openDBConnection() throws SQLException {
+        // Implement your database connection logic here
+        return null;
+    }
+
+    public static void main(String[] args) {
+        // Set look and feel to Nimbus
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Create and display the GUI
+        SwingUtilities.invokeLater(() -> new InsuranceCompanyEditGUI());
+    }
+}

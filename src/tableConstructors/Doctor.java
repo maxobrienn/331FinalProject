@@ -333,9 +333,9 @@ public class Doctor {
       Connection connection = openDBConnection();
       CallableStatement callableStatement = connection.prepareCall("{call Edit_Doctor_Info(?,?,?,?,?,?)}");
       callableStatement.setString(1, getDoctorId());
-      callableStatement.setString(2, lastName);
-      callableStatement.setString(3, firstName);
-      callableStatement.setString(4, email);
+      callableStatement.setString(2, email);
+      callableStatement.setString(3, lastName);
+      callableStatement.setString(4, firstName);
       callableStatement.setString(5, specialization);
       callableStatement.setString(6, officeNumber);
       

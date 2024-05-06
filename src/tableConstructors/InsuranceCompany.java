@@ -257,7 +257,7 @@ public class InsuranceCompany {
   public void addInsuranceCompany(InsuranceCompany insuranceCompany) {
      try (Connection connection = openDBConnection()) {
          // Generate a new insurance company ID using stored procedure
-         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_InsuranceCompany_ID}");
+         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Insurance_ID}");
          callableStatement.registerOutParameter(1, Types.CHAR);
          callableStatement.execute();
 
@@ -286,6 +286,43 @@ public class InsuranceCompany {
          e.printStackTrace();
      }
  }
+  
+  // Method to update insurance company information
+public void updateInsuranceCompanyInfo(String phoneNumber, String email, String street,
+                                       String city, String state, String zipCode, String insuranceName,
+                                       BigDecimal percent) {
+    try {
+        // Connect to Oracle database
+        Connection connection = openDBConnection();
+
+        // Prepare the stored procedure call
+        CallableStatement callableStatement = connection.prepareCall("{call Edit_InsuranceCompany_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+
+        // Set the input parameters
+        callableStatement.setString(1, getInsuranceId());
+        callableStatement.setString(2, phoneNumber);
+        callableStatement.setString(3, email);
+        callableStatement.setString(4, street);
+        callableStatement.setString(5, city);
+        callableStatement.setString(6, state);
+        callableStatement.setString(7, zipCode);
+        callableStatement.setString(8, insuranceName);
+        callableStatement.setBigDecimal(9, percent);
+
+        // Execute the stored procedure
+        callableStatement.execute();
+
+        // Output success message
+        System.out.println("Insurance company information updated successfully.");
+
+        // Close JDBC objects
+        callableStatement.close();
+        connection.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
   
   public InsuranceCompany displayInsuranceCompanyInfo(String insuranceId) {
     InsuranceCompany insuranceCompany = new InsuranceCompany();

@@ -119,9 +119,9 @@ public class DoctorEditGUI extends JFrame {
 
         // Call the method to update doctor information
         doctor.updateDoctorInfo(
+                emailField.getText(),
                 lastNameField.getText(),
                 firstNameField.getText(),
-                emailField.getText(),
                 specializationField.getText(),
                 officeNumberField.getText()
         );

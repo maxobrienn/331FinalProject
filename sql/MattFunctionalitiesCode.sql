@@ -279,7 +279,6 @@ END;
 
 CREATE OR REPLACE PROCEDURE Edit_Doctor_Info(
     p_doctor_id IN VARCHAR,
-    p_phone_number IN VARCHAR,
     p_email IN VARCHAR,
     p_last IN VARCHAR,
     p_first IN VARCHAR,
@@ -291,7 +290,6 @@ BEGIN
     -- Update the specified columns for the doctor
     UPDATE HealthCareManagement_DOCTOR
     SET 
-        PHONE_NUMBER = p_phone_number,
         EMAIL = p_email,
         LAST = p_last,
         FIRST = p_first,
