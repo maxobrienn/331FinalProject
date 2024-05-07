@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.sql.*;
 import tableConstructors.*;
 
+//Author Max
 public class GetUnpaidBalanceForPatientGUI extends JFrame {
   private JTextField patientIdField;
   private JButton getBalanceButton;

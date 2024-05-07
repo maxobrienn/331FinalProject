@@ -5,12 +5,18 @@ import java.awt.*;
 import java.awt.event.*;
 import tableConstructors.*;
 
+/**
+ * Represents a graphical user interface for patient login.
+ */
 public class PatientLoginGUI extends JFrame implements ActionListener {
     private JTextField emailField;
     private JPasswordField passwordField;
     private JButton loginButton;
     private Patient patient;
 
+    /**
+     * Constructs a PatientLoginGUI object.
+     */
     public PatientLoginGUI() {
         setTitle("Patient Login");
         setSize(300, 150);
@@ -41,6 +47,10 @@ public class PatientLoginGUI extends JFrame implements ActionListener {
         patient = new Patient(); // Create Patient object
     }
 
+    /**
+     * Handles the actionPerformed event for login button.
+     * @param e The ActionEvent object.
+     */
     public void actionPerformed(ActionEvent e) {
         String email = emailField.getText();
         String password = new String(passwordField.getPassword());
@@ -49,11 +59,24 @@ public class PatientLoginGUI extends JFrame implements ActionListener {
         if (loginSuccess) {
             JOptionPane.showMessageDialog(this, "Login successful!");
             // Open the main patient interface window here
+            openMainPatientInterface();
         } else {
             JOptionPane.showMessageDialog(this, "Login failed. Please check your email and password.");
         }
     }
 
+    /**
+     * Opens the main patient interface window.
+     */
+    private void openMainPatientInterface() {
+        // Code to open the main patient interface window
+        // Replace this with your implementation
+    }
+
+    /**
+     * Main method for testing purposes.
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             PatientLoginGUI loginGUI = new PatientLoginGUI();

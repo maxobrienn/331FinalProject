@@ -1,9 +1,9 @@
-package tableConstructors;
+package GUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import tableConstructors.Patient;
+import tableConstructors.*;
 
 public class PatientLoginGUI extends JFrame implements ActionListener {
     private JTextField emailField;
