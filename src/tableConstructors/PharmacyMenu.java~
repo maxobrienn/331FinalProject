@@ -41,11 +41,11 @@ public class PharmacyMenu extends JFrame {
   }
   
   private void displayProfile() {
-    SwingUtilities.invokeLater(() -> new PharmacyViewGUI(pharmacy));
+    //SwingUtilities.invokeLater(() -> new PharmacyInfoGUI(pharmacy));
   }
   
   private void updateInfo() {
-    SwingUtilities.invokeLater(() -> new PharmacyEditGUI(pharmacy));
+    //SwingUtilities.invokeLater(() -> new PharmacyEditGUI(pharmacy));
   }
   
   public static void main(String[] args) {
