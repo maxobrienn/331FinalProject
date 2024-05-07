@@ -35,7 +35,7 @@ public class InsurancePaymentGUI extends JFrame {
         JLabel prescriptionIdLabel = new JLabel("Prescription ID:");
         prescriptionIdField = new JTextField();
         JButton makePaymentButton = new JButton("Make Payment");
-        JButton returnButton = new JButton("Return to Insurance Menu"); // New button
+        JButton returnButton = new JButton("Return to Menu"); // New button
         statusLabel = new JLabel();
 
         panel.add(amountLabel);

@@ -6,10 +6,13 @@ import java.awt.event.*;
 import tableConstructors.*;
 
 public class PharmacyEmployeeMenu extends JFrame {
-    // Constructor
-    public PharmacyEmployeeMenu() {
-        initializeUI();
-    }
+  
+  private PharmacyEmployee employee;
+  
+  public PharmacyEmployeeMenu(PharmacyEmployee employee) {
+    this.employee = employee;
+    initializeUI();
+  }
 
     // Method to initialize the UI
     private void initializeUI() {
@@ -21,14 +24,14 @@ public class PharmacyEmployeeMenu extends JFrame {
         JPanel panel = new JPanel(new GridLayout(8, 1, 10, 10));
 
         // Buttons for different functionalities
-        JButton viewProfileButton = new JButton("PHARMACY EMPLOYEE: View Profile");
-        JButton editProfileButton = new JButton("PHARMACY EMPLOYEE: Edit Profile");
-        JButton viewInventoryButton = new JButton("PHARMACY EMPLOYEE: View Inventory");
-        JButton viewPrescriptionsButton = new JButton("PHARMACY EMPLOYEE: View all prescriptions and unpaid balances");
-        JButton requestMedicationButton = new JButton("PHARMACY EMPLOYEE: Request medication from supplier");
-        JButton updateMedicationButton = new JButton("PHARMACY EMPLOYEE: Update medication supply");
-        JButton fillPrescriptionsButton = new JButton("PHARMACY EMPLOYEE: Fill prescriptions");
-        JButton viewUnpaidBalanceButton = new JButton("PHARMACY EMPLOYEE: View patient/insurance company’s total unpaid balance");
+        JButton viewProfileButton = new JButton("View Profile");
+        JButton editProfileButton = new JButton("Edit Profile");
+        JButton viewInventoryButton = new JButton("View Inventory");
+        JButton viewPrescriptionsButton = new JButton("View All Prescriptions");
+        JButton requestMedicationButton = new JButton("Request Medication From Supplier");
+        JButton updateMedicationButton = new JButton("Update Medication Supply");
+        JButton fillPrescriptionsButton = new JButton("Fill Prescription");
+        JButton viewUnpaidBalanceButton = new JButton("View patient/insurance company’s total unpaid balance");
 
         // Add action listeners to buttons
         viewProfileButton.addActionListener(e -> viewProfile());
@@ -91,12 +94,5 @@ public class PharmacyEmployeeMenu extends JFrame {
     // Method to handle viewing unpaid balance
     private void viewUnpaidBalance() {
         // Your logic for viewing unpaid balance
-    }
-
-    // Main method for testing
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new PharmacyEmployeeMenu().setVisible(true);
-        });
     }
 }

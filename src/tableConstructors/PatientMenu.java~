@@ -1,8 +1,11 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import tableConstructors.Patient;
-import tableConstructors.ViewDiagnosisGUI;
+//import tableConstructors.Patient;
+//import tableConstructors.ViewDiagnosisGUI;
+import tableConstructors.*;
 
 public class PatientMenu extends JFrame {
     private Patient patient;
@@ -69,25 +72,30 @@ public class PatientMenu extends JFrame {
     }
 
     private void viewDiagnoses() {
-        SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
+      SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }
-
+    
     private void viewDoctors() {
-        // Display list of doctors
-        // Example: patient.viewDoctorList();
+      // Display list of doctors
+      // Example: patient.viewDoctorList();
     }
-
+    
     private void viewAppointments() {
-        // Logic to view past appointments
+      // Logic to view past appointments
     }
-
+    
     private void makePayment() {
-        // Logic to make payment
+      // Create a new instance of PatientPaymentGUI
+      PatientPaymentGUI paymentGUI = new PatientPaymentGUI(patient);
+      // Make the PatientPaymentGUI window visible
+      paymentGUI.setVisible(true);
     }
-
+    
+    
+    
     public static void main(String[] args) {
-        // Example usage:
-        // Patient patient = new Patient();
-        // new PatientMenu(patient).setVisible(true);
+      // Example usage:
+      // Patient patient = new Patient();
+      // new PatientMenu(patient).setVisible(true);
     }
 }

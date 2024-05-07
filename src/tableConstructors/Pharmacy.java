@@ -176,19 +176,19 @@ public class Pharmacy {
 
 
 
-    public void updatePharmacyInfo(String pharmacyId, String pharmacyName, String street, String city, String state, String zipCode, String phoneNumber, String password, String email) {
+    public void updatePharmacyInfo(String pharmacyName, String street, String city, String state, String zipCode, String phoneNumber, String email) {
         try {
             Connection connection = openDBConnection();
-            CallableStatement callableStatement = connection.prepareCall("{call Edit_Pharmacy_Info(?,?,?,?,?,?,?,?,?)}");
-            callableStatement.setString(1, pharmacyId);
+            CallableStatement callableStatement = connection.prepareCall("{call Edit_Pharmacy_Info(?,?,?,?,?,?,?,?)}");
+            callableStatement.setString(1, getPharmacyId());
             callableStatement.setString(2, phoneNumber);
             callableStatement.setString(3, email);
             callableStatement.setString(4, street);
             callableStatement.setString(5, city);
             callableStatement.setString(6, state);
             callableStatement.setString(7, zipCode);
-            callableStatement.setString(8, password);
-            callableStatement.setString(9, email);
+            callableStatement.setString(8, pharmacyName);
+            
 
             callableStatement.execute();
 

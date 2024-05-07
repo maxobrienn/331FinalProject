@@ -517,9 +517,10 @@ public void updateInsuranceCompanyInfo(String phoneNumber, String email, String 
       while (rs.next()) {
         String patientId = rs.getString("PATIENT_ID");
         String patientName = rs.getString("PATIENT_NAME");
+        String prescriptionId = rs.getString("PRESCRIPTION_ID"); // New prescription ID
         String insuranceIdResult = rs.getString("INSURANCE_ID");
         String amountOwed = String.format("%.2f", rs.getDouble("AMOUNT_OWED"));
-        patientData.add(new String[]{patientId, patientName, insuranceIdResult, amountOwed});
+        patientData.add(new String[]{patientId, patientName, prescriptionId, insuranceIdResult, amountOwed});
       }
       
       // Close resources
