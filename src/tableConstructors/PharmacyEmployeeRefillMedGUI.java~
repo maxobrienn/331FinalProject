@@ -1,0 +1,56 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class PharmacyEmployeeRefillMedGUI extends JFrame {
+    private JTextField supplierIdField;
+    private JTextField amountField;
+    private JButton refillButton;
+    private JTextArea resultArea;
+    private PharmacyEmployee employee;
+
+    public PharmacyEmployeeRefillMedGUI(PharmacyEmployee employee) {
+        this.employee = employee;
+        setTitle("Pharmacy Refill System");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 300);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 1));
+
+        supplierIdField = new JTextField();
+        amountField = new JTextField();
+        refillButton = new JButton("Refill");
+        resultArea = new JTextArea();
+        resultArea.setEditable(false);
+
+        refillButton.addActionListener(new RefillButtonListener());
+
+        panel.add(new JLabel("Supplier ID:"));
+        panel.add(supplierIdField);
+        panel.add(new JLabel("Amount:"));
+        panel.add(amountField);
+        panel.add(refillButton);
+
+        add(panel, BorderLayout.NORTH);
+        add(new JScrollPane(resultArea), BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    private class RefillButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String supplierId = supplierIdField.getText();
+            String amount = amountField.getText();
+            String message = employee.updateMedicationSupply(supplierId, amount);
+            resultArea.setText(message);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Assuming employee object is already created
+        PharmacyEmployee employee = new PharmacyEmployee();
+        new PharmacyEmployeeRefillMedGUI(employee);
+    }
+}

@@ -77,9 +77,13 @@ public class InsuranceMenu extends JFrame {
     }
 
     private void viewProfile() {
+      InsuranceCompanyViewInfoGUI view = new InsuranceCompanyViewInfoGUI(insurance);
+        view.setVisible(true);
     }
     
     private void updateInfo() {
+      InsuranceCompanyEditGUI view = new InsuranceCompanyEditGUI(insurance);
+        view.setVisible(true);
     }
 
     public static void main(String[] args) {

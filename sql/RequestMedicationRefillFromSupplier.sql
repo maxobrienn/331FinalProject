@@ -1,6 +1,7 @@
 
 
 --These are place holders for the actual trigger which will be the press of a button in the UI
+Exec UpdateSupplierQuantity('SUP001', '200')
 select *
 from healthcaremanagement_medication;
 

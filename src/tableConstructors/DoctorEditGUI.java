@@ -23,7 +23,7 @@ public class DoctorEditGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Adjust window size to show all fields
-        setSize(500, 300);
+        setSize(500, 600);
         setLocationRelativeTo(null); // Center the window
 
         JPanel panel = new JPanel(new GridBagLayout());

@@ -1,3 +1,11 @@
+----View for Prescription Information
+create or replace view Pharmacy_inventory as
+    select *
+    from HealthCareManagement_MEDICATION;  
+
+select *
+from Pharmacy_Inventory
+
 
 -- Create a view to show all prescriptions - including total unpaid balance on each
 CREATE OR REPLACE VIEW Pharmacy_Prescriptions AS
@@ -15,3 +23,28 @@ GROUP BY    F.PRESCRIPTION_ID, P.PATIENT_ID, P.LAST, P.FIRST, PC.INSURANCE_ID, F
 ORDER BY    AMOUNT_OWED DESC;
 
 SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = 'PHRM001';4
+
+
+
+
+--Update a maedication quantity from supplier
+Exec UpdateSupplierQuantity('SUP001', '200')
+select *
+from healthcaremanagement_medication;
+
+CREATE OR REPLACE PROCEDURE UpdateSupplierQuantity(supplierID  IN varchar2,
+                                                    amount IN char) 
+as
+begin
+    UPDATE healthcaremanagement_medication
+    SET quantity = amount
+    WHERE supplier_id = supplierID;
+
+
+END;
+/
+
+Exec UpdateSupplierQuantity('SUP001', '70')
+
+select *
+from healthcaremanagement_medication;

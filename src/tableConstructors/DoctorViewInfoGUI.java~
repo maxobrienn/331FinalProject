@@ -1,6 +1,9 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
+import tableConstructors.*;
 
 public class DoctorViewInfoGUI extends JFrame {
 
@@ -12,7 +15,7 @@ public class DoctorViewInfoGUI extends JFrame {
     private JTextField officeNumberField;
     private JButton closeButton;
 
-    public DoctorProfileGUI(Doctor doctor) {
+    public DoctorViewInfoGUI(Doctor doctor) {
         setTitle("Doctor Profile");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
@@ -95,6 +98,6 @@ public class DoctorViewInfoGUI extends JFrame {
         // Sample Doctor object for testing
         Doctor doctor = new Doctor("DOC001", "Smith", "John", "john.smith@hospital.com", "password", "Cardiology", "101");
 
-        SwingUtilities.invokeLater(() -> new DoctorProfileGUI(doctor));
+        SwingUtilities.invokeLater(() -> new DoctorViewInfoGUI(doctor));
     }
 }

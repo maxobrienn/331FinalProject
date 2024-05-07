@@ -213,8 +213,8 @@ public class PharmacyEmployee {
       
       while (resultSet.next()) {
         employee.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
-        employee.setLastName(resultSet.getString("LAST_NAME"));
-        employee.setFirstName(resultSet.getString("FIRST_NAME"));
+        employee.setLastName(resultSet.getString("LAST"));
+        employee.setFirstName(resultSet.getString("FIRST"));
         employee.setSsn(resultSet.getString("SSN"));
         employee.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
         employee.setEmail(resultSet.getString("EMAIL"));
@@ -275,19 +275,20 @@ public class PharmacyEmployee {
   }
   
   
-  public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
+  public void updateEmployeeInfo(String phoneNumber, String email, String lastName, String firstName, String position) {
     try {
       Connection connection = openDBConnection();
-      CallableStatement callableStatement = connection.prepareCall("{call Edit_Pharmacy_Employee_Info(?,?,?,?,?,?,?,?,?)}");
-      callableStatement.setString(1, employeeId);
-      callableStatement.setString(2, lastName);
-      callableStatement.setString(3, firstName);
-      callableStatement.setString(4, ssn);
-      callableStatement.setString(5, phoneNumber);
-      callableStatement.setString(6, email);
-      callableStatement.setString(7, position);
-      callableStatement.setString(8, pharmacyId);
-      callableStatement.setString(9, password);
+      CallableStatement callableStatement = connection.prepareCall("{call Edit_PharmacyEmployee_Info(?,?,?,?,?,?)}");
+      callableStatement.setString(1, getEmployeeId());
+      callableStatement.setString(2, phoneNumber);
+      callableStatement.setString(3, email);
+      callableStatement.setString(4, lastName);
+      callableStatement.setString(5, firstName);
+      callableStatement.setString(6, position);
+      
+// Remove the following line as "pharmacyId" is not a parameter in the stored procedure
+// callableStatement.setString(7, pharmacyId);
+      
       
       callableStatement.execute();
       
@@ -299,6 +300,7 @@ public class PharmacyEmployee {
       e.printStackTrace();
     }
   }
+  
   
   public PharmacyEmployee displayEmployeeInfo(String employeeId) {
     PharmacyEmployee employee = new PharmacyEmployee();
@@ -359,41 +361,59 @@ public class PharmacyEmployee {
    * Method that allows pharmacy employees to view all presscriptions including any unpaid balance for each
    * 
    */
-  public void viewPrescriptions() {
-    
+public String[][] viewPrescriptions() {
     Connection myConnection;
     PreparedStatement preparedStmt;
-    String pharmacyId = getPharmacyId();
+    String pharmacyId = this.pharmacyId;
     
     try {
-      myConnection = openDBConnection();
-      
-      // Prepare the SQL update statement.
-      String queryString = "SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = ?";
-      
-      preparedStmt = myConnection.prepareStatement(queryString);
-      
-      preparedStmt.setString(1, pharmacyId);
-      
-      ResultSet rs = preparedStmt.executeQuery(); 
-      
-      // Print the column headers
-      System.out.println("PRESCRIPTION_ID\tPATIENT_ID\tINSURANCE_ID\tAMOUNT_OWED");
-      
-      // Iterate through the result set and print each row
-      while (rs.next()) {
-        String prescriptionId = rs.getString("PRESCRIPTION_ID");
-        String patientId = rs.getString("PATIENT_ID");
-        String insuranceId = rs.getString("INSURANCE_ID");
-        double amountOwed = rs.getDouble("AMOUNT_OWED");
-        System.out.println(prescriptionId + "\t\t" + patientId + "\t\t" + insuranceId + "\t\t" + amountOwed);
-      }
+        myConnection = openDBConnection();
+        
+        // Prepare the SQL query statement.
+        String queryString = "SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = ?";
+        preparedStmt = myConnection.prepareStatement(queryString);
+        preparedStmt.setString(1, pharmacyId);
+        ResultSet rs = preparedStmt.executeQuery(); 
+        
+        // Create a list to store prescription data
+        List<String[]> prescriptionsList = new ArrayList<>();
+        
+        // Iterate through the result set and add each prescription data to the list
+        while (rs.next()) {
+            String prescriptionId = rs.getString("PRESCRIPTION_ID");
+            String patientId = rs.getString("PATIENT_ID");
+            String insuranceId = rs.getString("INSURANCE_ID");
+            double amountOwed = rs.getDouble("AMOUNT_OWED");
+            
+            // Create an array to hold prescription data
+            String[] prescriptionData = {prescriptionId, patientId, insuranceId, String.valueOf(amountOwed)};
+            
+            // Add prescription data array to the list
+            prescriptionsList.add(prescriptionData);
+        }
+        
+        // Convert the list to a 2D array
+        String[][] prescriptionsArray = new String[prescriptionsList.size()][4];
+        for (int i = 0; i < prescriptionsList.size(); i++) {
+            prescriptionsArray[i] = prescriptionsList.get(i);
+        }
+        
+        // Close resources
+        rs.close();
+        preparedStmt.close();
+        myConnection.close();
+        
+        // Return the 2D array containing prescription data
+        return prescriptionsArray;
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
     
-    catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
+    // Return null if an exception occurs
+    return null;
+}
+
   
   /**
    * Method that allows pharamacy employees to see total unpaid balance
@@ -536,7 +556,7 @@ public class PharmacyEmployee {
       //call method for viewing medication info
       //test.viewMedicationInfo("PAT001");
       //call method to refill medication
-      System.out.println(test.requestRefill("SUP001","200"));
+      System.out.println(test.updateMedicationSupply("SUP001","200"));
       
       test.fillPrescrption("PRSC001");
     } 
@@ -570,7 +590,7 @@ public class PharmacyEmployee {
     // Return an empty array if there's an error or no medication data found
     return new String[0][];
   }
-
+  
   
   
   /**
@@ -633,20 +653,31 @@ public class PharmacyEmployee {
   /**
    * Method for a pharmacy employee to refill a certain medication from a supplier
    */
-  public String requestRefill(String supplierName, String amount) {
+  public String updateMedicationSupply(String supplierId, String amount) {
     Connection con = openDBConnection();
-    String sql = "{CALL UpdateSupplierQuantity(?, ?)}";
-    try (CallableStatement statement = con.prepareCall(sql)) {
-      statement.setString(1, supplierName);
-      statement.setString(2, amount);
-      
-      statement.execute();
-      return "Medication quantity for "+supplierName+" updated to "+amount;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return "Invalid Medication Name";
-    }
-    
+    String checkSupplierSql = "SELECT COUNT(*) FROM HealthCareManagement_SUPPLIER WHERE SUPPLIER_ID = ?";
+    String updateQuantitySql = "{CALL UpdateSupplierQuantity(?, ?)}";
+    try (PreparedStatement checkStatement = con.prepareStatement(checkSupplierSql);
+         CallableStatement updateStatement = con.prepareCall(updateQuantitySql)) {
+           
+           // Check if the supplier exists
+           checkStatement.setString(1, supplierId);
+           ResultSet resultSet = checkStatement.executeQuery();
+           resultSet.next();
+           int supplierCount = resultSet.getInt(1);
+           if (supplierCount == 0) {
+             return "Supplier with ID " + supplierId + " does not exist.";
+           }
+           
+           // Update the medication quantity
+           updateStatement.setString(1, supplierId);
+           updateStatement.setString(2, amount);
+           updateStatement.execute();
+           return "Medication quantity for " + supplierId + " updated to " + amount;
+         } catch (SQLException e) {
+           e.printStackTrace();
+           return "Invalid Medication Name";
+         }
   }
   
   

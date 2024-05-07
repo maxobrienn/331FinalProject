@@ -304,9 +304,9 @@ private boolean loggedIn = false;
   }
   
   //Function to edit supplier profile info
-  public void editSupplierInfo(String supplierId, String supplierName, String street, String city, String state, String zipCode, String phoneNumber, String password, String email) {
+  public void editSupplierInfo(String supplierId, String supplierName, String street, String city, String state, String zipCode, String phoneNumber, String email) {
     Connection con = openDBConnection();
-    String sql = "{CALL Edit_Supplier_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+    String sql = "{CALL Edit_Supplier_Info(?, ?, ?, ?, ?, ?, ?, ?)}";
     try (PreparedStatement statement = con.prepareStatement(sql)) {
       statement.setString(1, supplierId);
       statement.setString(2, supplierName);
@@ -315,8 +315,7 @@ private boolean loggedIn = false;
       statement.setString(5, state);
       statement.setString(6, zipCode);
       statement.setString(7, phoneNumber);
-      statement.setString(8, password);
-      statement.setString(9, email);
+      statement.setString(8, email);
       
       statement.executeUpdate();
     } catch (SQLException e) {

@@ -89,7 +89,7 @@ public class PatientMenu extends JFrame {
 
     
     private void viewAppointments() {
-      // Logic to view past appointments
+      SwingUtilities.invokeLater(() -> new PatientViewPastAppointmentGUI(patient));
     }
     
     private void makePayment() {

@@ -58,15 +58,15 @@ public class DoctorMenu extends JFrame {
     }
 
     private void createPrescription() {
-        // Create prescription logic
+     SwingUtilities.invokeLater(() -> new PrescriptionGUI(doctor));
     }
 
     private void addAppointmentNote() {
-        // Add appointment note logic
+     SwingUtilities.invokeLater(() -> new AppointmentNoteGUI(doctor));
     }
 
     private void editPatientDiagnoses() {
-        // Edit patient diagnoses logic
+     SwingUtilities.invokeLater(() -> new EditDiagnosisGUI(doctor));
     }
 
     public static void main(String[] args) {

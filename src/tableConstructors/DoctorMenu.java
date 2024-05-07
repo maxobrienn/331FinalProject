@@ -46,11 +46,13 @@ public class DoctorMenu extends JFrame {
     }
 
     private void displayProfile() {
-        // Open doctor profile window
+      DoctorViewInfoGUI doctorInfoGUI = new DoctorViewInfoGUI(doctor);
+      doctorInfoGUI.setVisible(true);
     }
-
+    
     private void updateInfo() {
-        // Open update info dialog
+      DoctorEditGUI doctorEditInfoGUI = new DoctorEditGUI(doctor);
+      doctorEditInfoGUI.setVisible(true);
     }
 
     private void viewPatientsInfo() {
