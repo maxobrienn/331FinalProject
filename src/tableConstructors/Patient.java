@@ -546,47 +546,48 @@ public class Patient {
   
   /**
    * View prescription balances for the patient.
+   * @return a two-dimensional array of strings representing the prescription balances
    */
-  public void viewPrescriptionBalances() {
-    
-    //Variable of type database connection
+  public String[][] viewPrescriptionBalances() {
     Connection myConnection;
-    //Variable of type prepared statement
     PreparedStatement preparedStmt;
+    List<String[]> prescriptionBalances = new ArrayList<>();
     
     try {
       // Open a database connection.
       myConnection = openDBConnection();
       
-      // Prepare the SQL update statement.
+      // Prepare the SQL query statement.
       String queryString = "SELECT * FROM Patient_Prescription_Balance WHERE PATIENT_ID = ?";
-      
-      // Create a PreparedStatement for executing the update.
       preparedStmt = myConnection.prepareStatement(queryString);
-      
-      // Bind the instance field values to the PreparedStatement's parameters.
       preparedStmt.setString(1, getPatientId());
       
       // Execute the query
-      ResultSet rs = preparedStmt.executeQuery(); 
+      ResultSet rs = preparedStmt.executeQuery();
       
-      // Print the column headers
-      System.out.println("PATIENT_ID\tPRESCRIPTION_ID\tDATE_ISSUED\tPRESCRIPTION_NAME\tAMOUNT_OWED");
-      
-      // Iterate through the result set and print each row
+      // Iterate through the result set and add each row to the list
       while (rs.next()) {
-        String pId = rs.getString("PATIENT_ID");
         String prescriptionId = rs.getString("PRESCRIPTION_ID");
         java.util.Date dateIssued = rs.getDate("DATE_ISSUED");
         String prescriptionName = rs.getString("PRESCRIPTION_NAME");
         double amountOwed = rs.getDouble("AMOUNT_OWED");
-        System.out.println(pId + "\t\t" + prescriptionId + "\t\t" + dateIssued + "\t" + prescriptionName + "\t" + amountOwed);
+        prescriptionBalances.add(new String[]{prescriptionId, dateIssued.toString(), prescriptionName, String.valueOf(amountOwed)});
       }
-    }
-    catch (SQLException e) {
+      
+      // Close resources
+      rs.close();
+      preparedStmt.close();
+      myConnection.close();
+      
+    } catch (SQLException e) {
       e.printStackTrace();
     }
+    
+    // Convert the list to a two-dimensional array
+    return prescriptionBalances.toArray(new String[0][0]);
   }
+
+
   /**
    * View diagnoses for the patient.
    */

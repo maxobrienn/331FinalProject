@@ -1,0 +1,67 @@
+package tableConstructors;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import tableConstructors.*;
+
+public class GetUnpaidBalanceForInsuranceCompanyGUI extends JFrame {
+    private JTextField insuranceIdField;
+    private JButton getBalanceButton;
+    private JLabel balanceLabel;
+    private PharmacyEmployee pharmacyEmployee;
+
+    public GetUnpaidBalanceForInsuranceCompanyGUI(PharmacyEmployee pharmacyEmployee) {
+        this.pharmacyEmployee = pharmacyEmployee;
+        setTitle("Get Unpaid Balance for Insurance Company");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 150);
+        setLocationRelativeTo(null); // Center the window on the screen
+
+        // Initialize components
+        insuranceIdField = new JTextField(10);
+        getBalanceButton = new JButton("Get Balance");
+        balanceLabel = new JLabel();
+
+        // Create panel to hold components
+        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
+        panel.add(new JLabel("Insurance ID:"));
+        panel.add(insuranceIdField);
+        panel.add(new JLabel()); // Empty label for spacing
+        panel.add(getBalanceButton);
+
+        // Add panel and balance label to the frame
+        add(panel, BorderLayout.CENTER);
+        add(balanceLabel, BorderLayout.SOUTH);
+
+        // Attach event listeners
+        getBalanceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getUnpaidBalance();
+            }
+        });
+    }
+
+    private void getUnpaidBalance() {
+        String insuranceId = insuranceIdField.getText().trim();
+        double unpaidBalance = pharmacyEmployee.GetUnpaidBalanceForInsuranceCompany(insuranceId);
+        if (unpaidBalance >= 0) {
+            balanceLabel.setText("Unpaid Balance: $" + unpaidBalance);
+        } else {
+            balanceLabel.setText("Failed to retrieve balance.");
+        }
+    }
+
+    public static void main(String[] args) {
+        PharmacyEmployee pharmacyEmployee = new PharmacyEmployee();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                GetUnpaidBalanceForInsuranceCompanyGUI gui = new GetUnpaidBalanceForInsuranceCompanyGUI(pharmacyEmployee);
+                gui.setVisible(true);
+            }
+        });
+    }
+}

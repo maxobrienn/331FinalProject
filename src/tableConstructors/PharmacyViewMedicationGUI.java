@@ -7,12 +7,12 @@ import java.awt.event.*;
 import java.sql.*;
 import tableConstructors.*;
 
-public class InsuranceViewPrescriptionsGUI extends JFrame {
+public class PharmacyViewMedicationGUI extends JFrame {
     private JButton returnToMenuButton;
     private JTable dataTable;
 
-    public InsuranceViewPrescriptionsGUI(InsuranceCompany insuranceCompany) {
-        setTitle("Insurance View Prescriptions");
+    public PharmacyViewMedicationGUI(PharmacyEmployee pharmacyEmployee) {
+        setTitle("Pharmacy View Medication");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -22,10 +22,9 @@ public class InsuranceViewPrescriptionsGUI extends JFrame {
 
         // Create a table model with column headers
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("PATIENT_ID");
-        model.addColumn("PATIENT_NAME");
-        model.addColumn("INSURANCE_ID");
-        model.addColumn("AMOUNT_OWED");
+        model.addColumn("Medication Name");
+        model.addColumn("Supplier ID");
+        model.addColumn("Quantity");
         dataTable.setModel(model);
 
         // Add components to the layout
@@ -46,7 +45,7 @@ public class InsuranceViewPrescriptionsGUI extends JFrame {
         });
 
         // Populate the table with data
-        populateTable(insuranceCompany);
+        populateTable(pharmacyEmployee);
 
         // Set the size of the window
         setSize(600, 400);
@@ -58,9 +57,9 @@ public class InsuranceViewPrescriptionsGUI extends JFrame {
         dispose();
     }
 
-    private void populateTable(InsuranceCompany insuranceCompany) {
-        // Call the viewCoveredPatientsInformation method and populate the table with the results
-        String[][] data = insuranceCompany.viewCoveredPatientsInformation();
+    private void populateTable(PharmacyEmployee pharmacyEmployee) {
+        // Call the viewAvailableMedication method and populate the table with the results
+        String[][] data = pharmacyEmployee.viewAvailableMedication();
         DefaultTableModel model = (DefaultTableModel) dataTable.getModel();
         for (String[] row : data) {
             model.addRow(row);
@@ -68,17 +67,15 @@ public class InsuranceViewPrescriptionsGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Create an instance of InsuranceCompany
-        InsuranceCompany insuranceCompany = new InsuranceCompany();
-
-        // Call the makePayment method with the given parameters
-        insuranceCompany.setInsuranceId("INS001");
+        // Create an instance of PharmacyEmployee
+        PharmacyEmployee pharmacyEmployee = new PharmacyEmployee();
+        pharmacyEmployee.setPharmacyId("PHRM001");
 
         // Create and display the GUI
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                InsuranceViewPrescriptionsGUI gui = new InsuranceViewPrescriptionsGUI(insuranceCompany);
+                PharmacyViewMedicationGUI gui = new PharmacyViewMedicationGUI(pharmacyEmployee);
                 gui.setVisible(true);
             }
         });

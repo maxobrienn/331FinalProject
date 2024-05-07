@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION GetUnpaidBalanceForPatient(
     RETURN DECIMAL IS
     unpaid_balance DECIMAL(10, 2);
 BEGIN
-    SELECT SUM(PR.PRICE * (1 - IC.PERCENT))
+    SELECT CAST(SUM(PR.PRICE * (1 - IC.PERCENT)) AS DECIMAL(10, 2))
     INTO unpaid_balance
     FROM HealthCareManagement_PRESCRIPTION PR
     JOIN HealthCareManagement_PATIENT P ON PR.PATIENT_ID = P.PATIENT_ID
@@ -18,20 +18,15 @@ END;
 
 -- returns unpaid balance for a insurance company to a pharmacy employee
 CREATE OR REPLACE FUNCTION GetUnpaidBalanceForInsuranceCompany(
-    insurance_id HealthCareManagement_PRESCRIPTIONBALANCE.INSURANCE_ID%TYPE,
-    pharmacy_id HealthCareManagement_FILLS.PHARMACY_ID%TYPE
-) RETURN DECIMAL IS
+   insurance_id HealthCareManagement_PRESCRIPTIONBALANCE.INSURANCE_ID%TYPE) 
+    RETURN DECIMAL IS
     unpaid_balance DECIMAL(10, 2);
 BEGIN
-    SELECT SUM(PB.InsuranceBalance) INTO unpaid_balance
+    SELECT CAST(SUM(PB.InsuranceBalance) AS DECIMAL(10, 2)) INTO unpaid_balance
     FROM HealthCareManagement_PRESCRIPTIONBALANCE PB
-    JOIN HealthCareManagement_FILLS F ON PB.PRESCRIPTION_ID = F.PRESCRIPTION_ID
-    WHERE PB.INSURANCE_ID = GetUnpaidBalanceForInsuranceCompany.insurance_id 
-    AND F.PHARMACY_ID = GetUnpaidBalanceForInsuranceCompany.pharmacy_id;
-
+    WHERE PB.INSURANCE_ID = GetUnpaidBalanceForInsuranceCompany.insurance_id;
     RETURN unpaid_balance;
 END;
-
 
 SELECT * from HealthCareManagement_PRESCRIPTIONBALANCE;
 --PRESRIPTION_ID    PATIENT_ID  INSURANCE_ID    INSURANCEBALANCE    PATIENTBALANCE
@@ -45,6 +40,6 @@ SELECT * from HealthCareManagement_PRESCRIPTIONBALANCE;
 SELECT GetUnpaidBalanceForPatient('PAT001') FROM DUAL;
 --23
 
-SELECT GetUnpaidBalanceForInsuranceCompany('INS001', 'PHRM001') FROM DUAL;
---3
+SELECT GetUnpaidBalanceForInsuranceCompany('INS003') FROM DUAL;
+--12
 

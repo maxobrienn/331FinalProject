@@ -1,61 +1,49 @@
--- THIS FUNCTION TAKES IN A PATIENT ID AND PRESCRIPTION ID AND RETURNS UNPAID BALANCE TO INSURANCE COMPANY
-CREATE OR REPLACE FUNCTION GetPrescriptionPrice(p_patient_id IN HealthCareManagement_PRESCRIPTION.PATIENT_ID%TYPE,
-                                                p_prescription_id IN HealthCareManagement_PRESCRIPTION.PRESCRIPTION_ID%TYPE) RETURN DECIMAL
-AS
-    v_prescription_price DECIMAL := 0;
-    
-BEGIN
-    -- Retrieve the prescription price for the given patient ID and prescription ID
-    SELECT PRICE
-    INTO v_prescription_price
-    FROM HealthCareManagement_PRESCRIPTION
-    WHERE PATIENT_ID = p_patient_id AND PRESCRIPTION_ID = p_prescription_id;
 
-    -- Return the prescription price
-    RETURN v_prescription_price;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END;
-
---THIS TRIGGER CHANGES THE PRESCRIPTION PRICE AFTER A PAYMENT HAS BEEN MADE
-CREATE or REPLACE TRIGGER ChangePrescriptionPriceAfterPayment
-    AFTER INSERT ON HealthCareManagement_PAYMENT
+--THIS TRIGGER CHANGES THE PRESCRIPTION PRICE AFTER A PAYMENT HAS BEEN MADE BY THE PATIENT
+CREATE or REPLACE TRIGGER ChangePrescriptionPriceAfterPatientPayment
+    AFTER INSERT ON HealthCareManagement_PATIENTPAYMENT
     For Each Row
 BEGIN
-    UPDATE  HealthCareManagement_PRESCRIPTION
-    SET     PRICE=PRICE-:NEW.AMOUNT
+    UPDATE  HealthCareManagement_PRESCRIPTIONBALANCE
+    SET     PATIENTBALANCE=PATIENTBALANCE-:NEW.AMOUNT
+    WHERE   PRESCRIPTION_ID=:NEW.PRESCRIPTION_ID;
+END;
+
+--THIS TRIGGER CHANGES THE PRESCRIPTION PRICE AFTER A PAYMENT HAS BEEN MADE BY THE INSURANCE COMPANY
+CREATE or REPLACE TRIGGER ChangePrescriptionPriceAfterInsurancePayment
+    AFTER INSERT ON HealthCareManagement_INSURANCEPAYMENT
+    For Each Row
+BEGIN
+    UPDATE  HealthCareManagement_PRESCRIPTIONBALANCE
+    SET     INSURANCEBALANCE=INSURANCEBALANCE-:NEW.AMOUNT
     WHERE   PRESCRIPTION_ID=:NEW.PRESCRIPTION_ID;
 END;
 
 
--- FUNCTION TEST STATEMENTS:
-SELECT * FROM HealthCareManagement_PRESCRIPTION WHERE PATIENT_ID='PAT001' AND PRESCRIPTION_ID='PRSC001';
---PRESCRIPTION_ID   DATE_ISSUED     PRESCRIPTION_NAME   DOSAGE  REFILLS_REMAINING   PRICE   QUANTITY    DOCTOR_ID   PATIENT_ID 
--- PRSC001   	    01-JAN-23	    Amoxicillin	        500mg	05 	                25	    30   	    DOC001    	PAT001    
-SELECT GetPrescriptionPrice('PAT001','PRSC001') from DUAL;
--- 25
-
---TRIGGER TEST STATEMENTS:
-SELECT * FROM HealthCareManagement_PRESCRIPTION;
-INSERT INTO HealthCareManagement_PAYMENT (PAYMENT_ID, PAYMENT_DATE, AMOUNT, INSURANCE_ID, PRESCRIPTION_ID)
-        VALUES ('PAY001', TO_DATE('2023-06-15', 'YYYY-MM-DD'), 15.00, 'INS002', 'PRSC002');
-SELECT * FROM HealthCareManagement_PRESCRIPTION;
+--TEST STATEMENTS:
+SELECT * FROM HealthCareManagement_PRESCRIPTIONBALANCE;
+INSERT INTO HealthCareManagement_PATIENTPAYMENT (PAYMENT_ID, PAYMENT_DATE, AMOUNT, PATIENT_ID, PRESCRIPTION_ID)
+        VALUES ('PAY001', TO_DATE('2023-06-15', 'YYYY-MM-DD'), 15.00, 'PAT001', 'PRSC001');
+INSERT INTO HealthCareManagement_INSURANCEPAYMENT (PAYMENT_ID, PAYMENT_DATE, AMOUNT, INSURANCE_ID, PRESCRIPTION_ID)
+        VALUES ('PAY001', TO_DATE('2023-06-15', 'YYYY-MM-DD'), 2.00, 'INS001', 'PRSC001');      
+SELECT * FROM HealthCareManagement_PRESCRIPTIONBALANCE;
 
 --FIRST SELECT:
---PRESCRIPTION_ID   DATE_ISSUED     PRESCRIPTION_NAME   DOSAGE  REFILLS_REMAINING   PRICE   QUANTITY    DOCTOR_ID   PATIENT_ID 
---PRSC001   	    01-JAN-23	    Amoxicillin	        500mg	05 	                25	    30   	    DOC001    	PAT001    
---PRSC002   	    01-FEB-23	    Ibuprofen	        200mg	03 	                15	    20   	    DOC002    	PAT002    
---PRSC003   	    01-MAR-23	    Metformin	        850mg	02 	                30	    60   	    DOC003    	PAT003    
---PRSC004   	    01-APR-23	    Lisinopril	        10mg	04 	                22	    90   	    DOC004    	PAT004    
---PRSC005   	    01-MAY-23	    Atorvastatin	    20mg	01 	                45	    10   	    DOC005    	PAT005 
+--PRESCRIPTION_ID   PATIENT_ID      INSURANCE_ID   INSURANCEBAL PATIENTBAL 
+--PRSC001	        PAT001	        INS001	        2.5	        22.5
+--PRSC002	        PAT002	        INS002	        3.75	    11.25
+--PRSC003	        PAT003	        INS003	        12	        18
+--PRSC004	        PAT004	        INS004	        3.3	        18.7
+--PRSC005	        PAT005	        INS005	        4.5	        40.5
+--PRSC006	        PAT006	        INS006	        0	        10
 
 --AFTER INSERT:
---PRESCRIPTION_ID   DATE_ISSUED     PRESCRIPTION_NAME   DOSAGE  REFILLS_REMAINING   PRICE   QUANTITY    DOCTOR_ID   PATIENT_ID 
---PRSC001   	    01-JAN-23	    Amoxicillin	        500mg	05 	                25	    30   	    DOC001    	PAT001    
---PRSC002   	    01-FEB-23	    Ibuprofen	        200mg	03 	                0	    20   	    DOC002    	PAT002    
---PRSC003   	    01-MAR-23	    Metformin	        850mg	02 	                30	    60   	    DOC003    	PAT003    
---PRSC004   	    01-APR-23	    Lisinopril	        10mg	04 	                22	    90   	    DOC004    	PAT004    
---PRSC005   	    01-MAY-23	    Atorvastatin	    20mg	01 	                45	    10   	    DOC005    	PAT005 
+--PRESCRIPTION_ID   PATIENT_ID      INSURANCE_ID   INSURANCEBAL PATIENTBAL 
+--PRSC001	        PAT001	        INS001	        0.5	        7.5
+--PRSC002	        PAT002	        INS002	        3.75	    11.25
+--PRSC003	        PAT003	        INS003	        12	        18
+--PRSC004	        PAT004	        INS004	        3.3	        18.7
+--PRSC005	        PAT005	        INS005	        4.5	        40.5
+--PRSC006	        PAT006	        INS006	        0	        10
 
 
