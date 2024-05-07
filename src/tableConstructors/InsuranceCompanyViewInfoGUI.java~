@@ -1,0 +1,79 @@
+package tableConstructors;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import tableConstructors.*;
+
+public class ViewInsuranceCompanyInfoGUI extends JFrame {
+
+    private JTextField insuranceIdField;
+    // Other fields for displaying insurance company information
+
+    public ViewInsuranceCompanyInfoGUI() {
+        setTitle("View Insurance Company Information");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 400);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        // Add labels and text fields for insurance company information
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Insurance ID:"), gbc);
+        insuranceIdField = new JTextField(20);
+        gbc.gridx = 1;
+        panel.add(insuranceIdField, gbc);
+
+        // Add a button to fetch and display insurance company information
+        JButton viewButton = new JButton("View Information");
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 2;
+        panel.add(viewButton, gbc);
+
+        viewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    viewInsuranceCompanyInfo();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(ViewInsuranceCompanyInfoGUI.this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        add(panel);
+        setVisible(true);
+    }
+
+    private void viewInsuranceCompanyInfo() throws Exception {
+        // Get insurance ID from the text field
+        String insuranceId = insuranceIdField.getText();
+
+        // Create an instance of InsuranceCompany
+        InsuranceCompany insuranceCompany = new InsuranceCompany();
+
+        // Retrieve insurance company information using the provided method
+        insuranceCompany = insuranceCompany.displayInsuranceCompanyInfo(insuranceId);
+
+        // Display the retrieved information in dialog boxes or text fields
+        JOptionPane.showMessageDialog(this, "Insurance Company Information:\n" +
+                "Insurance Name: " + insuranceCompany.getInsuranceName() + "\n" +
+                "Street: " + insuranceCompany.getStreet() + "\n" +
+                "City: " + insuranceCompany.getCity() + "\n" +
+                "State: " + insuranceCompany.getState() + "\n" +
+                "ZIP Code: " + insuranceCompany.getZipCode() + "\n" +
+                "Phone Number: " + insuranceCompany.getPhoneNumber() + "\n" +
+                "Email: " + insuranceCompany.getEmail() + "\n" +
+                "Percent: " + insuranceCompany.getPercent());
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new ViewInsuranceCompanyInfoGUI());
+    }
+}

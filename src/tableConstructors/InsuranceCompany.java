@@ -257,7 +257,7 @@ public class InsuranceCompany {
   public void addInsuranceCompany(InsuranceCompany insuranceCompany) {
      try (Connection connection = openDBConnection()) {
          // Generate a new insurance company ID using stored procedure
-         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_InsuranceCompany_ID}");
+         CallableStatement callableStatement = connection.prepareCall("{? = call Generate_Random_Insurance_ID}");
          callableStatement.registerOutParameter(1, Types.CHAR);
          callableStatement.execute();
 
@@ -286,6 +286,43 @@ public class InsuranceCompany {
          e.printStackTrace();
      }
  }
+  
+  // Method to update insurance company information
+public void updateInsuranceCompanyInfo(String phoneNumber, String email, String street,
+                                       String city, String state, String zipCode, String insuranceName,
+                                       BigDecimal percent) {
+    try {
+        // Connect to Oracle database
+        Connection connection = openDBConnection();
+
+        // Prepare the stored procedure call
+        CallableStatement callableStatement = connection.prepareCall("{call Edit_InsuranceCompany_Info(?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+
+        // Set the input parameters
+        callableStatement.setString(1, getInsuranceId());
+        callableStatement.setString(2, phoneNumber);
+        callableStatement.setString(3, email);
+        callableStatement.setString(4, street);
+        callableStatement.setString(5, city);
+        callableStatement.setString(6, state);
+        callableStatement.setString(7, zipCode);
+        callableStatement.setString(8, insuranceName);
+        callableStatement.setBigDecimal(9, percent);
+
+        // Execute the stored procedure
+        callableStatement.execute();
+
+        // Output success message
+        System.out.println("Insurance company information updated successfully.");
+
+        // Close JDBC objects
+        callableStatement.close();
+        connection.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
   
   public InsuranceCompany displayInsuranceCompanyInfo(String insuranceId) {
     InsuranceCompany insuranceCompany = new InsuranceCompany();
@@ -454,48 +491,51 @@ public class InsuranceCompany {
     java.util.Date date = new java.util.Date();
     return dateFormat.format(date);
   }
-
+  
   
   
   /**
    * Method that allows insurance companies to view Covered Patients Information
-   * 
+   * @return a two-dimensional array of strings representing the patient information
    */
-  public void viewCoveredPatientsInformation() {
-    
+  public String[][] viewCoveredPatientsInformation() {
     Connection myConnection;
     PreparedStatement preparedStmt;
+    List<String[]> patientData = new ArrayList<>();
     
     try {
       myConnection = openDBConnection();
       
-      // Prepare the SQL update statement.
+      // Prepare the SQL statement
       String queryString = "SELECT * FROM Insurance_Company_Covered_Patients WHERE INSURANCE_ID = ?";
-      
       preparedStmt = myConnection.prepareStatement(queryString);
-      
       preparedStmt.setString(1, getInsuranceId());
       
       ResultSet rs = preparedStmt.executeQuery(); 
       
-      // Print the column headers
-      System.out.println("PATIENT_ID\tPATIENT_NAME\tINSURANCE_ID\tAMOUNT_OWED");
-      
-      // Iterate through the result set and print each row
+      // Iterate through the result set and add each row to the list
       while (rs.next()) {
         String patientId = rs.getString("PATIENT_ID");
         String patientName = rs.getString("PATIENT_NAME");
         String insuranceIdResult = rs.getString("INSURANCE_ID");
-        double amountOwed = rs.getDouble("AMOUNT_OWED");
-        System.out.println(patientId + "\t\t" + patientName + "\t\t" + insuranceIdResult + "\t\t" + amountOwed);
+        String amountOwed = String.format("%.2f", rs.getDouble("AMOUNT_OWED"));
+        patientData.add(new String[]{patientId, patientName, insuranceIdResult, amountOwed});
       }
-    }
-    
-    catch (SQLException e) {
+      
+      // Close resources
+      rs.close();
+      preparedStmt.close();
+      myConnection.close();
+      
+    } catch (SQLException e) {
       e.printStackTrace();
     }
+    
+    // Convert the list to a two-dimensional array
+    return patientData.toArray(new String[0][0]);
   }
-  
+
+
   
   /**
    * Main method to test JDBC methods
