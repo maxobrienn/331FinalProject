@@ -49,6 +49,9 @@ Setup
 
 To set up the Healthcare Management System:
 
+    Running on SQL Developer, connect to the TEAM05 server and run create_load_healthcaremanagement file located in the SQL folder. 
+    Run the author_funcitionalities sql file. 
+
     Ensure you have Java installed on your system.
     Download the source code from the repository.
     Compile the Java files in your preferred IDE or using the command line.
