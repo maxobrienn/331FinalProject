@@ -56,7 +56,7 @@ public class DoctorMenu extends JFrame {
     }
 
     private void viewPatientsInfo() {
-        // View patients information
+     SwingUtilities.invokeLater(() -> new ViewPatientInfoGUI(doctor));
     }
 
     private void createPrescription() {

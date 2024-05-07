@@ -1,3 +1,6 @@
+/*
+ * Author: Matt
+ */
 package GUI;
 
 import javax.swing.*;

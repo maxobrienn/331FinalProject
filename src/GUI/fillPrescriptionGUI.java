@@ -1,3 +1,6 @@
+/*
+ * Author: Ellie
+ */
 package GUI;
 
 import javax.swing.*;

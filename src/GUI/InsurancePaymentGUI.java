@@ -2,23 +2,22 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Random;
-import tableConstructors.*;
+import java.awt.event.*;
+import java.sql.*;
 
+/**
+ * This class represents a graphical user interface for making insurance payments.
+ */
 public class InsurancePaymentGUI extends JFrame {
     private JTextField amountField;
     private JTextField prescriptionIdField;
     private JLabel statusLabel;
     private InsuranceCompany insuranceCompany;
 
+    /**
+     * Constructs a new InsurancePaymentGUI with the specified InsuranceCompany object.
+     * @param insuranceCompany The InsuranceCompany object associated with this GUI.
+     */
     public InsurancePaymentGUI(InsuranceCompany insuranceCompany) {
         this.insuranceCompany = insuranceCompany;
 
@@ -56,63 +55,60 @@ public class InsurancePaymentGUI extends JFrame {
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                returnToInsuranceMenu(); // Open the insurance menu window here
+                returnToInsuranceMenu();
             }
         });
 
         add(panel);
     }
 
+    /**
+     * Closes the current window and returns to the InsuranceMenu.
+     */
     private void returnToInsuranceMenu() {
-        // Close this window and return to the InsuranceMenu
         dispose();
     }
 
+    /**
+     * Attempts to make a payment based on the entered amount and prescription ID.
+     */
     private void makePayment() {
         String amount = amountField.getText();
         String prescriptionId = prescriptionIdField.getText();
 
         if (isPrescriptionIdValid(prescriptionId)) {
-            // Call the makePayment method of InsuranceCompany class using the insuranceCompany object
             insuranceCompany.makePayment(amount, prescriptionId);
-
-            // Display success message
             statusLabel.setText("Payment made successfully.");
         } else {
-            // Prescription ID is not valid, show a pop-up message
             JOptionPane.showMessageDialog(null, "The entered prescription ID does not exist.", "Invalid Prescription ID", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    /**
+     * Checks if the given prescription ID is valid by querying the database.
+     * @param prescriptionId The prescription ID to validate.
+     * @return true if the prescription ID exists in the database, false otherwise.
+     */
     public boolean isPrescriptionIdValid(String prescriptionId) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
-            // Open a database connection.
             connection = insuranceCompany.openDBConnection();
-
-            // Prepare the SQL query to check if the prescription ID exists
             String queryString = "SELECT COUNT(*) FROM HealthCareManagement_PRESCRIPTION WHERE PRESCRIPTION_ID = ?";
             preparedStatement = connection.prepareStatement(queryString);
             preparedStatement.setString(1, prescriptionId);
-
-            // Execute the query
             resultSet = preparedStatement.executeQuery();
 
-            // Get the count of rows returned by the query
             resultSet.next();
             int count = resultSet.getInt(1);
 
-            // If count is greater than 0, the prescription ID exists
             return count > 0;
-
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Return false in case of any exception
+            return false;
         } finally {
-            // Close JDBC objects in the finally block
             try {
                 if (resultSet != null) resultSet.close();
                 if (preparedStatement != null) preparedStatement.close();
@@ -123,11 +119,14 @@ public class InsurancePaymentGUI extends JFrame {
         }
     }
 
+    /**
+     * Main method for testing purposes.
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // Create a dummy insuranceCompany object for testing
                 InsuranceCompany insuranceCompany = new InsuranceCompany();
                 insuranceCompany.setInsuranceId("INS001");
 

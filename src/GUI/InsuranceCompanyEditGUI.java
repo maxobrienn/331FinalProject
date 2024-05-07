@@ -1,4 +1,8 @@
+/*
+ * Authors: Matt, Max, Mason, Ellie, Evan
+ */
 package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
