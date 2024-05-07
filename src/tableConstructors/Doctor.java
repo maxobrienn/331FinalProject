@@ -398,37 +398,55 @@ public class Doctor {
    * @return A ResultSet containing patient details.
    * @throws SQLException If an SQL exception occurs.
    */
-  public ResultSet getPatientDetails() throws SQLException {
-   
+  public ResultSet getPatientDetails(String patientId) throws SQLException {
+   String query = "SELECT p.PATIENT_ID, p.LAST, p.FIRST, p.EMAIL, p.PHONE_NUMBER, p.DIAGNOSIS " +
+                   "FROM DoctorPatientDiagnosisView p " +
+                   "WHERE p.DOCTOR_ID = ? AND p.PATIENT_ID = ?";
 
-    
-    String query =  "SELECT " +
-      "p.PATIENT_ID, " +
-      "p.LAST, " +
-      "p.FIRST, " +
-      "p.EMAIL, " +
-      "p.PHONE_NUMBER, " +
-      "p.DIAGNOSIS " +
-      "FROM " +
-      "DoctorPatientDiagnosisView p " +
-      "WHERE " +
-      "p.DOCTOR_ID = ?";
-    
-    Connection myConnection = openDBConnection(); // Use 'myConnection' as the connection variable
+    Connection myConnection = openDBConnection();
     PreparedStatement stmt = null;
     ResultSet rs = null;
     try {
-      stmt = myConnection.prepareStatement(query);
-      stmt.setString(1, getDoctorId()); // Set doctorId for logged-in doctor
-      
-      rs = stmt.executeQuery();
-      return rs; // The caller must handle closing the ResultSet and Connection
+        stmt = myConnection.prepareStatement(query);
+        stmt.setString(1, this.getDoctorId());
+        stmt.setString(2, patientId);
+        rs = stmt.executeQuery();
+        return rs; // Caller must handle closing ResultSet and Connection
     } catch (SQLException e) {
-      if (stmt != null) stmt.close();
-      if (myConnection != null) myConnection.close(); // Ensure the connection is closed here
-      throw e; // Rethrow the exception to handle it in the calling method
+        if (stmt != null) stmt.close();
+        if (myConnection != null) myConnection.close();
+        throw e;
     }
-  }
+}
+
+//    
+//    String query =  "SELECT " +
+//      "p.PATIENT_ID, " +
+//      "p.LAST, " +
+//      "p.FIRST, " +
+//      "p.EMAIL, " +
+//      "p.PHONE_NUMBER, " +
+//      "p.DIAGNOSIS " +
+//      "FROM " +
+//      "DoctorPatientDiagnosisView p " +
+//      "WHERE " +
+//      "p.DOCTOR_ID = ?";
+//    
+//    Connection myConnection = openDBConnection(); // Use 'myConnection' as the connection variable
+//    PreparedStatement stmt = null;
+//    ResultSet rs = null;
+//    try {
+//      stmt = myConnection.prepareStatement(query);
+//      stmt.setString(1, getDoctorId()); // Set doctorId for logged-in doctor
+//      
+//      rs = stmt.executeQuery();
+//      return rs; // The caller must handle closing the ResultSet and Connection
+//    } catch (SQLException e) {
+//      if (stmt != null) stmt.close();
+//      if (myConnection != null) myConnection.close(); // Ensure the connection is closed here
+//      throw e; // Rethrow the exception to handle it in the calling method
+//    }
+//  }
 
    
   public boolean addPrescription(String patientId, String prescriptionName, String dosage, String refillsRemaining, double price, String quantity) throws SQLException {
@@ -524,85 +542,68 @@ public class Doctor {
    */
   public static void main(String[] args) {
     Doctor doctor = new Doctor();
-    
-    // Log in as a doctor
-    String doctorEmail = "john.smith@hospital.com";
-    String doctorPassword = "thsbaibniincd68n";
-    boolean loggedIn = doctor.doctorLogin(doctorEmail, doctorPassword);
-    
+
+    // Log in as a doctor using a doctor ID
+    String doctorId = "DOC001";
+    String doctorPassword = "password";
+    boolean loggedIn = doctor.doctorLogin(doctorId, doctorPassword);
+
     if (loggedIn) {
-      System.out.println("Doctor logged in successfully.");
-      
-      // Display doctor information
-      System.out.println("Doctor Information:");
-      Doctor doctorInfo = new Doctor();
-      doctorInfo.setDoctorId("DOC001");
-      doctor.displayDoctorInfo(doctorInfo.getDoctorId());
-      System.out.println(doctorInfo);
-      
-      try {
-        // Get patient details
-        System.out.println("\nPatient Details:");
-        doctor.setDoctorId("DOC004");
-        try(ResultSet patientResultSet = doctor.getPatientDetails()){
-        while (patientResultSet.next()) {
-          System.out.println("Patient ID: " + patientResultSet.getString("PATIENT_ID"));
-          System.out.println("Last Name: " + patientResultSet.getString("LAST"));
-          System.out.println("First Name: " + patientResultSet.getString("FIRST"));
-          System.out.println("Email: " + patientResultSet.getString("EMAIL"));
-          System.out.println("Sex: " + patientResultSet.getString("PHONE_NUMBER"));
-          System.out.println("Diagnosis: " + patientResultSet.getString("DIAGNOSIS"));
-          
-          
-          System.out.println("-----------------------------------");
-        }
-        } catch (SQLException e) {
-                System.out.println("An error occurred while retrieving patient details:");
-                e.printStackTrace();
-            }
-        // Add a prescription
-        System.out.println("\nAdding Prescription...");
-        String patientId = "PAT001";
-        String prescriptionName = "Paracetamol";
-        String dosage = "500mg";
-        String refillsRemaining = "10";
-        double price = 20.00;
-        String quantity = "30";
-        boolean prescriptionAdded = doctor.addPrescription(patientId, prescriptionName, dosage, refillsRemaining, price, quantity);
-        if (prescriptionAdded) {
-          System.out.println("Prescription added successfully.");
-        } else {
-          System.out.println("Failed to add prescription.");
-        }
+        System.out.println("Doctor logged in successfully.");
+
+        // Display doctor information
+        System.out.println("Doctor Information:");
+        Doctor displayedDoctor = doctor.displayDoctorInfo(doctorId);
+        System.out.println("Doctor ID: " + displayedDoctor.getDoctorId());
+        System.out.println("Last Name: " + displayedDoctor.getLastName());
+        System.out.println("First Name: " + displayedDoctor.getFirstName());
+        System.out.println("Email: " + displayedDoctor.getEmail());
+        System.out.println("Specialization: " + displayedDoctor.getSpecialization());
+        System.out.println("Office Number: " + displayedDoctor.getOfficeNumber());
         
-        // Add appointment note
-        System.out.println("\nAdding Appointment Note...");
-        String patientIdForNote = "PAT003";
-        String note = "Additional app scheduled.";
-        Date appointmentDate = new Date();
-        boolean noteAdded = doctor.addAppointmentNote(patientIdForNote,doctor.getDoctorId(), note, appointmentDate );
-        if (noteAdded) {
-          System.out.println("Appointment note added successfully.");
-        } else {
-          System.out.println("Failed to add appointment note.No appointment notes were updated. Check patient and doctor IDs.");
-        }
-     
-      //edit a diagnosis
-      System.out.println("\nEditing Diagnosis...");
-            String newDiagnosis = "Updated diagnosis information";
-            boolean diagnosisUpdated = doctor.editPatientDiagnosis(patientIdForNote, newDiagnosis);
-            if (diagnosisUpdated) {
-                System.out.println("Diagnosis updated successfully.");
-            } else {
-                System.out.println("Failed to update diagnosis. Check patient and doctor IDs.");
+        try {
+            // Get patient details for a specific patient ID
+            String specificPatientId = "PAT001";
+            System.out.println("\nPatient Details for ID: " + specificPatientId + ":");
+            try (ResultSet patientResultSet = doctor.getPatientDetails(specificPatientId)) {
+                if (patientResultSet.next()) {
+                    System.out.println("Patient ID: " + patientResultSet.getString("PATIENT_ID"));
+                    System.out.println("Last Name: " + patientResultSet.getString("LAST"));
+                    System.out.println("First Name: " + patientResultSet.getString("FIRST"));
+                    System.out.println("Email: " + patientResultSet.getString("EMAIL"));
+                    System.out.println("Phone Number: " + patientResultSet.getString("PHONE_NUMBER"));
+                    System.out.println("Diagnosis: " + patientResultSet.getString("DIAGNOSIS"));
+                } else {
+                    System.out.println("No details found for patient ID: " + specificPatientId);
+                }
             }
+
+            // Example of adding a prescription
+            System.out.println("\nAdding Prescription...");
+            boolean prescriptionAdded = doctor.addPrescription("PAT002", "Ibuprofen", "200mg", "5", 45.00, "20");
+            if (prescriptionAdded) {
+                System.out.println("Prescription added successfully.");
+            } else {
+                System.out.println("Failed to add prescription.");
+            }
+
+            // Adding an appointment note
+            System.out.println("\nAdding Appointment Note...");
+            Date appointmentDate = new Date();
+            boolean noteAdded = doctor.addAppointmentNote("PAT003", doctorId, "Follow-up visit required", appointmentDate);
+            if (noteAdded) {
+                System.out.println("Appointment note added successfully.");
+            } else {
+                System.out.println("Failed to add appointment note.");
+            }
+
         } catch (SQLException e) {
             System.out.println("An error occurred:");
             e.printStackTrace();
         }
-      } else {
-        System.out.println("Doctor login failed. Please check email and password.");
-  }
-      
+    } else {
+        System.out.println("Doctor login failed. Please check doctor ID and password.");
+    }
 }
+      
 }

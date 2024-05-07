@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class ViewPatientInfoGUI extends JFrame {
-   private JTextField patientIdField;
+  private JTextField patientIdField;
     private JButton viewButton, returnToMenuButton;
     private JTextArea infoArea;
     private Doctor doctor;  // Assuming the Doctor class is accessible
@@ -31,7 +31,7 @@ public class ViewPatientInfoGUI extends JFrame {
         inputPanel.add(patientIdField);
 
         viewButton = new JButton("View Info");
-        viewButton.addActionListener(e -> viewPatientInfo());
+        viewButton.addActionListener(this::viewPatientInfo);
         inputPanel.add(viewButton);
 
         returnToMenuButton = new JButton("Return to Doctor Menu");
@@ -61,27 +61,24 @@ public class ViewPatientInfoGUI extends JFrame {
         setVisible(true);
     }
 
-    private void viewPatientInfo() {
+    private void viewPatientInfo(ActionEvent e) {
         String patientId = patientIdField.getText().trim();
-        try {
-            ResultSet rs = doctor.getPatientDetails();  // Fetches details for all patients
-            boolean found = false;
-            while (rs.next()) {
-                if (rs.getString("PATIENT_ID").equals(patientId)) {
-                    String info = "Patient ID: " + rs.getString("PATIENT_ID") + "\n" +
-                                  "Name: " + rs.getString("FIRST") + " " + rs.getString("LAST") + "\n" +
-                                  "Email: " + rs.getString("EMAIL") + "\n" +
-                                  "Phone: " + rs.getString("PHONE_NUMBER") + "\n" +
-                                  "Diagnosis: " + rs.getString("DIAGNOSIS");
-                    infoArea.setText(info);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
+        if (patientId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a Patient ID.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (ResultSet rs = doctor.getPatientDetails(patientId)) {
+            if (rs.next()) { // Assuming that patient ID is unique, there should be at most one result
+                String info = "Patient ID: " + rs.getString("PATIENT_ID") + "\n" +
+                              "Name: " + rs.getString("FIRST") + " " + rs.getString("LAST") + "\n" +
+                              "Email: " + rs.getString("EMAIL") + "\n" +
+                              "Phone: " + rs.getString("PHONE_NUMBER") + "\n" +
+                              "Diagnosis: " + rs.getString("DIAGNOSIS");
+                infoArea.setText(info);
+            } else {
                 infoArea.setText("No information found for Patient ID: " + patientId);
             }
-            rs.close(); // Don't forget to close ResultSet
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error retrieving patient information: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

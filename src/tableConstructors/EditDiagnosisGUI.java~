@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class EditDiagnosisGUI extends JFrame {
-    private JTextField patientIdField, diagnosisField;
-    private JButton submitButton;
+     private JTextField patientIdField, diagnosisField;
+    private JButton submitButton, returnToMenuButton;
     private Doctor doctor;  // Assuming the Doctor class is accessible and has the required methods.
 
     public EditDiagnosisGUI(Doctor doctor) {
@@ -18,7 +18,7 @@ public class EditDiagnosisGUI extends JFrame {
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Edit Patient Diagnosis");
-        setLayout(new GridLayout(3, 2, 10, 10));  // Layout with rows, cols, hgap, vgap
+        setLayout(new GridLayout(4, 2, 10, 10));  // Updated grid layout to accommodate additional button
 
         // Adding labels and fields to the form
         add(new JLabel("Patient ID:"));
@@ -31,12 +31,13 @@ public class EditDiagnosisGUI extends JFrame {
 
         // Submit button
         submitButton = new JButton("Submit Diagnosis");
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                submitDiagnosis();
-            }
-        });
+        submitButton.addActionListener(e -> submitDiagnosis());
         add(submitButton);
+
+        // Return to Doctor Menu button
+        returnToMenuButton = new JButton("Return to Doctor Menu");
+        returnToMenuButton.addActionListener(e -> returnToMenu());
+        add(returnToMenuButton);
 
         pack();
         setLocationRelativeTo(null);  // Center the window
@@ -57,6 +58,11 @@ public class EditDiagnosisGUI extends JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
+    }
+
+    private void returnToMenu() {
+        this.dispose();  // Close the current window
+        new DoctorMenu(doctor).setVisible(true);  // Open the Doctor Menu
     }
 
     public static void main(String[] args) {
