@@ -1,3 +1,8 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for viewing a list of doctors.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -11,6 +16,9 @@ public class ViewDoctorListGUI extends JFrame {
     private JTable doctorTable;
     private JButton returnButton;
 
+    /**
+     * Constructs a ViewDoctorListGUI object.
+     */
     public ViewDoctorListGUI() {
         setTitle("View Doctor List");
         setSize(1000, 600);
@@ -48,6 +56,10 @@ public class ViewDoctorListGUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Populates the table model with data from the database.
+     * @param model The table model to populate.
+     */
     private void populateTableModel(DefaultTableModel model) {
         try {
             // Open a database connection.
@@ -81,10 +93,17 @@ public class ViewDoctorListGUI extends JFrame {
         }
     }
 
+    /**
+     * Returns to the main menu.
+     */
     private void returnToMainMenu() {
         dispose(); // Close the current window
     }
 
+    /**
+     * The main method for testing purposes.
+     * @param args The command-line arguments.
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -94,4 +113,3 @@ public class ViewDoctorListGUI extends JFrame {
         });
     }
 }
-

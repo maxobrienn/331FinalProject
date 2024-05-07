@@ -1,3 +1,8 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for removing medication from a supplier's inventory.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -8,11 +13,18 @@ import tableConstructors.*;
 public class SupplierRemoveMedicationGUI extends JFrame {
     private Supplier supplier;
 
+    /**
+     * Constructs a SupplierRemoveMedicationGUI object.
+     * @param supplier The supplier associated with this GUI.
+     */
     public SupplierRemoveMedicationGUI(Supplier supplier) {
         this.supplier = supplier;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface.
+     */
     private void initializeUI() {
         setTitle("Remove Medication");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -1,3 +1,8 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for the Supplier Menu.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -9,11 +14,18 @@ public class SupplierMenu extends JFrame {
   
   private Supplier supplier;
   
+  /**
+   * Constructs a SupplierMenu object.
+   * @param supplier The supplier associated with this menu.
+   */
   public SupplierMenu(Supplier supplier) {
     this.supplier = supplier;
     initializeUI();
   }
   
+  /**
+   * Initializes the user interface.
+   */
   private void initializeUI() {
     setTitle("Supplier Menu");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,29 +78,45 @@ public class SupplierMenu extends JFrame {
   }
 
     
-    private void viewProfile() {
-      SupplierInfoGUI viewGUI = new SupplierInfoGUI(supplier);
-      viewGUI.setVisible(true);
-    }
+  /**
+   * Displays the supplier's profile.
+   */
+  private void viewProfile() {
+    SupplierInfoGUI viewGUI = new SupplierInfoGUI(supplier);
+    viewGUI.setVisible(true);
+  }
     
-    private void updateInfo() {
-      SupplierEditGUI editGUI = new SupplierEditGUI(supplier);
-      editGUI.setVisible(true);
-    }
+  /**
+   * Opens the GUI for updating supplier information.
+   */
+  private void updateInfo() {
+    SupplierEditGUI editGUI = new SupplierEditGUI(supplier);
+    editGUI.setVisible(true);
+  }
     
-    private void addMedication() {
-      SupplierAddMedicationGUI addGUI = new SupplierAddMedicationGUI(supplier);
-      addGUI.setVisible(true);
-    }
+  /**
+   * Opens the GUI for adding medication.
+   */
+  private void addMedication() {
+    SupplierAddMedicationGUI addGUI = new SupplierAddMedicationGUI(supplier);
+    addGUI.setVisible(true);
+  }
     
-    private void removeMedication() {
-      SupplierRemoveMedicationGUI removeGUI = new SupplierRemoveMedicationGUI(supplier);
-      removeGUI.setVisible(true);
-    }
+  /**
+   * Opens the GUI for removing medication.
+   */
+  private void removeMedication() {
+    SupplierRemoveMedicationGUI removeGUI = new SupplierRemoveMedicationGUI(supplier);
+    removeGUI.setVisible(true);
+  }
     
-    public static void main(String[] args) {
-        // For testing purposes, you can create and display the menu GUI like this:
-        // Supplier supplier = new Supplier();
-        // SwingUtilities.invokeLater(() -> new SupplierMenu(supplier).setVisible(true));
-    }
+  /**
+   * Main method for testing purposes.
+   * @param args Command-line arguments.
+   */
+  public static void main(String[] args) {
+    // For testing purposes, you can create and display the menu GUI like this:
+    // Supplier supplier = new Supplier();
+    // SwingUtilities.invokeLater(() -> new SupplierMenu(supplier).setVisible(true));
+  }
 }

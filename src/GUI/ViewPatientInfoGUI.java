@@ -1,3 +1,8 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for viewing patient information.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -8,16 +13,23 @@ import java.sql.*;
 import tableConstructors.*;
 
 public class ViewPatientInfoGUI extends JFrame {
-private JTextField patientIdField;
+    private JTextField patientIdField;
     private JButton viewButton, returnToMenuButton;
     private JTextArea infoArea;
     private Doctor doctor;
 
+    /**
+     * Constructs a ViewPatientInfoGUI object.
+     * @param doctor The Doctor object associated with this GUI.
+     */
     public ViewPatientInfoGUI(Doctor doctor) {
         this.doctor = doctor;
         createUI();
     }
 
+    /**
+     * Creates the user interface.
+     */
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("View Patient Information");
@@ -68,6 +80,9 @@ private JTextField patientIdField;
         setVisible(true);
     }
 
+    /**
+     * Retrieves and displays patient information based on the entered patient ID.
+     */
     private void viewPatientInfo() {
         String patientId = patientIdField.getText().trim();
         if (patientId.isEmpty()) {
@@ -91,11 +106,18 @@ private JTextField patientIdField;
         }
     }
 
+    /**
+     * Returns to the Doctor Menu.
+     */
     private void returnToMenu() {
         dispose();
         new DoctorMenu(doctor).setVisible(true);
     }
 
+    /**
+     * The main method for testing purposes.
+     * @param args The command-line arguments.
+     */
     public static void main(String[] args) {
         Doctor doctor = new Doctor(); // This should be your logged-in doctor object
         doctor.setDoctorId("DOC001"); // Normally you would set this after a successful login

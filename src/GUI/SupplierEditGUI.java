@@ -1,3 +1,8 @@
+/**
+ * Author: Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for suppliers to edit their information.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -19,11 +24,18 @@ public class SupplierEditGUI extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
 
+    /**
+     * Constructs a SupplierEditGUI object.
+     * @param supplier The supplier whose information is being edited.
+     */
     public SupplierEditGUI(Supplier supplier) {
         this.supplier = supplier;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface.
+     */
     private void initializeUI() {
         setTitle("Update Supplier Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,6 +99,9 @@ public class SupplierEditGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Updates the supplier information based on the entered values.
+     */
     private void updateSupplierInformation() {
         String name = nameField.getText();
         String street = streetField.getText();
@@ -113,11 +128,18 @@ public class SupplierEditGUI extends JFrame {
         JOptionPane.showMessageDialog(this, "Supplier information updated successfully.");
     }
 
+    /**
+     * Closes this window and returns to the main menu.
+     */
     private void returnToMainMenu() {
         // Close this window and return to the main menu
         dispose();
     }
 
+    /**
+     * Main method for testing purposes.
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         // Create a sample supplier object
         Supplier supplier = new Supplier("SUP001", "ABC Supplier", "456 Supplier St", "SupplierCity", "SupplierState", "12345", "123-456-7890", "password", "supplier@email.com");

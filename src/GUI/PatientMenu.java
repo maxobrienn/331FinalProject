@@ -73,8 +73,8 @@ public class PatientMenu extends JFrame {
     }
     
     private void viewDoctors() {
-      // Display list of doctors
-      // Example: patient.viewDoctorList();
+      ViewDoctorListGUI doctorsListGUI = new ViewDoctorListGUI();
+      doctorsListGUI.setVisible(true);
     }
     
     private void viewAppointments() {

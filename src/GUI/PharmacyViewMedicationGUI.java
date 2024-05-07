@@ -1,16 +1,25 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for viewing medication information in a pharmacy.
+ * It displays medication details such as name, supplier ID, and quantity, and provides an option to return to the pharmacy menu.
+ */
 package GUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
-import tableConstructors.*;
+import tableConstructors.PharmacyEmployee;
 
 public class PharmacyViewMedicationGUI extends JFrame {
     private JButton returnToMenuButton;
     private JTable dataTable;
 
+    /**
+     * Constructs a PharmacyViewMedicationGUI object.
+     * @param pharmacyEmployee The pharmacy employee accessing the medication information.
+     */
     public PharmacyViewMedicationGUI(PharmacyEmployee pharmacyEmployee) {
         setTitle("Pharmacy View Medication");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,11 +61,18 @@ public class PharmacyViewMedicationGUI extends JFrame {
         setLocationRelativeTo(null); // Center the window on the screen
     }
 
+    /**
+     * Handles the action to return to the pharmacy menu.
+     */
     private void returnToMenu() {
         // Close the current window
         dispose();
     }
 
+    /**
+     * Populates the table with medication data.
+     * @param pharmacyEmployee The pharmacy employee accessing the medication information.
+     */
     private void populateTable(PharmacyEmployee pharmacyEmployee) {
         // Call the viewAvailableMedication method and populate the table with the results
         String[][] data = pharmacyEmployee.viewAvailableMedication();
@@ -66,6 +82,21 @@ public class PharmacyViewMedicationGUI extends JFrame {
         }
     }
 
+    /**
+     * The entry point of the application.
+     * Example usage:
+     * // Create an instance of PharmacyEmployee
+     * // PharmacyEmployee pharmacyEmployee = new PharmacyEmployee();
+     * // pharmacyEmployee.setPharmacyId("PHRM001");
+     * // Create and display the GUI
+     * // SwingUtilities.invokeLater(new Runnable() {
+     * //     @Override
+     * //     public void run() {
+     * //         PharmacyViewMedicationGUI gui = new PharmacyViewMedicationGUI(pharmacyEmployee);
+     * //         gui.setVisible(true);
+     * //     }
+     * // });
+     */
     public static void main(String[] args) {
         // Create an instance of PharmacyEmployee
         PharmacyEmployee pharmacyEmployee = new PharmacyEmployee();

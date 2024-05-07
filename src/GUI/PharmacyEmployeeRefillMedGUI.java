@@ -1,3 +1,9 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for the pharmacy employee to refill medication.
+ * It allows the pharmacy employee to refill medication by specifying the supplier ID and the amount to be refilled.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -12,6 +18,10 @@ public class PharmacyEmployeeRefillMedGUI extends JFrame {
     private JButton returnButton;
     private PharmacyEmployee employee;
 
+    /**
+     * Constructs a PharmacyEmployeeRefillMedGUI object.
+     * @param employee The pharmacy employee who is refilling medication.
+     */
     public PharmacyEmployeeRefillMedGUI(PharmacyEmployee employee) {
         this.employee = employee;
         setTitle("Pharmacy Refill System");
@@ -43,6 +53,10 @@ public class PharmacyEmployeeRefillMedGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * ActionListener implementation for the refill button.
+     * This listener handles the refill action initiated by the user.
+     */
     private class RefillButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -59,6 +73,10 @@ public class PharmacyEmployeeRefillMedGUI extends JFrame {
         }
     }
 
+    /**
+     * ActionListener implementation for the return button.
+     * This listener handles the action to return to the main menu.
+     */
     private class ReturnButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -66,6 +84,9 @@ public class PharmacyEmployeeRefillMedGUI extends JFrame {
         }
     }
 
+    /**
+     * The entry point of the application. Creates a sample employee object and displays the refill medication GUI.
+     */
     public static void main(String[] args) {
         PharmacyEmployee employee = new PharmacyEmployee();
         new PharmacyEmployeeRefillMedGUI(employee);

@@ -1,4 +1,12 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for viewing past appointments of a patient.
+ * It displays appointment details including doctor name, date, and purpose.
+ * The GUI also provides a button to return to the patient menu.
+ */
 package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,6 +17,10 @@ public class PatientViewPastAppointmentGUI extends JFrame {
 
     private Patient patient;
 
+    /**
+     * Constructs a PatientViewPastAppointmentGUI object.
+     * @param patient The patient whose past appointments are being viewed.
+     */
     public PatientViewPastAppointmentGUI(Patient patient) {
         this.patient = patient;
         initializeUI();

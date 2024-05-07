@@ -1,3 +1,10 @@
+/**
+ * Author: Mason Meyer
+ * 
+ * This class represents a graphical user interface (GUI) for creating prescriptions by a doctor.
+ * It allows the doctor to enter prescription details such as patient ID, prescription name, dosage, etc.,
+ * and submit the prescription to the database.
+ */
 package GUI;
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +18,18 @@ public class PrescriptionGUI extends JFrame {
     private JButton submitButton, returnToMenuButton;
     private Doctor doctor;  // Assuming the Doctor class is accessible and has the required methods.
 
+    /**
+     * Constructs a PrescriptionGUI object.
+     * @param doctor The doctor creating the prescription.
+     */
     public PrescriptionGUI(Doctor doctor) {
         this.doctor = doctor;
         createUI();
     }
 
+    /**
+     * Creates the user interface components.
+     */
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Create Prescription");
@@ -61,6 +75,9 @@ public class PrescriptionGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Submits the prescription details to the database.
+     */
     private void submitPrescription() {
         String patientId = patientIdField.getText();
         String prescriptionName = prescriptionNameField.getText();
@@ -81,11 +98,21 @@ public class PrescriptionGUI extends JFrame {
         }
     }
 
+    /**
+     * Returns to the Doctor Menu when the corresponding button is clicked.
+     */
     private void returnToMenu() {
         this.dispose();  // Close the current window
         new DoctorMenu(doctor).setVisible(true);  // Open the Doctor Menu
     }
 
+    /**
+     * The entry point of the application.
+     * Example usage:
+     * // Assume doctor is logged in and passed to the GUI
+     * // Doctor doctor = new Doctor();  // This should be your logged-in doctor object
+     * // new PrescriptionGUI(doctor);
+     */
     public static void main(String[] args) {
         // Assume doctor is logged in and passed to the GUI
         Doctor doctor = new Doctor();  // This should be your logged-in doctor object

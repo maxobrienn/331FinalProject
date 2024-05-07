@@ -8,10 +8,10 @@ import java.sql.*;
 import tableConstructors.*;
 
 public class ViewPatientInfoGUI extends JFrame {
-  private JTextField patientIdField;
+private JTextField patientIdField;
     private JButton viewButton, returnToMenuButton;
     private JTextArea infoArea;
-    private Doctor doctor;  // Assuming the Doctor class is accessible
+    private Doctor doctor;
 
     public ViewPatientInfoGUI(Doctor doctor) {
         this.doctor = doctor;
@@ -21,8 +21,9 @@ public class ViewPatientInfoGUI extends JFrame {
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("View Patient Information");
-        setSize(500, 400);  // Set frame size
-        setLocationRelativeTo(null);  // Center on screen
+        setSize(500, 400);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
         // Panel for input
         JPanel inputPanel = new JPanel();
@@ -31,13 +32,16 @@ public class ViewPatientInfoGUI extends JFrame {
         patientIdField = new JTextField(15);
         inputPanel.add(patientIdField);
 
+        // Button panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         viewButton = new JButton("View Info");
-        viewButton.addActionListener(this::viewPatientInfo);
-        inputPanel.add(viewButton);
+        viewButton.addActionListener(e -> viewPatientInfo());
+        buttonPanel.add(viewButton);
 
         returnToMenuButton = new JButton("Return to Doctor Menu");
         returnToMenuButton.addActionListener(e -> returnToMenu());
-        inputPanel.add(returnToMenuButton);
+        buttonPanel.add(returnToMenuButton);
 
         // Text area for displaying patient info
         infoArea = new JTextArea(15, 40);
@@ -46,15 +50,17 @@ public class ViewPatientInfoGUI extends JFrame {
 
         // Adding components to the frame
         add(inputPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.SOUTH);
 
         // Styling components
         inputPanel.setBackground(new Color(230, 230, 250));  // Lavender background
+        buttonPanel.setBackground(new Color(230, 230, 250)); // Consistent background with input panel
         viewButton.setFont(new Font("Arial", Font.BOLD, 14));
         viewButton.setBackground(new Color(100, 149, 237));  // Cornflower blue
         viewButton.setForeground(Color.WHITE);
         returnToMenuButton.setFont(new Font("Arial", Font.BOLD, 14));
-        returnToMenuButton.setBackground(new Color(100, 149, 237));  // Matching style with the view button
+        returnToMenuButton.setBackground(new Color(100, 149, 237));  // Matching style with view button
         returnToMenuButton.setForeground(Color.WHITE);
         infoArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
         infoArea.setBackground(new Color(245, 245, 245));  // White smoke
@@ -62,15 +68,15 @@ public class ViewPatientInfoGUI extends JFrame {
         setVisible(true);
     }
 
-    private void viewPatientInfo(ActionEvent e) {
+    private void viewPatientInfo() {
         String patientId = patientIdField.getText().trim();
         if (patientId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a Patient ID.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter a Patient ID", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try (ResultSet rs = doctor.getPatientDetails(patientId)) {
-            if (rs.next()) { // Assuming that patient ID is unique, there should be at most one result
+            if (rs.next()) {
                 String info = "Patient ID: " + rs.getString("PATIENT_ID") + "\n" +
                               "Name: " + rs.getString("FIRST") + " " + rs.getString("LAST") + "\n" +
                               "Email: " + rs.getString("EMAIL") + "\n" +
@@ -86,13 +92,13 @@ public class ViewPatientInfoGUI extends JFrame {
     }
 
     private void returnToMenu() {
-        this.dispose();  // Close the current window
-        new DoctorMenu(doctor).setVisible(true);  // Open the Doctor Menu
+        dispose();
+        new DoctorMenu(doctor).setVisible(true);
     }
 
     public static void main(String[] args) {
-        // Assume doctor is logged in and passed to the GUI
-        Doctor doctor = new Doctor();  // This should be your logged-in doctor object
+        Doctor doctor = new Doctor(); // This should be your logged-in doctor object
+        doctor.setDoctorId("DOC001"); // Normally you would set this after a successful login
         new ViewPatientInfoGUI(doctor);
     }
 }

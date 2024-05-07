@@ -1,10 +1,15 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for selecting user types.
+ * This class should be ran to interact with our database.
+ */
 package GUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import tableConstructors.*;
-
 
 public class UserTypeSelectionGUI extends JFrame implements ActionListener {
     private JButton patientButton;
@@ -14,6 +19,9 @@ public class UserTypeSelectionGUI extends JFrame implements ActionListener {
     private JButton pharmacyEmployeeButton;
     private JButton supplierButton;
 
+    /**
+     * Constructs a UserTypeSelectionGUI object.
+     */
     public UserTypeSelectionGUI() {
         setTitle("User Type Selection");
         setSize(400, 250);
@@ -49,6 +57,10 @@ public class UserTypeSelectionGUI extends JFrame implements ActionListener {
         return button;
     }
 
+    /**
+     * Performs actions when buttons are clicked.
+     * @param e The ActionEvent object.
+     */
     public void actionPerformed(ActionEvent e) {
         String userType = "";
         if (e.getSource() == patientButton) {
@@ -71,6 +83,10 @@ public class UserTypeSelectionGUI extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Opens the login GUI based on the selected user type.
+     * @param userType The type of user selected.
+     */
     private void openLoginGUI(String userType) {
         Object user = null;
         switch (userType) {

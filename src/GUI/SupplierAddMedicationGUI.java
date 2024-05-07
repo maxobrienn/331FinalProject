@@ -1,3 +1,8 @@
+/**
+ * Authors: Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for suppliers to add medication to their inventory.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -8,11 +13,18 @@ import tableConstructors.*;
 public class SupplierAddMedicationGUI extends JFrame {
     private Supplier supplier;
 
+    /**
+     * Constructs a SupplierAddMedicationGUI object.
+     * @param supplier The supplier adding the medication.
+     */
     public SupplierAddMedicationGUI(Supplier supplier) {
         this.supplier = supplier;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface.
+     */
     private void initializeUI() {
         setTitle("Add Medication");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -27,13 +39,14 @@ public class SupplierAddMedicationGUI extends JFrame {
         JTextField quantityField = new JTextField();
         JButton addButton = new JButton("Add Medication");
 
+        // Action listener for the "Add Medication" button
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String medicationName = nameField.getText();
                 int quantity = Integer.parseInt(quantityField.getText());
                 supplier.addMedication(medicationName, quantity);
                 JOptionPane.showMessageDialog(null, "Medication added successfully.");
-                dispose();
+                dispose(); // Close the window after adding medication
             }
         });
 
