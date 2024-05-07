@@ -359,43 +359,61 @@ public class PharmacyEmployee {
   
   /**
    * Method that allows pharmacy employees to view all presscriptions including any unpaid balance for each
-   * 
+   * aaaaaaaaaaaaaaaaaaaa
    */
-  public void viewPrescriptions() {
-    
+public String[][] viewPrescriptions() {
     Connection myConnection;
     PreparedStatement preparedStmt;
     String pharmacyId = getPharmacyId();
     
     try {
-      myConnection = openDBConnection();
-      
-      // Prepare the SQL update statement.
-      String queryString = "SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = ?";
-      
-      preparedStmt = myConnection.prepareStatement(queryString);
-      
-      preparedStmt.setString(1, pharmacyId);
-      
-      ResultSet rs = preparedStmt.executeQuery(); 
-      
-      // Print the column headers
-      System.out.println("PRESCRIPTION_ID\tPATIENT_ID\tINSURANCE_ID\tAMOUNT_OWED");
-      
-      // Iterate through the result set and print each row
-      while (rs.next()) {
-        String prescriptionId = rs.getString("PRESCRIPTION_ID");
-        String patientId = rs.getString("PATIENT_ID");
-        String insuranceId = rs.getString("INSURANCE_ID");
-        double amountOwed = rs.getDouble("AMOUNT_OWED");
-        System.out.println(prescriptionId + "\t\t" + patientId + "\t\t" + insuranceId + "\t\t" + amountOwed);
-      }
+        myConnection = openDBConnection();
+        
+        // Prepare the SQL query statement.
+        String queryString = "SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = ?";
+        preparedStmt = myConnection.prepareStatement(queryString);
+        preparedStmt.setString(1, pharmacyId);
+        ResultSet rs = preparedStmt.executeQuery(); 
+        
+        // Create a list to store prescription data
+        List<String[]> prescriptionsList = new ArrayList<>();
+        
+        // Iterate through the result set and add each prescription data to the list
+        while (rs.next()) {
+            String prescriptionId = rs.getString("PRESCRIPTION_ID");
+            String patientId = rs.getString("PATIENT_ID");
+            String insuranceId = rs.getString("INSURANCE_ID");
+            double amountOwed = rs.getDouble("AMOUNT_OWED");
+            
+            // Create an array to hold prescription data
+            String[] prescriptionData = {prescriptionId, patientId, insuranceId, String.valueOf(amountOwed)};
+            
+            // Add prescription data array to the list
+            prescriptionsList.add(prescriptionData);
+        }
+        
+        // Convert the list to a 2D array
+        String[][] prescriptionsArray = new String[prescriptionsList.size()][4];
+        for (int i = 0; i < prescriptionsList.size(); i++) {
+            prescriptionsArray[i] = prescriptionsList.get(i);
+        }
+        
+        // Close resources
+        rs.close();
+        preparedStmt.close();
+        myConnection.close();
+        
+        // Return the 2D array containing prescription data
+        return prescriptionsArray;
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
     
-    catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
+    // Return null if an exception occurs
+    return null;
+}
+
   
   /**
    * Method that allows pharamacy employees to see total unpaid balance

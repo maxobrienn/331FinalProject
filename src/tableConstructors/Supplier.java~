@@ -196,10 +196,51 @@ private boolean loggedIn = false;
              return true;
          }
      } catch (SQLException e) {
-         e.printStackTrace();
+       e.printStackTrace();
      }
      return false;
- }
+  }
+  
+  /**
+   * Retrieves and returns supplier information based on the given supplier ID.
+   * 
+   * @param supplierId The ID of the supplier whose information is to be retrieved.
+   * @return Supplier object containing the information of the specified supplier.
+   */
+  public Supplier displaySupplierInfo(String supplierId) {
+    Supplier supplier = null;
+    Connection con = openDBConnection();
+    try {
+      // Prepare and execute SQL query to retrieve supplier information
+      String sql = "SELECT * FROM HealthCareManagement_SUPPLIER WHERE SUPPLIER_ID = ?";
+      PreparedStatement preparedStatement = con.prepareStatement(sql);
+      preparedStatement.setString(1, supplierId);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      
+      // Construct the Supplier object with retrieved information
+      if (resultSet.next()) {
+        supplier = new Supplier();
+        supplier.setSupplierId(resultSet.getString("SUPPLIER_ID"));
+        supplier.setSupplierName(resultSet.getString("SUPPLIER_NAME"));
+        supplier.setStreet(resultSet.getString("STREET"));
+        supplier.setCity(resultSet.getString("CITY"));
+        supplier.setState(resultSet.getString("STATE"));
+        supplier.setZipCode(resultSet.getString("ZIP_CODE"));
+        supplier.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
+        supplier.setPassword(resultSet.getString("PASSWORD"));
+        supplier.setEmail(resultSet.getString("EMAIL"));
+      }
+      
+      // Close JDBC objects
+      resultSet.close();
+      preparedStatement.close();
+      con.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return supplier;
+  }
+
 
   public void addSupplier(Supplier supplier) {
      try (Connection connection = openDBConnection()) {
@@ -286,33 +327,41 @@ private boolean loggedIn = false;
   /**
    * Add a medication to the HealthCareManagement_MEDICATION table
    * 
-   * @param supplierID -- NEED TO REMOVE THIS TO GET SUPPLIERID METHOD
    * @param medicationName
    * @param quantity 
    */
-  public void addMedication(String supplierID, String medicationName, int quantity) {
-    Connection myConnection;
-    PreparedStatement preparedStmt;
+  public void addMedication(String medicationName, int quantity) {
+    Connection connection = null;
+    CallableStatement callableStatement = null;
     
     try {
-      myConnection = openDBConnection();
-      
-      String queryString = "INSERT INTO HealthCareManagement_MEDICATION (NAME, QUANTITY, SUPPLIER_ID) " +
-        "VALUES (?, ?, ?)";
-      
-      preparedStmt = myConnection.prepareStatement(queryString);
-      
-      preparedStmt.setString(1, medicationName);
-      preparedStmt.setInt(2, quantity);
-      preparedStmt.setString(3, supplierID);
-      
-      preparedStmt.executeQuery();
-    }
-    
-    catch (SQLException e) {
+      connection = openDBConnection();
+      callableStatement = connection.prepareCall("{CALL Add_Medication(?, ?, ?)}");
+      callableStatement.setString(1, medicationName);
+      callableStatement.setInt(2, quantity);
+      callableStatement.setString(3, this.supplierId);
+      callableStatement.executeUpdate();
+    } catch (SQLException e) {
       e.printStackTrace();
+    } finally {
+      // Close resources
+      if (callableStatement != null) {
+        try {
+          callableStatement.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
+      if (connection != null) {
+        try {
+          connection.close();
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
+  
   
   /**
    * Add a medication to the HealthCareManagement_MEDICATION table
@@ -321,9 +370,10 @@ private boolean loggedIn = false;
    * @param medicationName
    * 
    */
-  public void removeMedication(String supplierID, String medicationName) {
-    Connection myConnection;
-    PreparedStatement preparedStmt;
+  public boolean removeMedication(String medicationName) {
+    Connection myConnection = null;
+    PreparedStatement preparedStmt = null;
+    ResultSet resultSet = null;
     
     try {
       myConnection = openDBConnection();
@@ -332,30 +382,39 @@ private boolean loggedIn = false;
       String checkQuery = "SELECT * FROM HealthCareManagement_MEDICATION WHERE NAME = ? AND SUPPLIER_ID = ?";
       preparedStmt = myConnection.prepareStatement(checkQuery);
       preparedStmt.setString(1, medicationName);
-      preparedStmt.setString(2, supplierID);
-      ResultSet resultSet = preparedStmt.executeQuery();
+      preparedStmt.setString(2, this.supplierId);
+      resultSet = preparedStmt.executeQuery();
       
       if (resultSet.next()) {
         // Medication exists, proceed with removal
         String removeQuery = "DELETE FROM HealthCareManagement_MEDICATION WHERE NAME = ? AND SUPPLIER_ID = ?";
         preparedStmt = myConnection.prepareStatement(removeQuery);
         preparedStmt.setString(1, medicationName);
-        preparedStmt.setString(2, supplierID);
+        preparedStmt.setString(2, this.supplierId);
         preparedStmt.executeUpdate();
         System.out.println("Medication removed successfully.");
+        return true; // Medication successfully removed
       } else {
         // Medication does not exist
         System.out.println("Medication not found.");
+        return false; // Medication not found
       }
-      
-      // Close resources
-      resultSet.close();
-      preparedStmt.close();
-      myConnection.close();
     } catch (SQLException e) {
       e.printStackTrace();
+      return false; // Error occurred, medication not removed
+    } finally {
+      // Close resources
+      try {
+        if (resultSet != null) resultSet.close();
+        if (preparedStmt != null) preparedStmt.close();
+        if (myConnection != null) myConnection.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
   }
+
+
   
   /**
    * Main method to test JDBC methods
