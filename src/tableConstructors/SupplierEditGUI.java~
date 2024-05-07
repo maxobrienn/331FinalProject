@@ -105,7 +105,7 @@ public class SupplierEditGUI extends JFrame {
         supplier.setPassword(password);
 
         // Call method to update supplier information in the database
-        supplier.editSupplierInfo(supplier.getSupplierId(), name, street, city, state, zip, phone, password, email);
+        supplier.editSupplierInfo(supplier.getSupplierId(), name, street, city, state, zip, phone, email);
 
         JOptionPane.showMessageDialog(this, "Supplier information updated successfully.");
     }

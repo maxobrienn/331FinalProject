@@ -66,9 +66,13 @@ public class SupplierMenu extends JFrame {
 
     
     private void viewProfile() {
+      SupplierInfoGUI viewGUI = new SupplierInfoGUI(supplier);
+      viewGUI.setVisible(true);
     }
     
     private void updateInfo() {
+      SupplierEditGUI editGUI = new SupplierEditGUI(supplier);
+      editGUI.setVisible(true);
     }
     
     private void addMedication() {

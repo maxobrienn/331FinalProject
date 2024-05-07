@@ -1,7 +1,10 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import tableConstructors.Supplier;
+import tableConstructors.*;
 
 public class SupplierEditGUI extends JFrame {
 
