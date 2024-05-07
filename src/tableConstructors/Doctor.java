@@ -399,16 +399,25 @@ public class Doctor {
    * @throws SQLException If an SQL exception occurs.
    */
   public ResultSet getPatientDetails(String patientId) throws SQLException {
-   String query = "SELECT p.PATIENT_ID, p.LAST, p.FIRST, p.EMAIL, p.PHONE_NUMBER, p.DIAGNOSIS " +
-                   "FROM DoctorPatientDiagnosisView p " +
-                   "WHERE p.DOCTOR_ID = ? AND p.PATIENT_ID = ?";
+   String query =  "SELECT " +
+                    "p.PATIENT_ID, " +
+                    "p.LAST, " +
+                    "p.FIRST, " +
+                    "p.EMAIL, " +
+                    "p.PHONE_NUMBER, " +
+                    "p.DIAGNOSIS " +
+                    "FROM " +
+                    "DoctorPatientDiagnosisView p " +
+                    "WHERE " +
+                    "p.DOCTOR_ID = ? AND " +
+                    "p.PATIENT_ID = ?";
 
     Connection myConnection = openDBConnection();
     PreparedStatement stmt = null;
     ResultSet rs = null;
     try {
         stmt = myConnection.prepareStatement(query);
-        stmt.setString(1, this.getDoctorId());
+        stmt.setString(1, getDoctorId());
         stmt.setString(2, patientId);
         rs = stmt.executeQuery();
         return rs; // Caller must handle closing ResultSet and Connection
@@ -419,34 +428,6 @@ public class Doctor {
     }
 }
 
-//    
-//    String query =  "SELECT " +
-//      "p.PATIENT_ID, " +
-//      "p.LAST, " +
-//      "p.FIRST, " +
-//      "p.EMAIL, " +
-//      "p.PHONE_NUMBER, " +
-//      "p.DIAGNOSIS " +
-//      "FROM " +
-//      "DoctorPatientDiagnosisView p " +
-//      "WHERE " +
-//      "p.DOCTOR_ID = ?";
-//    
-//    Connection myConnection = openDBConnection(); // Use 'myConnection' as the connection variable
-//    PreparedStatement stmt = null;
-//    ResultSet rs = null;
-//    try {
-//      stmt = myConnection.prepareStatement(query);
-//      stmt.setString(1, getDoctorId()); // Set doctorId for logged-in doctor
-//      
-//      rs = stmt.executeQuery();
-//      return rs; // The caller must handle closing the ResultSet and Connection
-//    } catch (SQLException e) {
-//      if (stmt != null) stmt.close();
-//      if (myConnection != null) myConnection.close(); // Ensure the connection is closed here
-//      throw e; // Rethrow the exception to handle it in the calling method
-//    }
-//  }
 
    
   public boolean addPrescription(String patientId, String prescriptionName, String dosage, String refillsRemaining, double price, String quantity) throws SQLException {
@@ -551,20 +532,24 @@ public class Doctor {
     if (loggedIn) {
         System.out.println("Doctor logged in successfully.");
 
-        // Display doctor information
-        System.out.println("Doctor Information:");
+        // Fetch and display doctor information after login
         Doctor displayedDoctor = doctor.displayDoctorInfo(doctorId);
+        System.out.println("Doctor Information:");
         System.out.println("Doctor ID: " + displayedDoctor.getDoctorId());
         System.out.println("Last Name: " + displayedDoctor.getLastName());
         System.out.println("First Name: " + displayedDoctor.getFirstName());
         System.out.println("Email: " + displayedDoctor.getEmail());
         System.out.println("Specialization: " + displayedDoctor.getSpecialization());
         System.out.println("Office Number: " + displayedDoctor.getOfficeNumber());
-        
+
+        // Set the Doctor object's doctorId to the logged-in doctor's ID for further use
+        doctor.setDoctorId(displayedDoctor.getDoctorId());
+
         try {
-            // Get patient details for a specific patient ID
+            // Get patient details for a specific patient ID using the set doctorId
             String specificPatientId = "PAT001";
             System.out.println("\nPatient Details for ID: " + specificPatientId + ":");
+            System.out.println("Using Doctor ID: " + doctor.getDoctorId());
             try (ResultSet patientResultSet = doctor.getPatientDetails(specificPatientId)) {
                 if (patientResultSet.next()) {
                     System.out.println("Patient ID: " + patientResultSet.getString("PATIENT_ID"));
@@ -605,5 +590,6 @@ public class Doctor {
         System.out.println("Doctor login failed. Please check doctor ID and password.");
     }
 }
+
       
 }
