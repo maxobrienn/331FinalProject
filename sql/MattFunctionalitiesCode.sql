@@ -392,7 +392,6 @@ CREATE OR REPLACE PROCEDURE Edit_PharmacyEmployee_Info(
     p_email IN VARCHAR,
     p_last IN VARCHAR,
     p_first IN VARCHAR,
-    p_ssn IN VARCHAR,
     p_position IN VARCHAR
 )
 AS
@@ -404,7 +403,6 @@ BEGIN
         EMAIL = p_email,
         LAST = p_last,
         FIRST = p_first,
-        SSN = p_ssn,
         POSITION = p_position
     WHERE EMPLOYEE_ID = p_employee_id;
     
