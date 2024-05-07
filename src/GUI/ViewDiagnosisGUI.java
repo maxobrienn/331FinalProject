@@ -1,10 +1,10 @@
-package tableConstructors;
+package GUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import java.awt.event.*;
-import tableConstructors.Patient;
+import tableConstructors.*;
 
 public class ViewDiagnosisGUI extends JFrame {
     private JTextArea resultArea;

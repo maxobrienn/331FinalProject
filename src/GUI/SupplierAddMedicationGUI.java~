@@ -1,6 +1,9 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import tableConstructors.*;
 
 public class SupplierAddMedicationGUI extends JFrame {
     private Supplier supplier;

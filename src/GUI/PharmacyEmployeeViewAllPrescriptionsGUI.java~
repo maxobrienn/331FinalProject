@@ -10,15 +10,19 @@ import tableConstructors.*;
 public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
     private JButton returnToMenuButton;
     private JTable dataTable;
-
+    private PharmacyEmployee pharmacyEmployee;
+    
     public PharmacyEmployeeViewAllPrescriptionsGUI(PharmacyEmployee pharmacyEmployee) {
-        setTitle("Pharmacy View All Prescriptions");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-
-        // Initialize components
-        returnToMenuButton = new JButton("Return to Menu");
-        dataTable = new JTable();
+      
+      this.pharmacyEmployee = pharmacyEmployee;
+      
+      setTitle("Pharmacy View All Prescriptions");
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      setLayout(new BorderLayout());
+      
+      // Initialize components
+      returnToMenuButton = new JButton("Return to Menu");
+      dataTable = new JTable();
 
         // Create a table model with column headers
         DefaultTableModel model = new DefaultTableModel();

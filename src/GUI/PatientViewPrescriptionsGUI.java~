@@ -1,4 +1,4 @@
-package GUI;
+package tableConstructors;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -7,29 +7,27 @@ import java.awt.event.*;
 import java.sql.*;
 import tableConstructors.*;
 
-public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
+public class PatientViewPrescriptionsGUI extends JFrame {
     private JButton returnToMenuButton;
     private JTable dataTable;
-    private PharmacyEmployee pharmacyEmployee;
-    
-    public PharmacyEmployeeViewAllPrescriptionsGUI(PharmacyEmployee pharmacyEmployee) {
-      
-      this.pharmacyEmployee = pharmacyEmployee;
-      
-      setTitle("Pharmacy View All Prescriptions");
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setLayout(new BorderLayout());
-      
-      // Initialize components
-      returnToMenuButton = new JButton("Return to Menu");
-      dataTable = new JTable();
+    private Patient patient;
+
+    public PatientViewPrescriptionsGUI(Patient patient) {
+        this.patient = patient;
+        setTitle("View Prescription Balances");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Initialize components
+        returnToMenuButton = new JButton("Return to Menu");
+        dataTable = new JTable();
 
         // Create a table model with column headers
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Prescription ID");
-        model.addColumn("Patient ID");
-        model.addColumn("Insurance ID");
-        model.addColumn("Amount Owed");
+        model.addColumn("PRESCRIPTION_ID");
+        model.addColumn("DATE_ISSUED");
+        model.addColumn("PRESCRIPTION_NAME");
+        model.addColumn("AMOUNT_OWED");
         dataTable.setModel(model);
 
         // Add components to the layout
@@ -50,7 +48,7 @@ public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
         });
 
         // Populate the table with data
-        populateTable(pharmacyEmployee);
+        populateTable(patient.viewPrescriptionBalances());
 
         // Set the size of the window
         setSize(600, 400);
@@ -62,11 +60,7 @@ public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
         dispose();
     }
 
-
-
-    private void populateTable(PharmacyEmployee pharmacyEmployee) {
-        // Call the viewAvailableMedication method and populate the table with the results
-        String[][] data = pharmacyEmployee.viewPrescriptions();
+    private void populateTable(String[][] data) {
         DefaultTableModel model = (DefaultTableModel) dataTable.getModel();
         for (String[] row : data) {
             model.addRow(row);
@@ -74,19 +68,20 @@ public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Create an instance of PharmacyEmployee
-        PharmacyEmployee pharmacyEmployee = new PharmacyEmployee();
-        pharmacyEmployee.setPharmacyId("PHRM001");
+        // Create an instance of Patient
+        Patient patient = new Patient();
+
+        // Call the necessary methods to set patient data, if needed
+        // For example:
+        // patient.setPatientId("PAT001");
 
         // Create and display the GUI
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                PharmacyEmployeeViewAllPrescriptionsGUI gui = new PharmacyEmployeeViewAllPrescriptionsGUI(pharmacyEmployee);
+                PatientViewPrescriptionsGUI gui = new PatientViewPrescriptionsGUI(patient);
                 gui.setVisible(true);
             }
         });
     }
-    
 }
-

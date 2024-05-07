@@ -116,25 +116,18 @@ public class PharmacyEmployeeEditGUI extends JFrame {
         employee.setPosition(positionField.getText());
 
         // Call the method to update employee information
-        updateEmployeeInfo(
-                employee.getLastName(),
-                employee.getFirstName(),
+        employee.updateEmployeeInfo(
                 employee.getPhoneNumber(),
                 employee.getEmail(),
-                employee.getPosition(),
-                employee.getEmployeeId()
+                employee.getLastName(),
+                employee.getFirstName(),
+                employee.getPosition()
+
         );
 
         // Display updated employee information
         System.out.println("Updated Pharmacy Employee Information:");
         System.out.println(employee.toString());
-    }
-
-    // Method to update employee information
-    private void updateEmployeeInfo(String lastName, String firstName, String phoneNumber, String email, String position, String employeeId) {
-        // Code to call the updateEmployeeInfo method in your DAO class
-        PharmacyEmployeeDAO dao = new PharmacyEmployeeDAO();
-        dao.updateEmployeeInfo(lastName, firstName, phoneNumber, email, position, employeeId);
     }
 
     public static void main(String[] args) {

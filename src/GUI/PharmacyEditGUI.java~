@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import tableConstructors.Patient;
+import tableConstructors.*;
 
 public class PharmacyEditGUI extends JFrame {
 
@@ -123,7 +123,6 @@ public class PharmacyEditGUI extends JFrame {
         pharmacy.setState(stateField.getText());
         pharmacy.setZipCode(zipCodeField.getText());
         pharmacy.setPhoneNumber(phoneNumberField.getText());
-        pharmacy.setPassword(passwordField.getText());
         pharmacy.setEmail(emailField.getText());
 
         // Call the method to update pharmacy information
@@ -134,7 +133,6 @@ public class PharmacyEditGUI extends JFrame {
                 stateField.getText(),
                 zipCodeField.getText(),
                 phoneNumberField.getText(),
-                passwordField.getText(),
                 emailField.getText()
         );
 

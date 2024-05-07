@@ -18,7 +18,7 @@ public class EditDiagnosisGUI extends JFrame {
     private void createUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Edit Patient Diagnosis");
-        setLayout(new GridLayout(4, 2, 10, 10));  // Updated grid layout to accommodate additional button
+        setLayout(new GridLayout(4, 2, 8, 8));  // Updated grid layout to accommodate additional button
 
         // Adding labels and fields to the form
         add(new JLabel("Patient ID:"));

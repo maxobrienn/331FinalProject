@@ -1,14 +1,18 @@
+package tableConstructors;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.*;
 import java.sql.*;
 
 public class ViewDoctorListGUI extends JFrame {
     private JTable doctorTable;
+    private JButton returnButton;
 
     public ViewDoctorListGUI() {
         setTitle("View Doctor List");
-        setSize(600, 400);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create table model with column names
@@ -25,10 +29,19 @@ public class ViewDoctorListGUI extends JFrame {
         doctorTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(doctorTable);
 
-        // Add table to content pane
+        // Create return button
+        returnButton = new JButton("Return to Main Menu");
+        returnButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                returnToMainMenu();
+            }
+        });
+
+        // Add components to content pane
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
         container.add(scrollPane, BorderLayout.CENTER);
+        container.add(returnButton, BorderLayout.SOUTH);
 
         // Position the GUI in the middle of the screen
         setLocationRelativeTo(null);
@@ -67,6 +80,10 @@ public class ViewDoctorListGUI extends JFrame {
         }
     }
 
+    private void returnToMainMenu() {
+        dispose(); // Close the current window
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -76,3 +93,4 @@ public class ViewDoctorListGUI extends JFrame {
         });
     }
 }
+

@@ -1,3 +1,4 @@
+package tableConstructors;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -6,35 +7,84 @@ import java.util.ArrayList;
 
 public class PreferredDoctorGUI extends JFrame {
     private JComboBox<String> doctorComboBox;
+    private JButton updateButton;
+    private JButton returnButton; // New button for returning to the main page
+    private String selectedDoctor;
+    private Patient patient;
 
-    public PreferredDoctorGUI() {
+    public PreferredDoctorGUI(Patient patient) {
+        this.patient = patient; // Store the Patient object
         setTitle("Update Preferred Doctor");
-        setSize(300, 150);
+        setSize(600, 200); // Increased height to accommodate the button
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Initialize components
         doctorComboBox = new JComboBox<>();
-        JButton updateButton = new JButton("Update");
+        updateButton = new JButton("Update");
+        updateButton.setEnabled(false); // Button initially disabled
+        
+        // Initialize return button
+        returnButton = new JButton("Return to Main Page");
+
+        // Set preferred size for buttons
+        updateButton.setPreferredSize(new Dimension(100, 30)); // Set smaller size for update button
+        returnButton.setPreferredSize(new Dimension(150, 30)); // Set smaller size for return button
 
         // Add components to content pane
         Container container = getContentPane();
         container.setLayout(new BorderLayout());
-        container.add(doctorComboBox, BorderLayout.NORTH);
-        container.add(updateButton, BorderLayout.CENTER);
+        container.add(doctorComboBox, BorderLayout.NORTH); // Changed to NORTH to accommodate return button
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2)); // Panel for buttons
+        buttonPanel.add(updateButton);
+        buttonPanel.add(returnButton);
+        container.add(buttonPanel, BorderLayout.CENTER); // Added button panel
+        
 
         // Populate doctor names in the combo box
         populateDoctorComboBox();
 
+        // Position the GUI in the middle of the screen
+        setLocationRelativeTo(null);
+
+        // Add action listener to the combo box
+        doctorComboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Get the selected item
+                String selected = (String) doctorComboBox.getSelectedItem();
+                
+                // Check if it's the default option
+                if (!selected.equals("Choose a doctor")) {
+                    // Enable the update button when a doctor is selected
+                    selectedDoctor = selected;
+                    updateButton.setEnabled(true);
+                } else {
+                    // Disable the update button if "Choose a doctor" is selected
+                    updateButton.setEnabled(false);
+                }
+            }
+        });
+
         // Add action listener to the update button
         updateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String selectedDoctor = (String) doctorComboBox.getSelectedItem();
-                updatePreferredDoctor(selectedDoctor);
+                updatePatientPreferredDoctor();
+            }
+        });
+        
+        // Add action listener to the return button
+        returnButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Close this GUI and open the main menu
+                dispose(); // Close this window
+                PatientMenu.main(new String[]{}); // Open main menu
             }
         });
     }
 
     private void populateDoctorComboBox() {
+        // Add default option
+        doctorComboBox.addItem("Choose a doctor");
+
         // Retrieve doctor names from the database
         ArrayList<String> doctorNames = getDoctorNamesFromDatabase();
 
@@ -45,22 +95,21 @@ public class PreferredDoctorGUI extends JFrame {
     }
 
     private ArrayList<String> getDoctorNamesFromDatabase() {
-        // Connect to the database and retrieve doctor names
         ArrayList<String> doctorNames = new ArrayList<>();
         try {
-            // Establish database connection
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "username", "password");
-
-            // Execute SQL query to retrieve doctor names
+            Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@//cscioraclerh7srv.ad.csbsju.edu:1521/" +
+                                                                "csci.cscioraclerh7srv.ad.csbsju.edu","TEAM05", "TEAM05");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT NAME FROM Doctors");
+            ResultSet resultSet = statement.executeQuery("SELECT LAST, FIRST FROM HealthCareManagement_DOCTOR");
 
             // Add doctor names to the list
             while (resultSet.next()) {
-                doctorNames.add(resultSet.getString("NAME"));
+                String lastName = resultSet.getString("LAST");
+                String firstName = resultSet.getString("FIRST");
+                String fullName = lastName + ", " + firstName;
+                doctorNames.add(fullName);
             }
 
-            // Close the connection and resources
             resultSet.close();
             statement.close();
             connection.close();
@@ -70,40 +119,37 @@ public class PreferredDoctorGUI extends JFrame {
         return doctorNames;
     }
 
-    private void updatePreferredDoctor(String doctorName) {
-        // Update the preferred doctor in the database
-        try {
-            // Connect to the database
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "username", "password");
+    private void updatePatientPreferredDoctor() {
+        // Split the full name into first and last name
+        String[] nameParts = selectedDoctor.split(", ");
+        String lastName = nameParts[0];
+        String firstName = nameParts[1];
 
-            // Prepare SQL statement to update preferred doctor
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Patients SET PREFERRED_DOCTOR = ? WHERE PATIENT_ID = ?");
+        // Call the updatePatientPreferredDoctor method of the Patient object
+        String preferredDoctorFullName = lastName + ", " + firstName;
+        patient.updatePatientPreferredDoctor(preferredDoctorFullName);
 
-            // Set parameters
-            preparedStatement.setString(1, doctorName);
-            preparedStatement.setString(2, "your_patient_id");
 
-            // Execute the update
-            preparedStatement.executeUpdate();
+        // Display a message indicating that the preferred doctor has been updated
+        JOptionPane.showMessageDialog(this, "Preferred doctor updated successfully.", "Update Successful", JOptionPane.INFORMATION_MESSAGE);
 
-            // Close the connection and resources
-            preparedStatement.close();
-            connection.close();
-
-            // Display confirmation message
-            JOptionPane.showMessageDialog(this, "Preferred doctor updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error updating preferred doctor.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        // Reset combo box selection and disable the update button
+        doctorComboBox.setSelectedIndex(-1);
+        updateButton.setEnabled(false);
     }
 
     public static void main(String[] args) {
+        // Create a Patient object
+        Patient patient = new Patient();
+
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                PreferredDoctorGUI gui = new PreferredDoctorGUI();
+                // Pass the Patient object to the constructor of PreferredDoctorGUI
+                PreferredDoctorGUI gui = new PreferredDoctorGUI(patient);
                 gui.setVisible(true);
             }
         });
     }
 }
+
+

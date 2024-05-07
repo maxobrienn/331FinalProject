@@ -1,6 +1,9 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import tableConstructors.*;
 
 public class SupplierRemoveMedicationGUI extends JFrame {
     private Supplier supplier;
@@ -25,12 +28,16 @@ public class SupplierRemoveMedicationGUI extends JFrame {
         removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String medicationName = nameField.getText();
-                supplier.removeMedication(medicationName);
-                JOptionPane.showMessageDialog(null, "Medication removed successfully.");
+                boolean removed = supplier.removeMedication(medicationName);
+                if (removed) {
+                    JOptionPane.showMessageDialog(null, "Medication removed successfully.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Medication not found.");
+                }
                 dispose();
             }
         });
-
+        
         panel.add(nameLabel);
         panel.add(nameField);
         panel.add(removeButton);

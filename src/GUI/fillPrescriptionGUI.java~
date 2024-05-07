@@ -12,7 +12,7 @@ public class fillPrescriptionGUI extends JFrame {
     private JButton menuButton;
     private JTextField prescriptionIdField;
 
-    public PrescriptionGUI() {
+    public fillPrescriptionGUI() {
         setTitle("Prescription Filling");
         setSize(400, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -58,7 +58,7 @@ public class fillPrescriptionGUI extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new PrescriptionGUI();
+                new fillPrescriptionGUI();
             }
         });
     }

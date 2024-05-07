@@ -18,7 +18,7 @@ public class DoctorViewInfoGUI extends JFrame {
     public DoctorViewInfoGUI(Doctor doctor) {
         setTitle("Doctor Profile");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(500, 600);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridBagLayout());
