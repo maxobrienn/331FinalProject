@@ -538,7 +538,7 @@ public class PharmacyEmployee {
       //call method for viewing medication info
       //test.viewMedicationInfo("PAT001");
       //call method to refill medication
-      System.out.println(test.requestRefill("SUP001","200"));
+      System.out.println(test.updateMedicationSupply("SUP001","200"));
       
       test.fillPrescrption("PRSC001");
     } 
@@ -635,20 +635,31 @@ public class PharmacyEmployee {
   /**
    * Method for a pharmacy employee to refill a certain medication from a supplier
    */
-  public String requestRefill(String supplierName, String amount) {
+  public String updateMedicationSupply(String supplierId, String amount) {
     Connection con = openDBConnection();
-    String sql = "{CALL UpdateSupplierQuantity(?, ?)}";
-    try (CallableStatement statement = con.prepareCall(sql)) {
-      statement.setString(1, supplierName);
-      statement.setString(2, amount);
-      
-      statement.execute();
-      return "Medication quantity for "+supplierName+" updated to "+amount;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return "Invalid Medication Name";
-    }
-    
+    String checkSupplierSql = "SELECT COUNT(*) FROM HealthCareManagement_SUPPLIER WHERE SUPPLIER_ID = ?";
+    String updateQuantitySql = "{CALL UpdateSupplierQuantity(?, ?)}";
+    try (PreparedStatement checkStatement = con.prepareStatement(checkSupplierSql);
+         CallableStatement updateStatement = con.prepareCall(updateQuantitySql)) {
+           
+           // Check if the supplier exists
+           checkStatement.setString(1, supplierId);
+           ResultSet resultSet = checkStatement.executeQuery();
+           resultSet.next();
+           int supplierCount = resultSet.getInt(1);
+           if (supplierCount == 0) {
+             return "Supplier with ID " + supplierId + " does not exist.";
+           }
+           
+           // Update the medication quantity
+           updateStatement.setString(1, supplierId);
+           updateStatement.setString(2, amount);
+           updateStatement.execute();
+           return "Medication quantity for " + supplierId + " updated to " + amount;
+         } catch (SQLException e) {
+           e.printStackTrace();
+           return "Invalid Medication Name";
+         }
   }
   
   

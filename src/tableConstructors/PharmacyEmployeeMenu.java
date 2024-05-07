@@ -27,7 +27,6 @@ public class PharmacyEmployeeMenu extends JFrame {
         JButton editProfileButton = new JButton("Edit Profile");
         JButton viewInventoryButton = new JButton("View Inventory");
         JButton viewPrescriptionsButton = new JButton("View All Prescriptions");
-        JButton requestMedicationButton = new JButton("Request Medication From Supplier");
         JButton updateMedicationButton = new JButton("Update Medication Supply");
         JButton fillPrescriptionsButton = new JButton("Fill Prescription");
         JButton viewPatientUnpaidBalanceButton = new JButton("View Patient’s Total Unpaid Balance");
@@ -38,7 +37,6 @@ public class PharmacyEmployeeMenu extends JFrame {
         editProfileButton.addActionListener(e -> editProfile());
         viewInventoryButton.addActionListener(e -> viewInventory());
         viewPrescriptionsButton.addActionListener(e -> viewPrescriptions());
-        requestMedicationButton.addActionListener(e -> requestMedication());
         updateMedicationButton.addActionListener(e -> updateMedication());
         fillPrescriptionsButton.addActionListener(e -> fillPrescriptions());
         viewPatientUnpaidBalanceButton.addActionListener(e -> viewPatientUnpaidBalance());
@@ -49,7 +47,6 @@ public class PharmacyEmployeeMenu extends JFrame {
         panel.add(editProfileButton);
         panel.add(viewInventoryButton);
         panel.add(viewPrescriptionsButton);
-        panel.add(requestMedicationButton);
         panel.add(updateMedicationButton);
         panel.add(fillPrescriptionsButton);
         panel.add(viewPatientUnpaidBalanceButton);
@@ -59,14 +56,16 @@ public class PharmacyEmployeeMenu extends JFrame {
         add(panel);
     }
 
-        // Method to handle viewing profile
+    // Method to handle viewing profile
     private void viewProfile() {
-      // Your logic for viewing profile
+      PharmacyEmployeeViewGUI employeeViewGUI = new PharmacyEmployeeViewGUI(employee);
+      employeeViewGUI.setVisible(true);
     }
     
     // Method to handle editing profile
     private void editProfile() {
-      // Your logic for editing profile
+      PharmacyEmployeeEditGUI employeeEditGUI = new PharmacyEmployeeEditGUI(employee);
+      employeeEditGUI.setVisible(true);
     }
     
     // Method to handle viewing inventory
@@ -80,14 +79,10 @@ public class PharmacyEmployeeMenu extends JFrame {
       // Your logic for viewing prescriptions and unpaid balances
     }
     
-    // Method to handle requesting medication from supplier
-    private void requestMedication() {
-      // Your logic for requesting medication from supplier
-    }
-    
     // Method to handle updating medication supply
     private void updateMedication() {
-      // Your logic for updating medication supply
+      PharmacyEmployeeRefillMedGUI medicationInventoryGUI = new PharmacyEmployeeRefillMedGUI(employee);
+      medicationInventoryGUI.setVisible(true);
     }
     
     // Method to handle filling prescriptions

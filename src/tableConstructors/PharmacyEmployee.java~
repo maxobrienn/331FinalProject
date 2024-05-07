@@ -275,19 +275,20 @@ public class PharmacyEmployee {
   }
   
   
-  public void updateEmployeeInfo(String employeeId, String lastName, String firstName, String ssn, String phoneNumber, String email, String position, String pharmacyId, String password) {
+  public void updateEmployeeInfo(String phoneNumber, String email, String lastName, String firstName, String position) {
     try {
       Connection connection = openDBConnection();
-      CallableStatement callableStatement = connection.prepareCall("{call Edit_Pharmacy_Employee_Info(?,?,?,?,?,?,?,?,?)}");
-      callableStatement.setString(1, employeeId);
-      callableStatement.setString(2, lastName);
-      callableStatement.setString(3, firstName);
-      callableStatement.setString(4, ssn);
-      callableStatement.setString(5, phoneNumber);
-      callableStatement.setString(6, email);
-      callableStatement.setString(7, position);
-      callableStatement.setString(8, pharmacyId);
-      callableStatement.setString(9, password);
+      CallableStatement callableStatement = connection.prepareCall("{call Edit_PharmacyEmployee_Info(?,?,?,?,?,?)}");
+      callableStatement.setString(1, getEmployeeId());
+      callableStatement.setString(2, phoneNumber);
+      callableStatement.setString(3, email);
+      callableStatement.setString(4, lastName);
+      callableStatement.setString(5, firstName);
+      callableStatement.setString(6, position);
+      
+// Remove the following line as "pharmacyId" is not a parameter in the stored procedure
+// callableStatement.setString(7, pharmacyId);
+      
       
       callableStatement.execute();
       
@@ -299,6 +300,7 @@ public class PharmacyEmployee {
       e.printStackTrace();
     }
   }
+  
   
   public PharmacyEmployee displayEmployeeInfo(String employeeId) {
     PharmacyEmployee employee = new PharmacyEmployee();
@@ -570,7 +572,7 @@ public class PharmacyEmployee {
     // Return an empty array if there's an error or no medication data found
     return new String[0][];
   }
-
+  
   
   
   /**

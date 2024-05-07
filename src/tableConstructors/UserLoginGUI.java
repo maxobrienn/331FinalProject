@@ -105,7 +105,32 @@ public class UserLoginGUI extends JFrame implements ActionListener {
             AddPatientGUI addPatientGUI = new AddPatientGUI();
             addPatientGUI.setVisible(true);
             this.dispose(); // Close the login window
-        } else {
+        } else if (user instanceof Doctor) {
+          AddDoctorGUI addDoctorGUI = new AddDoctorGUI();
+          addDoctorGUI.setVisible(true);
+          this.dispose(); // Close the login window
+        }
+        else if (user instanceof InsuranceCompany) {
+          AddInsuranceCompanyGUI addInsCoGUI = new AddInsuranceCompanyGUI();
+          addInsCoGUI.setVisible(true);
+          this.dispose(); // Close the login window
+        }
+        else if (user instanceof Pharmacy) {
+          AddPharmacyGUI addPharmacyGUI = new AddPharmacyGUI();
+          addPharmacyGUI.setVisible(true);
+          this.dispose(); // Close the login window
+        }
+        else if (user instanceof Supplier) {
+          AddSupplierGUI addSupplierGUI = new AddSupplierGUI();
+          addSupplierGUI.setVisible(true);
+          this.dispose(); // Close the login window
+        }
+        else if (user instanceof PharmacyEmployee) {
+          AddPharmacyEmployeeGUI addPharmacyEmployeeGUI = new AddPharmacyEmployeeGUI();
+          addPharmacyEmployeeGUI.setVisible(true);
+          this.dispose(); // Close the login window
+        }
+        else {
             // For other user types, display a message indicating that account creation is not supported
             JOptionPane.showMessageDialog(this, "Account creation is not supported for this user type.");
         }

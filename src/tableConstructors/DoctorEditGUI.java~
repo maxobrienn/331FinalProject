@@ -1,8 +1,11 @@
+package tableConstructors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import tableConstructors.*;
+
 
 public class DoctorEditGUI extends JFrame {
 
@@ -116,9 +119,9 @@ public class DoctorEditGUI extends JFrame {
 
         // Call the method to update doctor information
         doctor.updateDoctorInfo(
+                emailField.getText(),
                 lastNameField.getText(),
                 firstNameField.getText(),
-                emailField.getText(),
                 specializationField.getText(),
                 officeNumberField.getText()
         );
