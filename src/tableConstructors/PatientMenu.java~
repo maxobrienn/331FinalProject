@@ -35,7 +35,6 @@ public class PatientMenu extends JFrame {
         JButton viewPrescriptionButton = new JButton("View Prescriptions");
         JButton viewDiagnosesButton = new JButton("View Diagnoses");
         JButton viewDoctorsButton = new JButton("View Doctors");
-
         JButton viewAppointmentsButton = new JButton("View Past Appointments");
         JButton makePaymentButton = new JButton("Make Payment");
 
@@ -65,10 +64,10 @@ public class PatientMenu extends JFrame {
     private void updateInfo() {
         SwingUtilities.invokeLater(() -> new PatientEditGUI(patient));
     }
-
+    
     private void viewPrescriptions() {
-        // Display patient prescription balances
-        // Example: patient.viewPrescriptionBalances();
+      PatientViewPrescriptionsGUI prescprtionsGUI = new PatientViewPrescriptionsGUI(patient);
+      prescprtionsGUI.setVisible(true);
     }
 
     private void viewDiagnoses() {
