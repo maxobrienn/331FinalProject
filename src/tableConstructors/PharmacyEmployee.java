@@ -213,8 +213,8 @@ public class PharmacyEmployee {
       
       while (resultSet.next()) {
         employee.setEmployeeId(resultSet.getString("EMPLOYEE_ID"));
-        employee.setLastName(resultSet.getString("LAST_NAME"));
-        employee.setFirstName(resultSet.getString("FIRST_NAME"));
+        employee.setLastName(resultSet.getString("LAST"));
+        employee.setFirstName(resultSet.getString("FIRST"));
         employee.setSsn(resultSet.getString("SSN"));
         employee.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
         employee.setEmail(resultSet.getString("EMAIL"));
@@ -359,12 +359,12 @@ public class PharmacyEmployee {
   
   /**
    * Method that allows pharmacy employees to view all presscriptions including any unpaid balance for each
-   * aaaaaaaaaaaaaaaaaaaa
+   * 
    */
 public String[][] viewPrescriptions() {
     Connection myConnection;
     PreparedStatement preparedStmt;
-    String pharmacyId = getPharmacyId();
+    String pharmacyId = this.pharmacyId;
     
     try {
         myConnection = openDBConnection();

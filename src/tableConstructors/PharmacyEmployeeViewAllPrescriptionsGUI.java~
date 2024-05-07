@@ -1,88 +1,88 @@
 package tableConstructors;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
 import tableConstructors.*;
 
 public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
+    private JButton returnToMenuButton;
+    private JTable dataTable;
 
-    private PharmacyEmployee employee;
-
-    public PharmacyEmployeeViewGUI(PharmacyEmployee employee) {
-        this.employee = employee;
-        initializeUI();
-    }
-
-    public PharmacyManagerGUI() {
-        setTitle("Prescription Viewer");
-        setSize(600, 400);
+    public PharmacyEmployeeViewAllPrescriptionsGUI(PharmacyEmployee pharmacyEmployee) {
+        setTitle("Pharmacy View All Prescriptions");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-        JTextArea prescriptionTextArea = new JTextArea();
-        prescriptionTextArea.setEditable(false);
+        // Initialize components
+        returnToMenuButton = new JButton("Return to Menu");
+        dataTable = new JTable();
 
-        JScrollPane scrollPane = new JScrollPane(prescriptionTextArea);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        // Create a table model with column headers
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Prescription ID");
+        model.addColumn("Patient ID");
+        model.addColumn("Insurance ID");
+        model.addColumn("Amount Owed");
+        dataTable.setModel(model);
 
-        JButton viewPrescriptionsButton = new JButton("View Prescriptions");
-        viewPrescriptionsButton.addActionListener(new ActionListener() {
+        // Add components to the layout
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(returnToMenuButton);
+
+        JScrollPane scrollPane = new JScrollPane(dataTable);
+        add(scrollPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        // Attach event listeners
+        returnToMenuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prescriptionTextArea.setText("");
-                viewPrescriptions(prescriptionTextArea);
+                // Handle button click event
+                returnToMenu();
             }
         });
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(viewPrescriptionsButton);
+        // Populate the table with data
+        populateTable(pharmacyEmployee);
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
-        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        // Set the size of the window
+        setSize(600, 400);
+        setLocationRelativeTo(null); // Center the window on the screen
     }
 
-    private void viewPrescriptions(JTextArea prescriptionTextArea) {
-        Connection myConnection;
-        PreparedStatement preparedStmt;
-        String pharmacyId = getPharmacyId();
+    private void returnToMenu() {
+        // Close the current window
+        dispose();
+    }
 
-        try {
-            myConnection = openDBConnection();
 
-            // Prepare the SQL select statement.
-            String queryString = "SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = ?";
 
-            preparedStmt = myConnection.prepareStatement(queryString);
-
-            preparedStmt.setString(1, pharmacyId);
-
-            ResultSet rs = preparedStmt.executeQuery();
-
-            // Append the column headers
-            prescriptionTextArea.append("PRESCRIPTION_ID\tPATIENT_ID\tINSURANCE_ID\tAMOUNT_OWED\n");
-
-            // Iterate through the result set and append each row
-            while (rs.next()) {
-                String prescriptionId = rs.getString("PRESCRIPTION_ID");
-                String patientId = rs.getString("PATIENT_ID");
-                String insuranceId = rs.getString("INSURANCE_ID");
-                double amountOwed = rs.getDouble("AMOUNT_OWED");
-                prescriptionTextArea.append(prescriptionId + "\t\t" + patientId + "\t\t" + insuranceId + "\t\t" + amountOwed + "\n");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    private void populateTable(PharmacyEmployee pharmacyEmployee) {
+        // Call the viewAvailableMedication method and populate the table with the results
+        String[][] data = pharmacyEmployee.viewPrescriptions();
+        DefaultTableModel model = (DefaultTableModel) dataTable.getModel();
+        for (String[] row : data) {
+            model.addRow(row);
         }
     }
 
     public static void main(String[] args) {
+        // Create an instance of PharmacyEmployee
+        PharmacyEmployee pharmacyEmployee = new PharmacyEmployee();
+        pharmacyEmployee.setPharmacyId("PHRM001");
+
+        // Create and display the GUI
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new PharmacyManagerGUI().setVisible(true);
+                PharmacyEmployeeViewAllPrescriptionsGUI gui = new PharmacyEmployeeViewAllPrescriptionsGUI(pharmacyEmployee);
+                gui.setVisible(true);
             }
         });
     }
+    
 }
-}
+

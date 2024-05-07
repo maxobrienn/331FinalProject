@@ -76,7 +76,8 @@ public class PharmacyEmployeeMenu extends JFrame {
     
     // Method to handle viewing prescriptions and unpaid balances
     private void viewPrescriptions() {
-      // Your logic for viewing prescriptions and unpaid balances
+      PharmacyEmployeeViewAllPrescriptionsGUI viewPreGUI = new PharmacyEmployeeViewAllPrescriptionsGUI(employee);
+      viewPreGUI.setVisible(true);
     }
     
     // Method to handle updating medication supply
@@ -87,7 +88,8 @@ public class PharmacyEmployeeMenu extends JFrame {
     
     // Method to handle filling prescriptions
     private void fillPrescriptions() {
-      // Your logic for filling prescriptions
+      fillPrescriptionGUI fillPreGUI = new fillPrescriptionGUI();
+      fillPreGUI.setVisible(true);
     }
     
     // Method to handle viewing patient total unpaid balance
