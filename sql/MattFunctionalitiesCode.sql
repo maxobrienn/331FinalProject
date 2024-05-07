@@ -250,15 +250,16 @@ END;
 CREATE OR REPLACE FUNCTION Generate_Random_Supplier_ID
 RETURN CHAR IS
     l_prefix CHAR(4) := 'SUPP';
-    l_suffix CHAR(6);
+    l_suffix CHAR(6); -- Increased size to 6 characters
 BEGIN
-    -- Generate a random number between 1000000 and 9999999
-    l_suffix := TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(10000, 99999)));
+    -- Generate a random number between 100000 and 999999
+    l_suffix := TO_CHAR(TRUNC(DBMS_RANDOM.VALUE(100000, 999999)));
 
     -- Concatenate prefix and suffix to form the Supplier ID
     RETURN l_prefix || l_suffix;
 END;
 /
+
 
 -- Trigger to update the Supplier table when a new Supplier is created
 CREATE OR REPLACE TRIGGER create_SupplierAccount
