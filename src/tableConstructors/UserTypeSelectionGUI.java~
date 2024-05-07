@@ -4,13 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import tableConstructors.*;
-//import tableConstructors.Patient;
-//import tableConstructors.InsuranceCompany;
-//import tableConstructors.Doctor;
-//import tableConstructors.Pharmacy;
-//import tableConstructors.PharmacyEmployee;
-//import tableConstructors.Supplier;
-//import tableConstructors.PatientMenu;
+
 
 public class UserTypeSelectionGUI extends JFrame implements ActionListener {
     private JButton patientButton;
@@ -22,7 +16,7 @@ public class UserTypeSelectionGUI extends JFrame implements ActionListener {
 
     public UserTypeSelectionGUI() {
         setTitle("User Type Selection");
-        setSize(400, 250);
+        setSize(500, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
 

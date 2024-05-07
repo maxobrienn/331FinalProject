@@ -28,23 +28,27 @@ public class ViewDiagnosisGUI extends JFrame {
         // Components
         resultArea = new JTextArea(10, 60);
         resultArea.setEditable(false);
-        resultArea.setFont(new Font("Arial", Font.BOLD, 16)); // Set font to large and bold
+        resultArea.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font to large and bold
+        resultArea.setLineWrap(true);
+        resultArea.setWrapStyleWord(true);
 
+        JScrollPane scrollPane = new JScrollPane(resultArea);
 
         viewButton = new JButton("View Diagnoses");
         viewButton.addActionListener(e -> viewDiagnoses());
+        viewButton.setPreferredSize(new Dimension(150, 30)); // Set preferred size
 
         returnButton = new JButton("Return to Patient Menu");
         returnButton.addActionListener(e -> returnToMenu());
+        returnButton.setPreferredSize(new Dimension(200, 30)); // Set preferred size
 
-        JPanel topPanel = new JPanel();
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         topPanel.add(new JLabel("Patient ID:"));
         topPanel.add(viewButton);
         topPanel.add(returnButton); // Add return button to the top panel
 
-        JScrollPane scrollPane = new JScrollPane(resultArea);
-
         // Adding components to frame
+        add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
         // Display the window

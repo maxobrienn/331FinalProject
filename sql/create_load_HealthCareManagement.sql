@@ -13,6 +13,7 @@ FIRST VARCHAR(10),
 SEX VARCHAR(10),
 INSURANCE_ID VARCHAR(10),
 PASSWORD VARCHAR(30),
+PREFERRED_DOCTOR VARCHAR(30) DEFAULT 'None',
 FOREIGN KEY (INSURANCE_ID) REFERENCES HealthCareManagement_INSURANCECOMPANY(INSURANCE_ID)
 ON DELETE SET NULL);
 
@@ -211,13 +212,12 @@ INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC003', 'Williams', 'David', '
 INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC004', 'Brown', 'Sophia', 'sophia.brown@healthcare.com', 'password', 'Pediatrics', '104');
 INSERT INTO HealthCareManagement_DOCTOR VALUES ('DOC005', 'Davis', 'Michael', 'michael.davis@generalhospital.com', 'password', 'General', '105');
 
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT001', TO_DATE('1990-01-01','YYYY-MM-DD'), '1234 Life St', 'Anytown', 'NY', '12345', 'patient1@email.com', '123-456-7890', 'Doe', 'Jane', 'Female', 'INS001', 'password');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT002', TO_DATE('1985-02-02','YYYY-MM-DD'), '5678 Health Rd', 'Wellville', 'TX', '23456', 'patient2@email.com', '234-567-8901', 'Brown', 'John', 'Male', 'INS002', 'password');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT003', TO_DATE('1975-03-03','YYYY-MM-DD'), '9101 Care Ave', 'Curecity', 'CA', '34567', 'patient3@email.com', '345-678-9012', 'Smith', 'Emily', 'Female', 'INS003', 'password');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT004', TO_DATE('2000-04-04','YYYY-MM-DD'), '1213 Remedy Blvd', 'Aidtown', 'FL', '45678', 'patient4@email.com', '456-789-0123', 'Johnson', 'Michael', 'Male', 'INS004', 'password');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT005', TO_DATE('1995-05-05','YYYY-MM-DD'), '1415 Wellness Ln', 'Hopetown', 'IL', '56789', 'patient5@email.com', '567-890-1234', 'Williams', 'Sophia', 'Female', 'INS005', 'password');
-INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT006', TO_DATE('1988-06-10','YYYY-MM-DD'), '2468 Healing Blvd', 'Recovery City', 'CA', '98765', 'patient6@email.com', '789-012-3456', 'Carlson', 'Mary', 'Female', 'INS006', 'password');
-
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT001', TO_DATE('1990-01-01','YYYY-MM-DD'), '1234 Life St', 'Anytown', 'NY', '12345', 'patient1@email.com', '123-456-7890', 'Doe', 'Jane', 'Female', 'INS001', 'password', 'None');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT002', TO_DATE('1985-02-02','YYYY-MM-DD'), '5678 Health Rd', 'Wellville', 'TX', '23456', 'patient2@email.com', '234-567-8901', 'Brown', 'John', 'Male', 'INS002', 'password', 'None');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT003', TO_DATE('1975-03-03','YYYY-MM-DD'), '9101 Care Ave', 'Curecity', 'CA', '34567', 'patient3@email.com', '345-678-9012', 'Smith', 'Emily', 'Female', 'INS003', 'password', 'None');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT004', TO_DATE('2000-04-04','YYYY-MM-DD'), '1213 Remedy Blvd', 'Aidtown', 'FL', '45678', 'patient4@email.com', '456-789-0123', 'Johnson', 'Michael', 'Male', 'INS004', 'password', 'None');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT005', TO_DATE('1995-05-05','YYYY-MM-DD'), '1415 Wellness Ln', 'Hopetown', 'IL', '56789', 'patient5@email.com', '567-890-1234', 'Williams', 'Sophia', 'Female', 'INS005', 'password', 'None');
+INSERT INTO HealthCareManagement_PATIENT VALUES ('PAT006', TO_DATE('1988-06-10','YYYY-MM-DD'), '2468 Healing Blvd', 'Recovery City', 'CA', '98765', 'patient6@email.com', '789-012-3456', 'Carlson', 'Mary', 'Female', 'INS006', 'password', 'None');
 
 INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC001', TO_DATE('2023-01-01','YYYY-MM-DD'), 'Amoxicillin', '500mg', '05', 25.00, '30', 'DOC001', 'PAT001', 'Yes');
 INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC002', TO_DATE('2023-02-01','YYYY-MM-DD'), 'Ibuprofen', '200mg', '03', 15.00, '20', 'DOC002', 'PAT002', 'No');
@@ -225,7 +225,6 @@ INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC003', TO_DATE('2023-0
 INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC004', TO_DATE('2023-04-01','YYYY-MM-DD'), 'Lisinopril', '10mg', '04', 22.00, '90', 'DOC004', 'PAT004', 'Yes');
 INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC005', TO_DATE('2023-05-01','YYYY-MM-DD'), 'Atorvastatin', '20mg', '01', 45.00, '10', 'DOC005', 'PAT005', 'No');
 INSERT INTO HealthCareManagement_PRESCRIPTION VALUES ('PRSC006', TO_DATE('2023-06-01','YYYY-MM-DD'), 'Aspirin', '250mg', '02', 10.00, '40', 'DOC005', 'PAT006', 'Yes');
-
 
 INSERT INTO HealthCareManagement_MEDICATION VALUES ('Amoxicillin', '100', 'SUP001');
 INSERT INTO HealthCareManagement_MEDICATION VALUES ('Ibuprofen', '200', 'SUP002');

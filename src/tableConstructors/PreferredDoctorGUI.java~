@@ -1,0 +1,109 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
+import java.util.ArrayList;
+
+public class PreferredDoctorGUI extends JFrame {
+    private JComboBox<String> doctorComboBox;
+
+    public PreferredDoctorGUI() {
+        setTitle("Update Preferred Doctor");
+        setSize(300, 150);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Initialize components
+        doctorComboBox = new JComboBox<>();
+        JButton updateButton = new JButton("Update");
+
+        // Add components to content pane
+        Container container = getContentPane();
+        container.setLayout(new BorderLayout());
+        container.add(doctorComboBox, BorderLayout.NORTH);
+        container.add(updateButton, BorderLayout.CENTER);
+
+        // Populate doctor names in the combo box
+        populateDoctorComboBox();
+
+        // Add action listener to the update button
+        updateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedDoctor = (String) doctorComboBox.getSelectedItem();
+                updatePreferredDoctor(selectedDoctor);
+            }
+        });
+    }
+
+    private void populateDoctorComboBox() {
+        // Retrieve doctor names from the database
+        ArrayList<String> doctorNames = getDoctorNamesFromDatabase();
+
+        // Add doctor names to the combo box
+        for (String name : doctorNames) {
+            doctorComboBox.addItem(name);
+        }
+    }
+
+    private ArrayList<String> getDoctorNamesFromDatabase() {
+        // Connect to the database and retrieve doctor names
+        ArrayList<String> doctorNames = new ArrayList<>();
+        try {
+            // Establish database connection
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "username", "password");
+
+            // Execute SQL query to retrieve doctor names
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT NAME FROM Doctors");
+
+            // Add doctor names to the list
+            while (resultSet.next()) {
+                doctorNames.add(resultSet.getString("NAME"));
+            }
+
+            // Close the connection and resources
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return doctorNames;
+    }
+
+    private void updatePreferredDoctor(String doctorName) {
+        // Update the preferred doctor in the database
+        try {
+            // Connect to the database
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/your_database", "username", "password");
+
+            // Prepare SQL statement to update preferred doctor
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Patients SET PREFERRED_DOCTOR = ? WHERE PATIENT_ID = ?");
+
+            // Set parameters
+            preparedStatement.setString(1, doctorName);
+            preparedStatement.setString(2, "your_patient_id");
+
+            // Execute the update
+            preparedStatement.executeUpdate();
+
+            // Close the connection and resources
+            preparedStatement.close();
+            connection.close();
+
+            // Display confirmation message
+            JOptionPane.showMessageDialog(this, "Preferred doctor updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error updating preferred doctor.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                PreferredDoctorGUI gui = new PreferredDoctorGUI();
+                gui.setVisible(true);
+            }
+        });
+    }
+}
