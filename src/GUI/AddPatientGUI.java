@@ -25,6 +25,7 @@ public class AddPatientGUI extends JFrame {
     private JTextField phoneNumberField;
     private JTextField sexField;
     private JTextField insuranceIdField;
+    private JTextField preferredDoctorField;
 
     public AddPatientGUI() {
         setTitle("Add New Patient"); // Setting the title of the window
@@ -136,6 +137,14 @@ public class AddPatientGUI extends JFrame {
         insuranceIdField = new JTextField(20); // Create text field for insurance ID
         gbc.gridx = 1;
         panel.add(insuranceIdField, gbc); // Add text field for insurance ID
+        
+        // Preferred doctor
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Preferred Doctor:"), gbc); // Add label for preferred Doctor
+        preferredDoctorField = new JTextField(20); // Create text field for preferred Doctor
+        gbc.gridx = 1;
+        panel.add(preferredDoctorField, gbc); // Add text field for insurance ID
 
         // Add a button to add the patient
         JButton addButton = new JButton("Add Patient");
@@ -175,6 +184,7 @@ public class AddPatientGUI extends JFrame {
         String phoneNumber = phoneNumberField.getText();
         String sex = sexField.getText();
         String insuranceId = insuranceIdField.getText();
+        String preferredDoctor = preferredDoctorField.getText();
 
         // Create a new Patient object
         Patient newPatient = new Patient();
@@ -190,6 +200,7 @@ public class AddPatientGUI extends JFrame {
         newPatient.setPhoneNumber(phoneNumber);
         newPatient.setSex(sex);
         newPatient.setInsuranceId(insuranceId);
+        newPatient.setPreferredDoctor(preferredDoctor);
 
         // Call the addPatient method directly from the Patient class
         newPatient.addPatient(newPatient);

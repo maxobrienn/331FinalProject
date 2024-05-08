@@ -126,7 +126,7 @@ public class ViewDiagnosisGUI extends JFrame {
     public static void main(String[] args) {
         // Assuming Patient is logged in and Patient instance is created accordingly
         Patient patient = new Patient("123456", new java.util.Date(), "123 Elm St", "Anytown", "Anystate", "12345", "email@example.com",
-                                      "555-1234", "Doe", "John", "M", "12345-67890", "password123");
+                                      "555-1234", "Doe", "John", "M", "12345-67890", "password123", "test");
         SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }
     */

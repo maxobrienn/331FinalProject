@@ -502,7 +502,7 @@ public class Patient {
       String generatedId = callableStatement.getString(1);
       callableStatement.close();
       
-      String sql = "INSERT INTO HealthCareManagement_Patient (PATIENT_ID, FIRST, LAST, EMAIL, PASSWORD, DOB, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, SEX, INSURANCE_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO HealthCareManagement_Patient (PATIENT_ID, FIRST, LAST, EMAIL, PASSWORD, DOB, STREET, CITY, STATE, ZIP_CODE, PHONE_NUMBER, SEX, INSURANCE_ID, PREFERRED_DOCTOR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       PreparedStatement preparedStatement = connection.prepareStatement(sql);
       preparedStatement.setString(1, generatedId);
       preparedStatement.setString(2, patient.getFirstName());
@@ -517,6 +517,7 @@ public class Patient {
       preparedStatement.setString(11, patient.getPhoneNumber());
       preparedStatement.setString(12, patient.getSex());
       preparedStatement.setString(13, patient.getInsuranceId());
+      preparedStatement.setString(14, patient.getPreferredDoctor());
       
       preparedStatement.executeUpdate();
       System.out.println("Patient added successfully with ID: " + generatedId);

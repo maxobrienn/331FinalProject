@@ -125,7 +125,7 @@ public class ViewDiagnosisGUI extends JFrame {
     /**
      * The main method for testing purposes.
      * @param args The command-line arguments.
-     
+     */
     public static void main(String[] args) {
         // Assuming Patient is logged in and Patient instance is created accordingly
         Patient patient = new Patient("123456", new java.util.Date(), "123 Elm St", "Anytown", "Anystate", "12345", "email@example.com",

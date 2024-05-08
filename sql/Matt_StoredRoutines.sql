@@ -248,7 +248,6 @@ SELECT D.FIRST || ' '|| D.LAST AS DOCTOR_NAME, A.APPOINTMENT_DATE, A.NOTE, A.pat
 FROM HealthCareManagement_APPOINTMENT A 
 JOIN HealthCareManagement_DOCTOR D ON A.DOCTOR_ID = D.DOCTOR_ID;
 
-
 -- Section: Functions
 
 -- Function for Creating a new patient Id when they create an account
@@ -369,6 +368,8 @@ BEGIN
     :NEW.SEX := :NEW.SEX; -- SEX
     :NEW.INSURANCE_ID := :NEW.INSURANCE_ID; -- INSURANCE_ID
     :NEW.PASSWORD := :NEW.PASSWORD; -- PASSWORD
+    :NEW.PREFERRED_DOCTOR := :NEW.PREFERRED_DOCTOR;
+    
 END;
 /
 
