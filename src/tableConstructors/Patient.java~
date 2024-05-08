@@ -27,6 +27,8 @@ public class Patient {
   private String sex;
   private String insuranceId;
   private String password;
+  private String preferredDoctor;
+  
   private Boolean loggedIn = false;
   
   // Constructor without parameters
@@ -65,6 +67,7 @@ public class Patient {
     this.sex = sex;
     this.insuranceId = insuranceId;
     this.password = password;
+    this.preferredDoctor = preferredDoctor;
   }
   
   
@@ -304,6 +307,24 @@ public class Patient {
     this.password = password;
   }
   
+   /**
+   * Get the preferred doctor of the patient.
+   * 
+   * @return The preferred doctor.
+   */
+  public String getPreferredDoctor() {
+    return preferredDoctor;
+  }
+  
+  /**
+   * Set the preferred doctor of the patient.
+   * 
+   * @param preferredDoctor The preferred doctor to set.
+   */
+  public void setPreferredDoctor(String preferredDoctor) {
+    this.preferredDoctor = preferredDoctor;
+  }
+  
   /**
    * Check if the patient is logged in.
    * 
@@ -341,6 +362,7 @@ public class Patient {
       ", sex='" + sex + '\'' +
       ", insuranceId='" + insuranceId + '\'' +
       ", password='" + password + '\'' +
+      ", preferredDoctor='" + preferredDoctor + '\'' + 
       '}';
   }
   
@@ -467,8 +489,32 @@ public class Patient {
     }
   }
   
-  
-  
+  // Method to update patient's preferred doctor
+public void updatePatientPreferredDoctor(String preferredDoctorId) {
+  try {
+    // Connect to Oracle database
+    Connection connection = openDBConnection();
+    
+    // Prepare the stored procedure call
+    CallableStatement callableStatement = connection.prepareCall("{call Edit_Patient_Preferred_Doctor(?,?)}");
+    
+    // Set the input parameters
+    callableStatement.setString(1, getPatientId());
+    callableStatement.setString(2, preferredDoctorId);
+    
+    // Execute the stored procedure
+    callableStatement.execute();
+    
+    // Output success message
+    System.out.println("Patient's preferred doctor updated successfully.");
+    
+    // Close JDBC objects
+    callableStatement.close();
+    connection.close();
+  } catch (SQLException e) {
+    e.printStackTrace();
+  }
+}  
   
   public void addPatient(Patient patient) {
     try (Connection connection = openDBConnection()) {
@@ -799,7 +845,7 @@ public class Patient {
     patient.setPhoneNumber("123-456-7890");
     patient.setSex("Female");
     patient.setInsuranceId("INS001");
-    
+    /**
     // Test login functionality
     System.out.println("Testing login functionality...");
     boolean loginSuccess = patient.patientLogin("patient9999@email.com", "password");
@@ -868,6 +914,16 @@ public class Patient {
     //Test viewing list of doctors and info
     System.out.println("\nTesting viewing doctor list...");
     patient.viewDoctorList();
+    */
+    //Test updating patient preffered doctor 
+    System.out.println("\nTesting updating preffered doctor...");
+    System.out.println("Patient info before update:");
+    System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
+    patient.updatePatientPreferredDoctor("DOC003"); // Assuming "DOC003" is the ID of the new preferred doctor
+    System.out.println("\nPatient info after update:");
+    System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
+
+    /**
     
     // Test making payment
     System.out.println("\nTesting making payment...");
@@ -888,8 +944,8 @@ public class Patient {
     System.out.println("Retrieved appointment details:");
     for (AppointmentDetails appointmentDetails : appointmentDetailsList) {
       System.out.println(appointmentDetails.toString());
-      
+      */
     }
   }
-}
+
 

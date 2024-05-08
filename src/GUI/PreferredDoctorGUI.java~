@@ -1,9 +1,10 @@
-package tableConstructors;
+package GUI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
 import java.util.ArrayList;
+import tableConstructors.*;
 
 public class PreferredDoctorGUI extends JFrame {
     private JComboBox<String> doctorComboBox;

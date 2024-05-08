@@ -147,7 +147,7 @@ public class PatientEditGUI extends JFrame {
         Patient patient = new Patient("PAT001", new java.util.Date(90, 0, 1),
                 "1234 Life St", "Anytown", "NY", "12345",
                 "patient1@email.com", "123-456-7890",
-                "Doe", "Jane", "Female", "INS001", "thsbaibniincd58n");
+                "Doe", "Jane", "Female", "INS001", "thsbaibniincd58n", "Test");
 
         // Set look and feel to Nimbus
         try {

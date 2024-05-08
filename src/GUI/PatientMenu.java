@@ -33,6 +33,7 @@ public class PatientMenu extends JFrame {
         JButton viewPrescriptionButton = new JButton("View Prescriptions");
         JButton viewDiagnosesButton = new JButton("View Diagnoses");
         JButton viewDoctorsButton = new JButton("View Doctors");
+        JButton choosePreferredDoctorButton = new JButton("Choose Preferred Doctor");
         JButton viewAppointmentsButton = new JButton("View Past Appointments");
         JButton makePaymentButton = new JButton("Make Payment");
 
@@ -43,11 +44,13 @@ public class PatientMenu extends JFrame {
         viewDoctorsButton.addActionListener(e -> viewDoctors());
         viewAppointmentsButton.addActionListener(e -> viewAppointments());
         makePaymentButton.addActionListener(e -> makePayment());
+        choosePreferredDoctorButton.addActionListener(e -> updatePatientPreferredDoctor());
 
         panel.add(viewProfileButton);
         panel.add(updateInfoButton);
         panel.add(viewPrescriptionButton);
         panel.add(viewDiagnosesButton);
+        panel.add(choosePreferredDoctorButton);
         panel.add(viewDoctorsButton);
         panel.add(viewAppointmentsButton);
         panel.add(makePaymentButton);
@@ -67,7 +70,13 @@ public class PatientMenu extends JFrame {
       PatientViewPrescriptionsGUI prescprtionsGUI = new PatientViewPrescriptionsGUI(patient);
       prescprtionsGUI.setVisible(true);
     }
-
+    
+    
+    private void updatePatientPreferredDoctor() {
+      PreferredDoctorGUI pdoctorGUI = new PreferredDoctorGUI(patient);
+      pdoctorGUI.setVisible(true);
+    }
+    
     private void viewDiagnoses() {
       SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }

@@ -1,10 +1,8 @@
-package tableConstructors;
+package GUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-//import tableConstructors.Patient;
-//import tableConstructors.ViewDiagnosisGUI;
 import tableConstructors.*;
 
 public class PatientMenu extends JFrame {
