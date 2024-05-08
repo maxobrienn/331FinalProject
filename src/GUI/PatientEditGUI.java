@@ -51,6 +51,7 @@ public class PatientEditGUI extends JFrame {
         zipCodeField = addEditableRow(panel, gbc, "ZIP Code:", patient.getZipCode(), labelFont, labelColor);
         insuranceIdField = addEditableRow(panel, gbc, "Insurance ID:", patient.getInsuranceId(), labelFont, labelColor);
         sexField = addEditableRow(panel, gbc, "Sex:", patient.getSex(), labelFont, labelColor);
+        addRow(panel, gbc, "Preferred Doctor:", patient.getPreferredDoctor(), labelFont, labelColor);
 
         JButton saveButton = new JButton("Save");
         gbc.gridx = 0;

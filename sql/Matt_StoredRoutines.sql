@@ -248,7 +248,6 @@ SELECT D.FIRST || ' '|| D.LAST AS DOCTOR_NAME, A.APPOINTMENT_DATE, A.NOTE, A.pat
 FROM HealthCareManagement_APPOINTMENT A 
 JOIN HealthCareManagement_DOCTOR D ON A.DOCTOR_ID = D.DOCTOR_ID;
 
-
 -- Section: Functions
 
 -- Function for Creating a new patient Id when they create an account

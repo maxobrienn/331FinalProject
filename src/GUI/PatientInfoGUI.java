@@ -64,6 +64,8 @@ public class PatientInfoGUI extends JFrame {
         panel.add(new JLabel(patient.getSex()));
         panel.add(new JLabel("Insurance ID:"));
         panel.add(new JLabel(patient.getInsuranceId()));
+        panel.add(new JLabel("Preferred Doctor:"));
+        panel.add(new JLabel(patient.getPreferredDoctor()));
 
         // Add a button to return to the PatientMenu
         JButton returnButton = new JButton("Return to PatientMenu");

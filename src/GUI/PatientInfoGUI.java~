@@ -5,15 +5,25 @@ import java.awt.*;
 import java.awt.event.*;
 import tableConstructors.*;
 
+/**
+ * Represents a graphical user interface for displaying patient information.
+ */
 public class PatientInfoGUI extends JFrame {
 
     private Patient patient;
 
+    /**
+     * Constructs a PatientInfoGUI object with the specified Patient.
+     * @param patient The Patient object to display information.
+     */
     public PatientInfoGUI(Patient patient) {
         this.patient = patient;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface.
+     */
     private void initializeUI() {
         setTitle("Patient Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,6 +78,11 @@ public class PatientInfoGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Formats the given date to a string in MM/dd/yyyy format.
+     * @param date The date to format.
+     * @return The formatted date string.
+     */
     private String formatDate(java.util.Date date) {
         if (date == null) {
             return "N/A";
@@ -76,17 +91,24 @@ public class PatientInfoGUI extends JFrame {
         return dateFormat.format(date);
     }
 
+    /**
+     * Closes the current window and returns to the PatientMenu.
+     */
     private void returnToPatientMenu() {
         // Close this window and return to the PatientMenu
         dispose();
     }
 
+    /**
+     * Main method for testing purposes.
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         // Create a sample patient object
         Patient patient = new Patient("PAT001", new java.util.Date(90, 0, 1),
                 "1234 Life St", "Anytown", "NY", "12345",
                 "patient1@email.com", "123-456-7890",
-                "Doe", "Jane", "Female", "INS001", "thsbaibniincd58n");
+                "Doe", "Jane", "Female", "INS001", "thsbaibniincd58n", "Test");
 
         // Create and display the GUI
         SwingUtilities.invokeLater(() -> new PatientInfoGUI(patient));

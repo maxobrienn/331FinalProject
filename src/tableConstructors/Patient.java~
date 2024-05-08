@@ -53,7 +53,7 @@ public class Patient {
    * @param password The password of the patient.
    */
   public Patient(String patientId, java.util.Date dob, String street, String city, String state, String zipCode, String email,
-                 String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password) {
+                 String phoneNumber, String lastName, String firstName, String sex, String insuranceId, String password, String preferred_doctor) {
     this.patientId = patientId;
     this.dob = dob;
     this.street = street;
@@ -488,33 +488,8 @@ public class Patient {
       e.printStackTrace();
     }
   }
-  
-  // Method to update patient's preferred doctor
-public void updatePatientPreferredDoctor(String preferredDoctorId) {
-  try {
-    // Connect to Oracle database
-    Connection connection = openDBConnection();
-    
-    // Prepare the stored procedure call
-    CallableStatement callableStatement = connection.prepareCall("{call Edit_Patient_Preferred_Doctor(?,?)}");
-    
-    // Set the input parameters
-    callableStatement.setString(1, getPatientId());
-    callableStatement.setString(2, preferredDoctorId);
-    
-    // Execute the stored procedure
-    callableStatement.execute();
-    
-    // Output success message
-    System.out.println("Patient's preferred doctor updated successfully.");
-    
-    // Close JDBC objects
-    callableStatement.close();
-    connection.close();
-  } catch (SQLException e) {
-    e.printStackTrace();
-  }
-}  
+ 
+
   
   public void addPatient(Patient patient) {
     try (Connection connection = openDBConnection()) {
@@ -578,6 +553,7 @@ public void updatePatientPreferredDoctor(String preferredDoctorId) {
         patient.setZipCode(resultSet.getString("ZIP_CODE"));
         patient.setInsuranceId(resultSet.getString("INSURANCE_ID"));
         patient.setSex(resultSet.getString("SEX"));
+        patient.setPreferredDoctor(resultSet.getString("PREFERRED_DOCTOR"));
       }
       
       // Close JDBC objects
@@ -643,8 +619,9 @@ public void updatePatientPreferredDoctor(String preferredDoctorId) {
     Connection myConnection;
     //Variable of type prepared statement
     PreparedStatement preparedStmt;
+    // Method to update patient's preferred doctor
     
-    try {
+      try {
       // Open a database connection.
       myConnection = openDBConnection();
       
@@ -675,6 +652,34 @@ public void updatePatientPreferredDoctor(String preferredDoctorId) {
       e.printStackTrace();
     }
   }
+    
+  public void updatePatientPreferredDoctor(String preferredDoctor) {
+  try {
+    // Connect to Oracle database
+    Connection connection = openDBConnection();
+    
+    // Prepare the stored procedure call
+    CallableStatement callableStatement = connection.prepareCall("{call Edit_Patient_Preferred_Doctor(?,?)}");
+    
+    // Set the input parameters
+    callableStatement.setString(1, getPatientId());
+    callableStatement.setString(2, preferredDoctor);
+    
+    // Execute the stored procedure
+    callableStatement.execute();
+    
+    // Output success message
+    System.out.println("Patient's preferred doctor updated successfully.");
+    
+    // Close JDBC objects
+    callableStatement.close();
+    connection.close();
+  } catch (SQLException e) {
+    e.printStackTrace();
+  }
+} 
+
+
   
   /**
    * Make a payment for the patient.
@@ -919,7 +924,7 @@ public void updatePatientPreferredDoctor(String preferredDoctorId) {
     System.out.println("\nTesting updating preffered doctor...");
     System.out.println("Patient info before update:");
     System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
-    patient.updatePatientPreferredDoctor("DOC003"); // Assuming "DOC003" is the ID of the new preferred doctor
+    patient.updatePatientPreferredDoctor("Te4565st"); // Assuming "DOC003" is the ID of the new preferred doctor
     System.out.println("\nPatient info after update:");
     System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
 
