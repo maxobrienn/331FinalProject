@@ -517,6 +517,46 @@ public class Doctor {
     }
 }
   
+ public int getCountOfAppointments(String doctorId, String appointmentDate) {
+        int appointmentCount = 0;
+        Connection conn = null;
+        CallableStatement cstmt = null;
+
+        try {
+            // Establish a connection
+            conn = openDBConnection();
+
+            // Prepare the call to the SQL function
+            String sql = "{ ? = call DoctorAppointmentCount(?, ?) }";
+            cstmt = conn.prepareCall(sql);
+
+            // Register the return value as an OUT parameter
+            cstmt.registerOutParameter(1, Types.INTEGER);
+
+            // Set the input parameters for the doctor ID and appointment date
+            cstmt.setString(2, doctorId);
+            cstmt.setString(3, appointmentDate);
+
+            // Execute the function call
+            cstmt.execute();
+
+            // Retrieve the result from the OUT parameter
+            appointmentCount = cstmt.getInt(1);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (cstmt != null) cstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return appointmentCount;
+    }
+
   
   /**
    * Main method to test functionalities.
@@ -589,7 +629,28 @@ public class Doctor {
     } else {
         System.out.println("Doctor login failed. Please check doctor ID and password.");
     }
+
+
+// Log in as a doctor using a doctor ID
+// Log in as a doctor using a doctor ID
+    /**
+    String doctorId = "DOC001";
+    String doctorPassword = "password";
+    boolean loggedIn = doctor.doctorLogin(doctorId, doctorPassword);
+    
+    if (loggedIn) {
+      System.out.println("Doctor logged in successfully.");
+      
+      // Test getCountOfAppointments method
+      String specificDate = "01-JUN-23";
+      int appointmentCount = doctor.getCountOfAppointments(doctorId, specificDate);
+      System.out.println("Total Appointments for Doctor " + doctorId + ": " + appointmentCount);
+      
+    } else {
+      System.out.println("Doctor login failed. Please check doctor ID and password.");
+      }*/
+  }
 }
 
       
-}
+

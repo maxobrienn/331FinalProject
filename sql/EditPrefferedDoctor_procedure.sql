@@ -18,5 +18,7 @@ BEGIN
 EXCEPTION
     WHEN OTHERS THEN
         -- Output error message if an exception occurs
-        DBMS_OUTPUT.PUT_LINE('Error updating patient preferred doctor: ' || SQLERRM);
+        DBMS_OUTPUT.PUT_LINE('Error updating patient preferred doctor: ');
 END;
+/
+

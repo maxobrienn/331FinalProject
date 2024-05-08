@@ -1,3 +1,8 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for viewing patient diagnoses.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -13,11 +18,18 @@ public class ViewDiagnosisGUI extends JFrame {
     private JButton returnButton; // New button for returning to PatientMenu
     private Patient patient;
 
+    /**
+     * Constructs a ViewDiagnosisGUI object.
+     * @param patient The patient whose diagnoses are being viewed.
+     */
     public ViewDiagnosisGUI(Patient patient) {
         this.patient = patient;
         createAndShowGUI();
     }
 
+    /**
+     * Creates and displays the GUI.
+     */
     private void createAndShowGUI() {
         // Frame initial setup
         setTitle("Patient Diagnosis Viewer");
@@ -58,6 +70,9 @@ public class ViewDiagnosisGUI extends JFrame {
         viewDiagnoses();
     }
 
+    /**
+     * Retrieves and displays the patient's diagnoses.
+     */
     private void viewDiagnoses() {
         // Clear previous results
         resultArea.setText("");
@@ -99,16 +114,23 @@ public class ViewDiagnosisGUI extends JFrame {
         }
     }
 
-    // Method to return to the Patient Menu
+    /**
+     * Returns to the Patient Menu.
+     */
     private void returnToMenu() {
         dispose(); // Close the current window
         SwingUtilities.invokeLater(() -> new PatientMenu(patient)); // Open PatientMenu
     }
 
+    /**
+     * The main method for testing purposes.
+     * @param args The command-line arguments.
+     
     public static void main(String[] args) {
         // Assuming Patient is logged in and Patient instance is created accordingly
         Patient patient = new Patient("123456", new java.util.Date(), "123 Elm St", "Anytown", "Anystate", "12345", "email@example.com",
                                       "555-1234", "Doe", "John", "M", "12345-67890", "password123");
         SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }
+    */
 }

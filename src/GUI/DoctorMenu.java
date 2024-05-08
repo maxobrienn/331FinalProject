@@ -30,6 +30,8 @@ public class DoctorMenu extends JFrame {
         JButton createPrescriptionButton = new JButton("Create Prescription");
         JButton addAppointmentNoteButton = new JButton("Add Appointment Note");
         JButton editPatientDiagnosesButton = new JButton("Edit Patient Diagnoses");
+        JButton numberOfAppointmentsButton = new JButton("View Number of Appointments");
+
 
         viewProfileButton.addActionListener(e -> displayProfile());
         updateInfoButton.addActionListener(e -> updateInfo());
@@ -37,6 +39,7 @@ public class DoctorMenu extends JFrame {
         createPrescriptionButton.addActionListener(e -> createPrescription());
         addAppointmentNoteButton.addActionListener(e -> addAppointmentNote());
         editPatientDiagnosesButton.addActionListener(e -> editPatientDiagnoses());
+        numberOfAppointmentsButton.addActionListener(e -> getCountOfAppointments());
 
         panel.add(viewProfileButton);
         panel.add(updateInfoButton);
@@ -44,6 +47,7 @@ public class DoctorMenu extends JFrame {
         panel.add(createPrescriptionButton);
         panel.add(addAppointmentNoteButton);
         panel.add(editPatientDiagnosesButton);
+        panel.add(numberOfAppointmentsButton);
 
         add(panel);
     }
@@ -72,6 +76,10 @@ public class DoctorMenu extends JFrame {
 
     private void editPatientDiagnoses() {
      SwingUtilities.invokeLater(() -> new EditDiagnosisGUI(doctor));
+    }
+    
+    private void getCountOfAppointments() {
+     SwingUtilities.invokeLater(() -> new NumberOfAppointmentsGUI(doctor));
     }
 
     public static void main(String[] args) {

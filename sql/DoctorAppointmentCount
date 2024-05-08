@@ -1,0 +1,20 @@
+CREATE OR REPLACE FUNCTION DoctorAppointmentCount(doctorId VARCHAR2) RETURN INT IS
+    appointmentCount INT;
+BEGIN
+    SELECT COUNT(*)
+    INTO appointmentCount
+    FROM HealthCareManagement_APPOINTMENT
+    WHERE DOCTOR_ID = doctorId;
+
+    RETURN appointmentCount;
+END;
+/
+
+DECLARE
+    doctorId VARCHAR2(10) := 'DOC001';
+    numAppointments INT;
+BEGIN
+    numAppointments := CountAppointmentsForDoctor(doctorId);
+    DBMS_OUTPUT.PUT_LINE('Doctor ' || doctorId || ' has ' || numAppointments || ' appointments.');
+END;
+/

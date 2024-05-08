@@ -1,0 +1,52 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class NumberOfAppointmentsGUI {
+    private JFrame frame;
+    private JTextField dateTextField;
+    
+    public NumberOfAppointmentsGUI() {
+        frame = new JFrame("Number of Appointments");
+        frame.setSize(300, 200);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        JLabel dateLabel = new JLabel("Enter Date (DD-MON-YY):");
+        dateTextField = new JTextField(10);
+        JButton countButton = new JButton("Get Count");
+        
+        countButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedDate = dateTextField.getText();
+                int appointmentCount = getCountOfAppointments(selectedDate);
+                JOptionPane.showMessageDialog(frame, "Appointments on " + selectedDate + ": " + appointmentCount);
+            }
+        });
+        
+        JPanel panel = new JPanel();
+        panel.add(dateLabel);
+        panel.add(dateTextField);
+        panel.add(countButton);
+        
+        frame.add(panel);
+        frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.setVisible(true);
+    }
+    
+    // Your method to get the count of appointments based on the selected date
+    private int getCountOfAppointments(String selectedDate) {
+        // Call your existing functionality to get the count of appointments
+        // You may need to modify this method to fit your existing implementation
+        return 0;
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new NumberOfAppointmentsGUI();
+            }
+        });
+    }
+}

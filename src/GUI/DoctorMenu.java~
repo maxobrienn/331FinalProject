@@ -1,3 +1,6 @@
+/*
+ * Author: Max
+ */
 package GUI;
 
 import javax.swing.*;

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import tableConstructors.*;
 
 /**
  * This class represents a graphical user interface for making insurance payments.

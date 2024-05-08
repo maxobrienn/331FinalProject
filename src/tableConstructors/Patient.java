@@ -611,47 +611,53 @@ public class Patient {
 
 
   /**
-   * View diagnoses for the patient.
-   */
-  public void viewDiagnoses() {
-    
-    //Variable of type database connection
+ * View diagnoses for the patient.
+ */
+public void viewDiagnoses() {
+  
+    // Variable of type database connection
     Connection myConnection;
-    //Variable of type prepared statement
+    // Variable of type prepared statement
     PreparedStatement preparedStmt;
-    // Method to update patient's preferred doctor
     
-      try {
-      // Open a database connection.
-      myConnection = openDBConnection();
+    try {
+        // Open a database connection.
+        myConnection = openDBConnection();
       
-      // Prepare the SQL update statement.
-      String queryString = "SELECT * FROM DOCTOR_PATIENT_DIAGNOSES WHERE PATIENT_ID = ?";
+        // Prepare the SQL select statement to retrieve diagnoses from the view.
+        String queryString = "SELECT PATIENT_ID, DIAGNOSES, DIAGNOSIS_DATE FROM HealthCareManagement_SEEDIAGNOSIS WHERE PATIENT_ID = ?";
       
-      // Create a PreparedStatement for executing the update.
-      preparedStmt = myConnection.prepareStatement(queryString);
+        // Create a PreparedStatement for executing the select statement.
+        preparedStmt = myConnection.prepareStatement(queryString);
       
-      // Bind the instance field values to the PreparedStatement's parameters.
-      preparedStmt.setString(1, getPatientId());
+        // Bind the patient ID to the PreparedStatement's parameter.
+        preparedStmt.setString(1, getPatientId());
       
-      // Execute the query
-      ResultSet rs = preparedStmt.executeQuery(); 
+        // Execute the query
+        ResultSet rs = preparedStmt.executeQuery(); 
       
-      // Print the column headers
-      System.out.println("PATIENT_ID\t          DIAGNOSES");
+        // Print the column headers
+        System.out.println("PATIENT_ID\tDIAGNOSES\t\tDIAGNOSIS_DATE");
       
-      // Iterate through the result set and print each row
-      while (rs.next()) {
-        String pId = rs.getString("PATIENT_ID");
-        String diagnoses = rs.getString("DIAGNOSES");
-        System.out.println(pId + "\t\t" + diagnoses);
-      }
+        // Iterate through the result set and print each row
+        while (rs.next()) {
+            String pId = rs.getString("PATIENT_ID");
+            String diagnoses = rs.getString("DIAGNOSES");
+            String diagnosisDate = rs.getString("DIAGNOSIS_DATE");
+            System.out.println(pId + "\t\t" + diagnoses + "\t\t" + diagnosisDate);
+        }
+      
+        // Close the ResultSet, PreparedStatement, and the database connection.
+        rs.close();
+        preparedStmt.close();
+        myConnection.close();
     }
     
     catch (SQLException e) {
-      e.printStackTrace();
+        e.printStackTrace();
     }
-  }
+}
+
     
   public void updatePatientPreferredDoctor(String preferredDoctor) {
   try {
@@ -911,15 +917,15 @@ public class Patient {
     System.out.println("\nTesting viewing prescription balances...");
     patient.setPatientId("PAT001");
     patient.viewPrescriptionBalances();
-    
+    */
     //Test viewing patient diagnosis
     System.out.println("\nTesting viewing patient diagnosises...");
     patient.viewDiagnoses();
-    
+    /**
     //Test viewing list of doctors and info
     System.out.println("\nTesting viewing doctor list...");
     patient.viewDoctorList();
-    */
+    
     //Test updating patient preffered doctor 
     System.out.println("\nTesting updating preffered doctor...");
     System.out.println("Patient info before update:");
@@ -927,8 +933,6 @@ public class Patient {
     patient.updatePatientPreferredDoctor("Te4565st"); // Assuming "DOC003" is the ID of the new preferred doctor
     System.out.println("\nPatient info after update:");
     System.out.println(patient.displayPatientInfo(patient.getPatientId()).toString());
-
-    /**
     
     // Test making payment
     System.out.println("\nTesting making payment...");
