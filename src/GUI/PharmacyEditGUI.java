@@ -1,3 +1,10 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for editing pharmacy information.
+ * It allows editing of various fields such as pharmacy name, address, and contact details.
+ * The GUI also provides a button to save changes and return to the pharmacy menu.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -19,6 +26,10 @@ public class PharmacyEditGUI extends JFrame {
     private JTextField passwordField;
     private JTextField emailField;
 
+    /**
+     * Constructs a PharmacyEditGUI object.
+     * @param pharmacy The pharmacy whose information is being edited.
+     */
     public PharmacyEditGUI(Pharmacy pharmacy) {
         this.pharmacy = pharmacy;
 

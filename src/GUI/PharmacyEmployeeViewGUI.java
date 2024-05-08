@@ -1,21 +1,32 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for pharmacy employees to view their information.
+ * It displays employee details such as employee ID, first name, last name, SSN, phone number, email, position, and pharmacy ID.
+ */
 package GUI;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.*;
 import tableConstructors.*;
 
 public class PharmacyEmployeeViewGUI extends JFrame {
 
     private PharmacyEmployee employee;
 
+    /**
+     * Constructs a PharmacyEmployeeViewGUI object.
+     * @param employee The pharmacy employee whose information is being viewed.
+     */
     public PharmacyEmployeeViewGUI(PharmacyEmployee employee) {
         this.employee = employee;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface.
+     */
     private void initializeUI() {
         setTitle("Pharmacy Employee Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,11 +73,18 @@ public class PharmacyEmployeeViewGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Action listener for the return button.
+     * Closes this window and returns to the PharmacyMenu.
+     */
     private void returnToPharmacyMenu() {
         // Close this window and return to the PharmacyMenu
         dispose();
     }
 
+    /**
+     * The entry point of the application. Creates an instance of PharmacyEmployee and displays the view employee information GUI.
+     */
     public static void main(String[] args) {
         // Create a sample employee object
         PharmacyEmployee employee = new PharmacyEmployee("EMP001", "Doe", "John", "123-45-6789", "555-123-4567", "john.doe@example.com", "Pharmacist", "PH001", "password123");

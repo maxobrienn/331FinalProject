@@ -1,10 +1,11 @@
-package tableConstructors;
+package GUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;
+import tableConstructors.*;
 
 public class ViewDoctorListGUI extends JFrame {
     private JTable doctorTable;

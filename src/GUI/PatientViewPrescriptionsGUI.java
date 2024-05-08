@@ -1,3 +1,10 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for viewing prescription balances of a patient.
+ * It displays prescription details including ID, date issued, name, and amount owed.
+ * The GUI also provides a button to return to the patient menu.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -12,6 +19,10 @@ public class PatientViewPrescriptionsGUI extends JFrame {
     private JTable dataTable;
     private Patient patient;
 
+    /**
+     * Constructs a PatientViewPrescriptionsGUI object.
+     * @param patient The patient whose prescription balances are being viewed.
+     */
     public PatientViewPrescriptionsGUI(Patient patient) {
         this.patient = patient;
         setTitle("View Prescription Balances");

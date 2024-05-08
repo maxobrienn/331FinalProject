@@ -5,15 +5,25 @@ import java.awt.event.*;
 import java.math.BigDecimal;
 import tableConstructors.*;
 
+/**
+ * This class represents a graphical user interface for viewing insurance company information.
+ */
 public class InsuranceCompanyViewInfoGUI extends JFrame {
 
     private InsuranceCompany insuranceCompany;
 
+    /**
+     * Constructs a new InsuranceCompanyViewInfoGUI with the given InsuranceCompany object.
+     * @param insuranceCompany The InsuranceCompany object to display information for.
+     */
     public InsuranceCompanyViewInfoGUI(InsuranceCompany insuranceCompany) {
         this.insuranceCompany = insuranceCompany;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface components.
+     */
     private void initializeUI() {
         setTitle("Insurance Company Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,11 +72,17 @@ public class InsuranceCompanyViewInfoGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Closes the current window and returns to the main menu.
+     */
     private void returnToMainMenu() {
-        // Close this window and return to the MainMenu
         dispose();
     }
 
+    /**
+     * Main method to create and display the GUI.
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         // Create a sample insurance company object
         InsuranceCompany insuranceCompany = new InsuranceCompany("INS001", "Health Insure Inc.",

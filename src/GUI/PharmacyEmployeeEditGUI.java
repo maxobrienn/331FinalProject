@@ -1,3 +1,10 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for editing pharmacy employee information.
+ * It allows editing of various fields such as phone number, email, and position.
+ * The GUI also provides a button to save changes and return to the pharmacy menu.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -14,6 +21,10 @@ public class PharmacyEmployeeEditGUI extends JFrame {
     private JTextField firstNameField;
     private JTextField positionField;
 
+    /**
+     * Constructs a PharmacyEmployeeEditGUI object.
+     * @param employee The pharmacy employee whose information is being edited.
+     */
     public PharmacyEmployeeEditGUI(PharmacyEmployee employee) {
         this.employee = employee;
 
@@ -71,12 +82,17 @@ public class PharmacyEmployeeEditGUI extends JFrame {
         setVisible(true);
     }
 
-    // Method to open the PharmacyMenu GUI
+    /**
+     * Method to open the PharmacyMenu GUI.
+     */
     private void openPharmacyMenu() {
         // Code to open the PharmacyMenu GUI
         // Replace this with your implementation to open the PharmacyMenu
     }
 
+    /**
+     * Adds a row with a label and value to the specified panel.
+     */
     private void addRow(JPanel panel, GridBagConstraints gbc, String labelText, String valueText, Font labelFont, Color labelColor) {
         JLabel label = new JLabel(labelText);
         label.setFont(labelFont);
@@ -91,6 +107,9 @@ public class PharmacyEmployeeEditGUI extends JFrame {
         panel.add(value, gbc);
     }
 
+    /**
+     * Adds an editable row with a label and text field to the specified panel.
+     */
     private JTextField addEditableRow(JPanel panel, GridBagConstraints gbc, String labelText, String valueText, Font labelFont, Color labelColor) {
         JLabel label = new JLabel(labelText);
         label.setFont(labelFont);
@@ -107,6 +126,9 @@ public class PharmacyEmployeeEditGUI extends JFrame {
         return textField;
     }
 
+    /**
+     * Saves changes made to employee information.
+     */
     private void saveChanges() {
         // Update employee information based on text field values
         employee.setPhoneNumber(phoneNumberField.getText());

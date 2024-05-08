@@ -5,15 +5,25 @@ import java.awt.*;
 import java.awt.event.*;
 import tableConstructors.*;
 
+/**
+ * This class represents a graphical user interface for the Insurance Company menu.
+ */
 public class InsuranceMenu extends JFrame {
 
     private InsuranceCompany insurance;
 
+    /**
+     * Constructs a new InsuranceMenu with the given InsuranceCompany object.
+     * @param insurance The InsuranceCompany object associated with this menu.
+     */
     public InsuranceMenu(InsuranceCompany insurance) {
         this.insurance = insurance;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface components.
+     */
     private void initializeUI() {
         setTitle("Insurance Company Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,27 +75,42 @@ public class InsuranceMenu extends JFrame {
         add(panel);
     }
 
+    /**
+     * Opens the InsurancePaymentGUI for making payment.
+     */
     private void makePayment() {
-        // Create and display InsurancePaymentGUI
         InsurancePaymentGUI paymentGUI = new InsurancePaymentGUI(insurance);
         paymentGUI.setVisible(true);
     }
 
+    /**
+     * Opens the InsuranceViewPrescriptionsGUI for viewing covered patients' prescriptions.
+     */
     private void viewCoveredPatients() {
         InsuranceViewPrescriptionsGUI view = new InsuranceViewPrescriptionsGUI(insurance);
         view.setVisible(true);
     }
 
+    /**
+     * Opens the InsuranceCompanyViewInfoGUI for viewing insurance company profile.
+     */
     private void viewProfile() {
-      InsuranceCompanyViewInfoGUI view = new InsuranceCompanyViewInfoGUI(insurance);
+        InsuranceCompanyViewInfoGUI view = new InsuranceCompanyViewInfoGUI(insurance);
         view.setVisible(true);
     }
     
+    /**
+     * Opens the InsuranceCompanyEditGUI for updating insurance company information.
+     */
     private void updateInfo() {
-      InsuranceCompanyEditGUI view = new InsuranceCompanyEditGUI(insurance);
+        InsuranceCompanyEditGUI view = new InsuranceCompanyEditGUI(insurance);
         view.setVisible(true);
     }
 
+    /**
+     * Main method to create and display the InsuranceMenu.
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         // For testing purposes, create and display InsuranceMenu
         InsuranceCompany insurance = new InsuranceCompany();

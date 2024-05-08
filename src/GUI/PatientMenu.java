@@ -5,14 +5,24 @@ import java.awt.*;
 import java.awt.event.*;
 import tableConstructors.*;
 
+/**
+ * Represents a graphical user interface for the patient menu.
+ */
 public class PatientMenu extends JFrame {
     private Patient patient;
 
+    /**
+     * Constructs a PatientMenu object.
+     * @param patient The patient object associated with this menu.
+     */
     public PatientMenu(Patient patient) {
         this.patient = patient;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface components.
+     */
     private void initializeUI() {
         setTitle("Patient Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,17 +68,26 @@ public class PatientMenu extends JFrame {
         add(panel);
     }
 
+    /**
+     * Displays the patient's profile.
+     */
     private void displayProfile() {
         SwingUtilities.invokeLater(() -> new PatientInfoGUI(patient));
     }
 
+    /**
+     * Opens the interface for updating patient information.
+     */
     private void updateInfo() {
         SwingUtilities.invokeLater(() -> new PatientEditGUI(patient));
     }
     
+    /**
+     * Displays the list of prescriptions associated with the patient.
+     */
     private void viewPrescriptions() {
-      PatientViewPrescriptionsGUI prescprtionsGUI = new PatientViewPrescriptionsGUI(patient);
-      prescprtionsGUI.setVisible(true);
+      PatientViewPrescriptionsGUI prescriptionsGUI = new PatientViewPrescriptionsGUI(patient);
+      prescriptionsGUI.setVisible(true);
     }
     
     
@@ -77,28 +96,42 @@ public class PatientMenu extends JFrame {
       pdoctorGUI.setVisible(true);
     }
     
+
     private void viewDiagnoses() {
       SwingUtilities.invokeLater(() -> new ViewDiagnosisGUI(patient));
     }
     
+    /**
+     * Displays the list of doctors associated with the patient.
+     */
     private void viewDoctors() {
-      // Display list of doctors
+
+      ViewDoctorListGUI doctorsListGUI = new ViewDoctorListGUI();
+      doctorsListGUI.setVisible(true);
+
+      // Implement logic to display the list of doctors associated with the patient
       // Example: patient.viewDoctorList();
     }
     
+    /**
+     * Opens the interface for viewing past appointments of the patient.
+     */
     private void viewAppointments() {
       SwingUtilities.invokeLater(() -> new PatientViewPastAppointmentGUI(patient));
     }
     
+    /**
+     * Opens the interface for making a payment.
+     */
     private void makePayment() {
-      // Create a new instance of PatientPaymentGUI
       PatientPaymentGUI paymentGUI = new PatientPaymentGUI(patient);
-      // Make the PatientPaymentGUI window visible
       paymentGUI.setVisible(true);
     }
     
-    
-    
+    /**
+     * Main method for testing purposes.
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
       // Example usage:
       // Patient patient = new Patient();

@@ -1,4 +1,4 @@
-package tableConstructors;
+package GUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,7 +56,7 @@ public class DoctorMenu extends JFrame {
     }
 
     private void viewPatientsInfo() {
-        // View patients information
+     SwingUtilities.invokeLater(() -> new ViewPatientInfoGUI(doctor));
     }
 
     private void createPrescription() {

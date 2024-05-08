@@ -1,3 +1,9 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for pharmacy employees to view all prescriptions.
+ * It displays prescription information such as prescription ID, patient ID, insurance ID, and amount owed.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -12,6 +18,10 @@ public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
     private JTable dataTable;
     private PharmacyEmployee pharmacyEmployee;
     
+    /**
+     * Constructs a PharmacyEmployeeViewAllPrescriptionsGUI object.
+     * @param pharmacyEmployee The pharmacy employee viewing all prescriptions.
+     */
     public PharmacyEmployeeViewAllPrescriptionsGUI(PharmacyEmployee pharmacyEmployee) {
       
       this.pharmacyEmployee = pharmacyEmployee;
@@ -57,13 +67,19 @@ public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
         setLocationRelativeTo(null); // Center the window on the screen
     }
 
+    /**
+     * ActionListener implementation for the return to menu button.
+     * Closes the current window.
+     */
     private void returnToMenu() {
         // Close the current window
         dispose();
     }
 
-
-
+    /**
+     * Populates the table with prescription data.
+     * @param pharmacyEmployee The pharmacy employee.
+     */
     private void populateTable(PharmacyEmployee pharmacyEmployee) {
         // Call the viewAvailableMedication method and populate the table with the results
         String[][] data = pharmacyEmployee.viewPrescriptions();
@@ -73,6 +89,9 @@ public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
         }
     }
 
+    /**
+     * The entry point of the application. Creates an instance of PharmacyEmployee and displays the view all prescriptions GUI.
+     */
     public static void main(String[] args) {
         // Create an instance of PharmacyEmployee
         PharmacyEmployee pharmacyEmployee = new PharmacyEmployee();
@@ -89,4 +108,3 @@ public class PharmacyEmployeeViewAllPrescriptionsGUI extends JFrame {
     }
     
 }
-

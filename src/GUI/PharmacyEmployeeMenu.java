@@ -1,3 +1,10 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for the pharmacy employee menu.
+ * It provides various functionalities such as viewing/editing profile, managing inventory,
+ * viewing prescriptions, updating medication supply, filling prescriptions, and viewing unpaid balances.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -9,11 +16,18 @@ public class PharmacyEmployeeMenu extends JFrame {
   
     private PharmacyEmployee employee;
   
+    /**
+     * Constructs a PharmacyEmployeeMenu object.
+     * @param employee The pharmacy employee for whom the menu is being displayed.
+     */
     public PharmacyEmployeeMenu(PharmacyEmployee employee) {
         this.employee = employee;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface of the menu.
+     */
     private void initializeUI() {
         setTitle("PHARMACY EMPLOYEE: Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,6 +118,9 @@ public class PharmacyEmployeeMenu extends JFrame {
       insuranceTotalBalanceGUI.setVisible(true);
     }
     
+    /**
+     * The entry point of the application. Creates a sample employee object and displays the menu GUI.
+     */
     public static void main(String[] args) {
       // For testing purposes, create and display PharmacyEmployeeMenu
       PharmacyEmployee employee = new PharmacyEmployee();

@@ -1,3 +1,8 @@
+/**
+ * Authors: Ellie Smith
+ * 
+ * This class represents a graphical user interface (GUI) for user login.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -12,6 +17,10 @@ public class UserLoginGUI extends JFrame implements ActionListener {
     private JButton createAccountButton;
     private Object user;
 
+    /**
+     * Constructs a UserLoginGUI object.
+     * @param user The user object associated with this GUI.
+     */
     public UserLoginGUI(Object user) {
         this.user = user;
 
@@ -65,6 +74,10 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         add(panel);
     }
 
+    /**
+     * Performs actions when buttons are clicked.
+     * @param e The ActionEvent object.
+     */
     public void actionPerformed(ActionEvent e) {
         String id = idField.getText();
         String password = new String(passwordField.getPassword());
@@ -93,8 +106,10 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         }
     }
     
+    /**
+     * Opens the account creation GUI based on the user type.
+     */
     private void createAccount() {
-        // Redirect patients to the AddPatientGUI for account creation
         if (user instanceof Patient) {
             AddPatientGUI addPatientGUI = new AddPatientGUI();
             addPatientGUI.setVisible(true);
@@ -130,7 +145,10 @@ public class UserLoginGUI extends JFrame implements ActionListener {
         }
     }
 
-    // Method to open the main menu based on the user type
+    /**
+     * Opens the main menu based on the user type.
+     * @param user The user object.
+     */
     private void openMainMenu(Object user) {
       String id = idField.getText();
       if (user instanceof Patient) {

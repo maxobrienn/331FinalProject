@@ -1,3 +1,8 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, and Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for displaying supplier information.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -10,11 +15,18 @@ public class SupplierInfoGUI extends JFrame {
 
     private Supplier supplier;
 
+    /**
+     * Constructs a SupplierInfoGUI object.
+     * @param supplier The supplier whose information is being displayed.
+     */
     public SupplierInfoGUI(Supplier supplier) {
         this.supplier = supplier;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface.
+     */
     private void initializeUI() {
         setTitle("Supplier Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,11 +66,18 @@ public class SupplierInfoGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Closes this window and returns to the MainMenu.
+     */
     private void returnToMainMenu() {
         // Close this window and return to the MainMenu
         dispose();
     }
 
+    /**
+     * Main method for testing purposes.
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         // Create a sample supplier object
         Supplier supplier = new Supplier("SUP001", "ABC Supplier", "456 Supplier St", "SupplierCity", "SupplierState", "12345", "123-456-7890", "password", "supplier@email.com");

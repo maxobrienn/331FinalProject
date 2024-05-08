@@ -1,3 +1,9 @@
+/**
+ * Authors: Matt DeRosa, Max O’Brien, Ellie Smith, Mason Meyer, Evan Quinn
+ * 
+ * This class represents a graphical user interface (GUI) for viewing pharmacy information.
+ * It displays various details about a pharmacy and provides an option to return to the pharmacy menu.
+ */
 package GUI;
 
 import javax.swing.*;
@@ -9,11 +15,18 @@ public class PharmacyViewGUI extends JFrame {
 
     private Pharmacy pharmacy;
 
+    /**
+     * Constructs a PharmacyViewGUI object.
+     * @param pharmacy The pharmacy whose information is being displayed.
+     */
     public PharmacyViewGUI(Pharmacy pharmacy) {
         this.pharmacy = pharmacy;
         initializeUI();
     }
 
+    /**
+     * Initializes the user interface.
+     */
     private void initializeUI() {
         setTitle("Pharmacy Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,11 +73,22 @@ public class PharmacyViewGUI extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Handles the action to return to the PharmacyMenu.
+     */
     private void returnToPharmacyMenu() {
         // Close this window and return to the PharmacyMenu
         dispose();
     }
 
+    /**
+     * The entry point of the application.
+     * Example usage:
+     * // Create a sample pharmacy object
+     * // Pharmacy pharmacy = new Pharmacy("PH001", "ABC Pharmacy", "456 Maple St", "Anytown", "NY", "12345", "555-123-4567", "password123", "abc@example.com");
+     * // Create and display the GUI
+     * // SwingUtilities.invokeLater(() -> new PharmacyViewGUI(pharmacy));
+     */
     public static void main(String[] args) {
         // Create a sample pharmacy object
         Pharmacy pharmacy = new Pharmacy("PH001", "ABC Pharmacy", "456 Maple St", "Anytown", "NY", "12345", "555-123-4567", "password123", "abc@example.com");
