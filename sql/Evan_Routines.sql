@@ -5,7 +5,7 @@ create or replace view Pharmacy_inventory as
 
 select *
 from Pharmacy_Inventory
-
+/
 
 -- Create a view to show all prescriptions - including total unpaid balance on each
 CREATE OR REPLACE VIEW Pharmacy_Prescriptions AS
@@ -21,6 +21,7 @@ FROM        HealthCareManagement_PATIENT P
             JOIN    HealthCareManagement_FILLS F ON PB.PRESCRIPTION_ID = F.PRESCRIPTION_ID
 GROUP BY    F.PRESCRIPTION_ID, P.PATIENT_ID, P.LAST, P.FIRST, PC.INSURANCE_ID, F.PHARMACY_ID
 ORDER BY    AMOUNT_OWED DESC;
+/
 
 SELECT * FROM Pharmacy_Prescriptions WHERE PHARMACY_ID = 'PHRM001';4
 
@@ -48,3 +49,4 @@ Exec UpdateSupplierQuantity('SUP001', '70')
 
 select *
 from healthcaremanagement_medication;
+/
